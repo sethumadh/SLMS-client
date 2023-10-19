@@ -5,8 +5,9 @@ import { z } from "zod"
 import DatePicker from "react-datepicker"
 import Select, { SingleValue } from "react-select"
 import { useState } from "react"
+import { PersonalSchema } from "@/types/studentSetupWizardSchema"
 
-import { PersonalSchema } from "@/types/studentSetupWIzardSchema"
+
 
 const options = [
   { value: "male", label: "Male" },
