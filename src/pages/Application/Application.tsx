@@ -45,7 +45,7 @@ function Application() {
       emergencyContact: {
         contactPerson: "",
         contactNumber: "",
-        relationship: "friend",
+        relationship: "",
       },
       healthInformation: {
         medicareNumber: "",
