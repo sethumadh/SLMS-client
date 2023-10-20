@@ -1,6 +1,6 @@
 import { StudentWizardSchema } from "@/pages/Application/Application"
 import { PhotoIcon } from "@heroicons/react/24/solid"
-import React, { useState } from "react"
+import { useState } from "react"
 import ReactDatePicker from "react-datepicker"
 import { Controller, useFormContext } from "react-hook-form"
 import Select, { SingleValue } from "react-select"

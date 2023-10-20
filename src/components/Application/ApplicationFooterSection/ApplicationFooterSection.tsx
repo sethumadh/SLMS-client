@@ -30,14 +30,14 @@ ApplicationFooterSection) {
         <div className="flex flex-row">
           {showPrevBtn && (
             <Button
-            className="bg-slate-500"
+              className="bg-slate-500"
               type="button"
               //   variant="contained"
               //   color="primary"
               //   mr="1"
               onClick={prevOnClick}
               //   disabled={isSubmitting}
-              >
+            >
               {prevText}
             </Button>
           )}
