@@ -1,37 +1,5 @@
 import { z } from "zod"
 
-export const studentSetupWizardSchema = z.object({
-  personalDetails: z.object({
-    firstName: z
-      .string({ required_error: "First name is required" })
-      .min(3, { message: "Name should be minimum 3 Characters" }),
-    lastName: z
-      .string({ required_error: "Last name is required" })
-      .min(3, { message: "Last Name should be minimum 3 Characters" }),
-    DOB: z
-      .date({ required_error: "Please select a date " })
-      .min(new Date("2005-01-01"), { message: "Age cannot be more than 18" })
-      .max(new Date("2013-01-01"), { message: "Age should below 10" }),
-    gender: z.string({ required_error: "Gender is required" }),
-    email: z
-      .string({ required_error: "Gender is required" })
-      .email({ message: "Invalid email address" }),
-    contact: z
-      .string({ required_error: "Mobile number is required" })
-      .regex(/^0\d{9}$/, "Invalid Number!"),
-    address: z
-      .string({ required_error: "Address is required" })
-      .min(3, { message: "minium 3 characters required" }),
-    suburb: z
-      .string({ required_error: "suburn is required" })
-      .min(3, { message: "minium 3 characters required" }),
-    state: z.string({ required_error: "State is required" }),
-    postcode: z
-      .string({ required_error: "Post code is required" })
-      .min(6, { message: "Post code is minimum 6 digits" }),
-  }),
-})
-
 export const PersonalSchema = z.object({
   firstName: z
     .string({ required_error: "First name is required" })
@@ -62,8 +30,8 @@ export const PersonalSchema = z.object({
   country: z.string({ required_error: "State is required" }),
   postcode: z
     .string({ required_error: "Post code is required" })
-    .min(6, { message: "Post code is minimum 6 digits" })
-    .max(6, { message: "Post code is maximum 6 digits" }),
+    .min(4, { message: "Post code is minimum 4 digits" })
+    .max(4, { message: "Post code is maximum 4 digits" }),
   image: z
     .any()
     .refine((file) => !file || file.size <= 400000, {
@@ -91,4 +59,48 @@ export const ParentsSchema = z.object({
   parentContact: z
     .string({ required_error: "Parent'sMobile number is required" })
     .regex(/^0\d{9}$/, "Please provide a valid Number!"),
+})
+
+export const EmergencyContactSchema = z.object({
+  contactPerson: z
+    .string({ required_error: "Contact person's name is required" })
+    .min(3, { message: "Minimum 3 characters" }),
+  contactNumber: z
+    .string({ required_error: "Contact person's Mobile number is required" })
+    .regex(/^0\d{9}$/, "Please provide a valid Number!"),
+  relationship: z
+    .string({ required_error: "Relationship with children is required" })
+    .min(3, { message: "Minimum 3 characters" }),
+})
+export const HealthInformationSchema = z.object({
+  medicareNumber: z
+    .string({ required_error: "Post code is required" })
+    .min(10, { message: "Medicare number is minimum 10 digits" })
+    .max(10, { message: "Medicare number is maximum 10 digits" }),
+  ambulanceMembershipNumber: z.string().optional(),
+  medicalCondition: z
+    .string({ required_error: "Please give a valid answer" })
+    .min(3, { message: "Mininum 3 characters" }),
+  allergy: z
+    .string({ required_error: "valid" })
+    .min(3, { message: "Mininum 3 characters" }),
+})
+
+export const SubjectSchema = z.object({
+  subjects: z.array(z.string()).refine((subjects) => subjects.length > 0, {
+    message: "Please select at least one subject",
+  }),
+  subjectRelated: z
+    .array(z.string())
+    .refine((subjectRelated) => subjectRelated.length > 0, {
+      message: "Please select at least one option",
+    }),
+})
+
+export const studentSetupWizardSchema = z.object({
+  personalDetails: PersonalSchema,
+  parentsSchema: ParentsSchema,
+  emergencyContact: EmergencyContactSchema,
+  healthInformation: HealthInformationSchema,
+  subjects: SubjectSchema,
 })
