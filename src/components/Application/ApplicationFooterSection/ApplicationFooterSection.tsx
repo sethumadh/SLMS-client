@@ -23,9 +23,10 @@ ApplicationFooterSection) {
       <hr className="border-t" />
       <div className="flex justify-between items-center p-3">
         <span className="font-space-grotesk font-normal text-sm ml-8 text-gray-600">
-          Please Fill all the section. Once you complete, click Next Button. If
+          Please Fill all the sections.
+          {/* Once you complete, click Next Button. If
           you like to go back click prevous. Once you see submit button , click
-          submit when you have give full information.
+          submit when you have give full information. */}
         </span>
         <div className="flex flex-row">
           {showPrevBtn && (

@@ -146,25 +146,27 @@ function Application() {
             noValidate
             className="bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl md:col-span-2"
           >
-            <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
+            <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8 mb-16">
               {step == 0 && <StudentInfo />}
               {step == 1 && <ParentsInfo />}
               {step == 2 && <EmergencyContact />}
               {step == 3 && <HealthInformation />}
               {step == 4 && <Subjects />}
-              <ApplicationFooterSection
-                showPrevBtn={step == 0 ? false : true}
-                prevText={"Previous"}
-                prevOnClick={() => {
-                  setStep(step - 1)
-                }}
-                type={!nextPage ? "button" : "submit"}
-                nextText={step != 4 ? "Next" : "Submit"}
-                nextOnClick={() => {
-                  handlNextStep()
-                }}
-                // isSubmitting={updateBrandProfile.isLoading}
-              />
+              <div className="">
+                <ApplicationFooterSection
+                  showPrevBtn={step == 0 ? false : true}
+                  prevText={"Previous"}
+                  prevOnClick={() => {
+                    setStep(step - 1)
+                  }}
+                  type={!nextPage ? "button" : "submit"}
+                  nextText={step != 4 ? "Next" : "Submit"}
+                  nextOnClick={() => {
+                    handlNextStep()
+                  }}
+                  // isSubmitting={updateBrandProfile.isLoading}
+                />
+              </div>
             </div>
           </form>
         </FormProvider>
