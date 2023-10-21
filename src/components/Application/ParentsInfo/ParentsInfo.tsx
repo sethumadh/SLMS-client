@@ -24,7 +24,7 @@ function ParentsInfo() {
                   htmlFor="father-name"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Father's name{" "}
+                  Father's name<span className="text-red-600">*</span>
                 </label>
                 <div className="mt-2">
                   <input
@@ -49,7 +49,7 @@ function ParentsInfo() {
                   htmlFor="mother-name"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Mother's name{" "}
+                  Mother's name<span className="text-red-600">*</span>
                 </label>
                 <div className="mt-2">
                   <input
@@ -74,7 +74,7 @@ function ParentsInfo() {
                   htmlFor="parent-mobile"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Parent's Mobile
+                  Parent's Mobile<span className="text-red-600">*</span>
                 </label>
                 <div className="mt-2">
                   <input
@@ -99,7 +99,7 @@ function ParentsInfo() {
                   htmlFor="parent-email"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Parents' Email
+                  Parents' Email<span className="text-red-600">*</span>
                 </label>
                 <div className="mt-2">
                   <input

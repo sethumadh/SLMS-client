@@ -23,7 +23,7 @@ function HealthInformation() {
                   htmlFor="medicare"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Medicare Number
+                  Medicare Number<span className="text-red-600">*</span>
                 </label>
                 <div className="mt-2">
                   <input
@@ -81,7 +81,7 @@ function HealthInformation() {
                   htmlFor="medical-condition"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Medical Condition
+                  Medical Condition<span className="text-red-600">*</span>
                 </label>
                 <div className="mt-2">
                   <input
@@ -110,7 +110,7 @@ function HealthInformation() {
                   htmlFor="allergy"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Allergy
+                  Allergy<span className="text-red-600">*</span>
                 </label>
                 <div className="mt-2">
                   <input

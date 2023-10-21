@@ -41,7 +41,7 @@ function Subjects() {
                   htmlFor="subjects"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Subjects
+                  Subjects<span className="text-red-600">*</span>
                 </label>
                 <div className="mt-2">
                   {subjects.map((subject) => (
@@ -91,7 +91,7 @@ function Subjects() {
       <div className="grid grid-cols-1 gap-x-8 gap-y-8 pt-10 md:grid-cols-3">
         <div className="px-4 sm:px-0">
           <h2 className="text-base font-semibold leading-7 text-gray-900">
-            Please tick all relevant
+            Please tick all relevant<span className="text-red-600">*</span>
           </h2>
           {/* <p className="mt-1 text-sm leading-6 text-gray-600">
             Please provide medicare of private health insurance number below

@@ -35,7 +35,7 @@ function StudentInfo() {
                   htmlFor="first-name"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  First name{" "}
+                  First name{" "} <span className="text-red-600">*</span>
                   <span className="italic text-xs text-gray-500">
                     (including middle name)
                   </span>
@@ -61,7 +61,7 @@ function StudentInfo() {
                   htmlFor="last-name"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Last name
+                  Last name<span className="text-red-600">*</span>
                 </label>
                 <div className="mt-2">
                   <input
@@ -85,7 +85,7 @@ function StudentInfo() {
                   htmlFor="last-name"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Date of Birth
+                  Date of Birth<span className="text-red-600">*</span>
                 </label>
                 <div className="mt-2">
                   {/* <input
@@ -159,7 +159,7 @@ function StudentInfo() {
                   htmlFor="gender"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Gender
+                  Gender<span className="text-red-600">*</span>
                 </label>
                 <div className="mt-2">
                   <Controller
@@ -202,7 +202,7 @@ function StudentInfo() {
                   htmlFor="email"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Contact number-
+                  Contact number<span className="text-red-600">*</span>-
                   <span className="italic text-xs bg-slate-200 text-gray-500">
                     ਇਸ ਮੋਬਾਇਲ ਨੰਬਰ ਤੇ ਆਪ ਜੀ ਨੂੰ ਵਿਦਿਆਰਥੀ ਨਾਲ ਸੰਬੰਧਿਤ ਤਸਵੀਰਾਂ,
                     ਵੀਡੀਉ ਅਤੇ ਸੰਦੇਸ਼ ਭੇਜੇ ਜਾਣਗੇ । You will be receiving videos ,
@@ -231,7 +231,7 @@ function StudentInfo() {
                   htmlFor="email"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Email address
+                  Email address<span className="text-red-600">*</span>
                 </label>
                 <div className="mt-2">
                   <input
@@ -255,7 +255,7 @@ function StudentInfo() {
                   htmlFor="street-address"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Address
+                  Address<span className="text-red-600">*</span>
                 </label>
                 <div className="mt-2">
                   <input
@@ -300,7 +300,7 @@ function StudentInfo() {
                   htmlFor="city"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Suburb
+                  Suburb<span className="text-red-600">*</span>
                 </label>
                 <div className="mt-2">
                   <input
@@ -345,7 +345,7 @@ function StudentInfo() {
                   htmlFor="postal-code"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  ZIP / Postal code
+                  ZIP / Postal code<span className="text-red-600">*</span>
                 </label>
                 <div className="mt-2">
                   <input
@@ -368,7 +368,7 @@ function StudentInfo() {
                   htmlFor="photo"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Photo -
+                  Photo<span className="text-red-600">*</span> -
                   <span className="italic text-xs text-gray-600">
                     Student Photo will be used to make Student ID Card.
                   </span>

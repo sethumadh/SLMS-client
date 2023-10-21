@@ -24,7 +24,7 @@ function EmergencyContact() {
                   htmlFor="contact-person"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Emergency Contact Person - Name
+                  Emergency Contact Person<span className="text-red-600">*</span> - Name
                 </label>
                 <div className="mt-2">
                   <input
@@ -53,7 +53,7 @@ function EmergencyContact() {
                   htmlFor="contact-number"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Emergency Contact{" "}
+                  Emergency Contact<span className="text-red-600">*</span>
                 </label>
                 <div className="mt-2">
                   <input
@@ -82,7 +82,7 @@ function EmergencyContact() {
                   htmlFor="relationship"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Relationship with child
+                  Relationship with child<span className="text-red-600">*</span>
                 </label>
                 <div className="mt-2">
                   <input
