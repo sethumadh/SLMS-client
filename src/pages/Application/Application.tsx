@@ -11,6 +11,7 @@ import ParentsInfo from "@/components/Application/ParentsInfo/ParentsInfo"
 import EmergencyContact from "@/components/Application/EmergencyContact/EmergencyContact"
 import HealthInformation from "@/components/Application/HealthInformation/HealthInformation"
 import Subjects from "@/components/Application/Subjects/Subjects"
+import OtherInfo from "@/components/Application/OtherInfo/OtherInfo"
 
 export type StudentWizardSchema = z.infer<typeof studentSetupWizardSchema>
 
@@ -21,80 +22,88 @@ function Application() {
 
   const methods = useForm<StudentWizardSchema>({
     resolver: zodResolver(studentSetupWizardSchema),
-    defaultValues: {
-      personalDetails: {
-        firstName: "",
-        lastName: "",
-        DOB: new Date("01-01-2010"),
-        gender: "",
-        email: "",
-        contact: "",
-        address: "",
-        suburb: "",
-        state: "Victoria",
-        country: "Australia",
-        postcode: "",
-        image: "",
-      },
-      parentsSchema: {
-        fatherName: "",
-        motherName: "",
-        parentContact: "",
-        parentEmail: "",
-      },
-      emergencyContact: {
-        contactPerson: "",
-        contactNumber: "",
-        relationship: "",
-      },
-      healthInformation: {
-        medicareNumber: "",
-        ambulanceMembershipNumber: "",
-        medicalCondition: "",
-        allergy: "",
-      },
-      subjects: {
-        subjects: [],
-        subjectRelated: [],
-      },
-    },
     // defaultValues: {
     //   personalDetails: {
-    //     firstName: "sethu",
-    //     lastName: "sethu",
+    //     firstName: "",
+    //     lastName: "",
     //     DOB: new Date("01-01-2010"),
     //     gender: "",
-    //     email: "s@s.com",
-    //     contact: "0999999999",
-    //     address: "sethu",
-    //     suburb: "sethu",
+    //     email: "",
+    //     contact: "",
+    //     address: "",
+    //     suburb: "",
     //     state: "Victoria",
     //     country: "Australia",
-    //     postcode: "1234",
+    //     postcode: "",
     //     image: "",
     //   },
     //   parentsSchema: {
-    //     fatherName: "sethu",
-    //     motherName: "sethu",
-    //     parentContact: "0999999999",
-    //     parentEmail: "s@s.com",
+    //     fatherName: "",
+    //     motherName: "",
+    //     parentContact: "",
+    //     parentEmail: "",
     //   },
     //   emergencyContact: {
-    //     contactPerson: "sethu",
-    //     contactNumber: "0999999999",
-    //     relationship: "friend",
+    //     contactPerson: "",
+    //     contactNumber: "",
+    //     relationship: "",
     //   },
     //   healthInformation: {
-    //     medicareNumber: "1111111111",
-    //     ambulanceMembershipNumber: "2222",
-    //     medicalCondition: "sssss",
-    //     allergy: "ssssss",
+    //     medicareNumber: "",
+    //     ambulanceMembershipNumber: "",
+    //     medicalCondition: "",
+    //     allergy: "",
     //   },
     //   subjects: {
     //     subjects: [],
     //     subjectRelated: [],
     //   },
+    //   otherInformation: {
+    //     otherInfo: "",
+    //     declaration: [],
+    //   },
     // },
+    defaultValues: {
+      personalDetails: {
+        firstName: "sethu",
+        lastName: "sethu",
+        DOB: new Date("01-01-2010"),
+        gender: "",
+        email: "s@s.com",
+        contact: "0999999999",
+        address: "sethu",
+        suburb: "sethu",
+        state: "Victoria",
+        country: "Australia",
+        postcode: "1234",
+        image: "",
+      },
+      parentsSchema: {
+        fatherName: "sethu",
+        motherName: "sethu",
+        parentContact: "0999999999",
+        parentEmail: "s@s.com",
+      },
+      emergencyContact: {
+        contactPerson: "sethu",
+        contactNumber: "0999999999",
+        relationship: "friend",
+      },
+      healthInformation: {
+        medicareNumber: "1111111111",
+        ambulanceMembershipNumber: "2222",
+        medicalCondition: "sssss",
+        allergy: "ssssss",
+      },
+      subjects: {
+        subjects: [],
+        subjectRelated: [],
+      },
+      otherInformation: {
+        otherInfo: "",
+        declaration: [],
+      },
+    },
   })
 
   const { trigger } = methods
@@ -127,6 +136,12 @@ function Application() {
         shouldFocus: true,
       })
 
+      if (validateStep) setStep(5)
+    } else if (step == 5) {
+      const validateStep = await trigger(["subjects"], {
+        shouldFocus: true,
+      })
+
       if (validateStep) setNextPage(true)
     }
   }
@@ -152,6 +167,7 @@ function Application() {
               {step == 2 && <EmergencyContact />}
               {step == 3 && <HealthInformation />}
               {step == 4 && <Subjects />}
+              {step == 5 && <OtherInfo />}
               <div className="">
                 <ApplicationFooterSection
                   showPrevBtn={step == 0 ? false : true}
@@ -160,7 +176,7 @@ function Application() {
                     setStep(step - 1)
                   }}
                   type={!nextPage ? "button" : "submit"}
-                  nextText={step != 4 ? "Next" : "Submit"}
+                  nextText={step != 5 ? "Next" : "Submit"}
                   nextOnClick={() => {
                     handlNextStep()
                   }}

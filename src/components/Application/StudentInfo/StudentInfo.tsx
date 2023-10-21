@@ -7,7 +7,7 @@ import Select, { SingleValue } from "react-select"
 
 const options = [
   { value: "male", label: "Male" },
-  { value: "female", label: "female" },
+  { value: "female", label: "Female" },
   { value: "other", label: "Other" },
 ]
 
@@ -35,7 +35,7 @@ function StudentInfo() {
                   htmlFor="first-name"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  First name{" "} <span className="text-red-600">*</span>
+                  First name <span className="text-red-600">*</span>
                   <span className="italic text-xs text-gray-500">
                     (including middle name)
                   </span>

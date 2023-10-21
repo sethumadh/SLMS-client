@@ -97,10 +97,20 @@ export const SubjectSchema = z.object({
     }),
 })
 
+export const OtherInformationSchema = z.object({
+  otherInfo: z.string().optional(),
+  declaration: z
+    .array(z.string())
+    .refine((subjectRelated) => subjectRelated.length > 0, {
+      message: "Please give your declaration",
+    }),
+})
+
 export const studentSetupWizardSchema = z.object({
   personalDetails: PersonalSchema,
   parentsSchema: ParentsSchema,
   emergencyContact: EmergencyContactSchema,
   healthInformation: HealthInformationSchema,
   subjects: SubjectSchema,
+  otherInformation:OtherInformationSchema
 })

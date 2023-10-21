@@ -26,7 +26,13 @@ function Subjects() {
       <div className="grid grid-cols-1 gap-x-8 gap-y-8 pt-10 md:grid-cols-3">
         <div className="px-4 sm:px-0">
           <h2 className="text-base font-semibold leading-7 text-gray-900">
-            Subjects
+            Subjects{" "}
+            <span className="text-xs text-slate-400 italic">
+              *ਪੰਜਾਬੀ ਅਤੇ ਗੁਰਮਤਿ ਕਲਾਸਾਂ ਲਈ ਘੱਟੋ-ਘੱਟ ਉਮਰ ਸਾਢੇ ਤਿੰਨ ਸਾਲ ਹੋਣੀ
+              ਚਾਹੀਦੀ ਹੈ । *ਕੀਰਤਨ ਅਤੇ ਗਤਕਾ ਕਲਾਸਾਂ ਲਈ ਘੱਟੋ-ਘੱਟ ਉਮਰ ਪੰਜ ਸਾਲ ਹੋਣੀ
+              ਚਾਹੀਦੀ ਹੈ । *ਗੁਰਬਾਣੀ ਸੰਥਿਆਂ ਲਈ ਵਿਦਿਆਰਥੀ ਪੰਜਾਬੀ ਚੰਗੀ ਤਰ੍ਹਾਂ ਪੜ੍ਹ
+              ਲੈਂਦਾ ਹੋਵੇ ।
+            </span>
           </h2>
           {/* <p className="mt-1 text-sm leading-6 text-gray-600">
             Please provide medicare of private health insurance number below
