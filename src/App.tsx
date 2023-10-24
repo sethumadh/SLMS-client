@@ -23,15 +23,19 @@ import Attendance from "./pages/Admin/Attendance/Attendance"
 import Timetable from "./pages/Admin/Timetable/Timetable"
 import Communication from "./pages/Admin/Communication/Communication"
 import Administration from "./pages/Admin/Administration/Administration"
+import PageNotFound from "./pages/PageNotFound/PageNotFound"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
+    {/* ROle= guest/user */}
       <Route path="/" element={<Navbar />}>
         <Route index element={<Home />} />
-        <Route path="/application" element={<Application />} />
-        <Route path="/application-submit" element={<SubmitPage />} />
+        <Route path="application" element={<Application />} />
+        <Route path="application-submit" element={<SubmitPage />} />
       </Route>
+
+      {/* Role= admin */}
       <Route path="/admin" element={<AdminDashboardLayout />}>
         <Route index element={<Dashboard />} />
         <Route path="students" element={<Students />} />
@@ -42,7 +46,7 @@ const router = createBrowserRouter(
         <Route path="administration" element={<Administration />} />
         <Route path="timetable" element={<Timetable />} />
       </Route>
-      {/* <Route path="/*" element={}/> */}
+      <Route path="/*" element={<PageNotFound/>}/>
     </>
   )
 )
