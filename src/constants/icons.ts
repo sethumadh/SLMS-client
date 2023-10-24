@@ -1,0 +1,35 @@
+import {
+  PresentationChartBarIcon,
+  Cog6ToothIcon,
+  PowerIcon,
+} from "@heroicons/react/24/solid"
+import {
+  LayoutDashboard,
+  Users,
+  Package,
+  BadgeDollarSign,
+  ShieldAlert,
+  Clock4,
+  Send,
+  LockKeyhole,
+  LogOut,
+  Menu,
+  Home,
+} from "lucide-react"
+
+export default {
+  Cog6ToothIcon,
+  PowerIcon,
+  PresentationChartBarIcon,
+  LayoutDashboard,
+  Users,
+  Package,
+  BadgeDollarSign,
+  ShieldAlert,
+  Clock4,
+  Send,
+  LockKeyhole,
+  LogOut,
+  Menu,
+  Home,
+}

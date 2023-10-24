@@ -14,6 +14,13 @@ import Subjects from "@/components/Application/Subjects/Subjects"
 import OtherInfo from "@/components/Application/OtherInfo/OtherInfo"
 
 export type StudentWizardSchema = z.infer<typeof studentSetupWizardSchema>
+type FieldName =
+  | "personalDetails"
+  | "parentsSchema"
+  | "emergencyContact"
+  | "healthInformation"
+  | "subjects"
+  | "otherInformation"
 
 function Application() {
   const [nextPage, setNextPage] = useState(false)
@@ -107,42 +114,67 @@ function Application() {
   })
 
   const { trigger } = methods
-  const handlNextStep = async () => {
-    if (step == 0) {
+  // const handleNextStep = async () => {
+  //   if (step == 0) {
+  //     setNextPage(false)
+  //     const validateStep = await trigger(["personalDetails"], {
+  //       shouldFocus: true,
+  //     })
+  //     if (validateStep) setStep(1)
+  //   } else if (step == 1) {
+  //     const validateStep = await trigger(["parentsSchema"], {
+  //       shouldFocus: true,
+  //     })
+  //     if (validateStep) setStep(2)
+  //   } else if (step == 2) {
+  //     setNextPage(false)
+  //     const validateStep = await trigger(["emergencyContact"], {
+  //       shouldFocus: true,
+  //     })
+  //     if (validateStep) setStep(3)
+  //   } else if (step == 3) {
+  //     setNextPage(false)
+  //     const validateStep = await trigger(["healthInformation"], {
+  //       shouldFocus: true,
+  //     })
+  //     if (validateStep) setStep(4)
+  //   } else if (step == 4) {
+  //     const validateStep = await trigger(["subjects"], {
+  //       shouldFocus: true,
+  //     })
+
+  //     if (validateStep) setStep(5)
+  //   } else if (step == 5) {
+  //     const validateStep = await trigger(["subjects"], {
+  //       shouldFocus: true,
+  //     })
+
+  //     if (validateStep) setNextPage(true)
+  //   }
+  // }
+
+  const handleNextStep = async () => {
+    const validationFields: FieldName[] = [
+      "personalDetails",
+      "parentsSchema",
+      "emergencyContact",
+      "healthInformation",
+      "subjects",
+    ]
+
+    if (step >= 0 && step <= validationFields.length) {
       setNextPage(false)
-      const validateStep = await trigger(["personalDetails"], {
-        shouldFocus: true,
-      })
-      if (validateStep) setStep(1)
-    } else if (step == 1) {
-      const validateStep = await trigger(["parentsSchema"], {
-        shouldFocus: true,
-      })
-      if (validateStep) setStep(2)
-    } else if (step == 2) {
-      setNextPage(false)
-      const validateStep = await trigger(["emergencyContact"], {
-        shouldFocus: true,
-      })
-      if (validateStep) setStep(3)
-    } else if (step == 3) {
-      setNextPage(false)
-      const validateStep = await trigger(["healthInformation"], {
-        shouldFocus: true,
-      })
-      if (validateStep) setStep(4)
-    } else if (step == 4) {
-      const validateStep = await trigger(["subjects"], {
+      const validateStep = await trigger([validationFields[step]], {
         shouldFocus: true,
       })
 
-      if (validateStep) setStep(5)
-    } else if (step == 5) {
-      const validateStep = await trigger(["subjects"], {
-        shouldFocus: true,
-      })
-
-      if (validateStep) setNextPage(true)
+      if (validateStep) {
+        if (step === 5) {
+          setNextPage(true)
+        } else {
+          setStep(step + 1)
+        }
+      }
     }
   }
 
@@ -178,7 +210,7 @@ function Application() {
                   type={!nextPage ? "button" : "submit"}
                   nextText={step != 5 ? "Next" : "Submit"}
                   nextOnClick={() => {
-                    handlNextStep()
+                    handleNextStep()
                   }}
                   // isSubmitting={updateBrandProfile.isLoading}
                 />
