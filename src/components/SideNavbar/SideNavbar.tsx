@@ -82,7 +82,6 @@ function SideNavBar() {
               </>
             }
             component={<Link to={`/admin`} />}
-
           >
             {/* {user.user.name} */} Admin
           </MenuItem>
@@ -91,7 +90,7 @@ function SideNavBar() {
               if (!collapsed) setCollapsed(!collapsed)
             }}
             className={`${
-              activeLink == "/admin" 
+              activeLink == "/admin"
                 ? "bg-gradient-to-r from-orange-400  to-yellow-300"
                 : ""
             }`}

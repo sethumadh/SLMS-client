@@ -54,42 +54,42 @@ const Navbar = () => {
               } absolute lg:static transition-all duration-300 w-full py-12 lg:py-0 left-1/2 lg:opacity-100 lg:translate-x-0 lg:bg-transparent lg:w-auto -translate-x-1/2 top-20 sm:top-24 bg-[#3764cd] `}
             >
               <nav className="flex flex-col items-center space-y-8 lg:flex-row lg:space-y-0 lg:-mx-4">
-                <a
-                  href="#"
+                <Link
+                  to="#"
                   className="font-medium text-white lg:text-black lg:hover:text-gray-400 lg:mx-4"
                 >
                   Home
-                </a>
-                <a
-                  href="#"
+                </Link>
+                <Link
+                  to="#"
                   className="font-medium text-white lg:text-black lg:hover:text-gray-400 lg:mx-4"
                 >
                   About
-                </a>
-                <a
-                  href="#"
+                </Link>
+                <Link
+                  to="/admin"
                   className="font-medium text-white lg:text-black lg:hover:text-gray-400 lg:mx-4"
                 >
-                  Contact
-                </a>
-                <a
-                  href="#"
+                  Admin
+                </Link>
+                <Link
+                  to="#"
                   className="font-medium text-white lg:text-black lg:hover:text-gray-400 lg:mx-4"
                 >
                   Classes & Events
-                </a>
-                <a
+                </Link>
+                <Link
                   className="px-8 py-2.5 text-white lg:text-black lg:hover:bg-blue-600 lg:hover:text-white duration-300 transition-colors font-medium lg:mx-4 border-2 lg:border-blue-400 border-blue-400 rounded-lg"
-                  href="#"
+                  to="#"
                 >
                   Staff Login
-                </a>
+                </Link>
               </nav>
             </div>
           </div>
         </header>
       </div>
-      <Outlet/>
+      <Outlet />
     </div>
   )
 }
