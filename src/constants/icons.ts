@@ -15,6 +15,8 @@ import {
   LogOut,
   Menu,
   Home,
+  ChevronRight,
+  ChevronLeft
 } from "lucide-react"
 
 export default {
@@ -32,4 +34,6 @@ export default {
   LogOut,
   Menu,
   Home,
+  ChevronRight,
+  ChevronLeft
 }
