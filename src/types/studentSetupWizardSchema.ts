@@ -112,5 +112,13 @@ export const studentSetupWizardSchema = z.object({
   emergencyContact: EmergencyContactSchema,
   healthInformation: HealthInformationSchema,
   subjects: SubjectSchema,
-  otherInformation:OtherInformationSchema
+  otherInformation: OtherInformationSchema,
+})
+export const studentSchema = z.object({
+  personalDetails: PersonalSchema,
+  parentsSchema: ParentsSchema,
+  emergencyContact: EmergencyContactSchema,
+  healthInformation: HealthInformationSchema,
+  subjects: SubjectSchema,
+  otherInformation: OtherInformationSchema,
 })

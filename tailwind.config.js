@@ -78,6 +78,7 @@ module.exports = {
     // eslint-disable-next-line no-undef
     require("tailwindcss-animate"),
     require("@tailwindcss/forms"),
+    require('@tailwindcss/forms'),
     require("flowbite/plugin"), // Add this line
   ],
 }

@@ -25,6 +25,9 @@ import Communication from "./pages/Admin/Communication/Communication"
 import Administration from "./pages/Admin/Administration/Administration"
 import PageNotFound from "./pages/PageNotFound/PageNotFound"
 import ClassesAndEvents from "./pages/ClassesAndEvents/ClassesAndEvents"
+import StudentsNavbar from "./Layouts/Studentslayout/StudentsLayout"
+import StudentDetail from "./pages/StudentDetail/StudentDetail"
+import StudentDetailLayout from "./Layouts/StudentDetailLayout/StudentDetailyout"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -40,7 +43,24 @@ const router = createBrowserRouter(
       {/* Role = admin */}
       <Route path="/admin" element={<AdminDashboardLayout />}>
         <Route index element={<Dashboard />} />
-        <Route path="students" element={<Students />} />
+        <Route path="students" element={<StudentsNavbar />}>
+          <Route index element={<Students />} />
+          <Route path="student-detail/:id" element={<StudentDetailLayout />}>
+            <Route index element={<StudentDetail />} />
+          </Route>
+
+          <Route
+            path="alumni"
+            element={
+              <>
+                <div className="flex justify-center items-center">
+                  Alumni section
+                </div>
+              </>
+            }
+          />
+          <Route />
+        </Route>
         <Route path="enrollment" element={<Enrollment />} />
         <Route path="finance" element={<Finance />} />
         <Route path="attendance" element={<Attendance />} />

@@ -105,7 +105,7 @@ function SideNavBar() {
               if (!collapsed) setCollapsed(!collapsed)
             }}
             className={`${
-              activeLink == "/admin/students"
+              activeLink.startsWith("/admin/students")
                 ? "bg-gradient-to-r from-orange-400  to-yellow-300"
                 : ""
             }`}

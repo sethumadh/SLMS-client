@@ -2,7 +2,6 @@
 import { useCallback, useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import ReactPaginate from "react-paginate"
-import { ArrowLongLeftIcon, ArrowLongRightIcon } from '@heroicons/react/20/solid'
 
 import Searchbar from "@/components/Searchbar/Searchbar"
 import Skeleton from "@/components/Skeleton"
@@ -697,7 +696,8 @@ function Students() {
   const [searchData, setSearchData] = useState<studentListSchema>([])
   // client side pagination
   const [currentPage, setCurrentPage] = useState(1)
-  const [recordsPerPage, setRecordsPerPage] = useState(10)
+  // const [recordsPerPage, setRecordsPerPage] = useState(10)
+  const [recordsPerPage] = useState(10)
   const indexOfLastRecord = currentPage * recordsPerPage
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage
   const nPages = Math.ceil(searchData?.length / recordsPerPage)
@@ -731,10 +731,10 @@ function Students() {
   }
 
   return (
-    <div className="container mt-12">
+    <div className="container mt-2">
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="sm:flex sm:items-center">
-          <div className="sm:flex-auto">
+          <div className="sm:flex-auto ">
             <div className="">
               <h3 className="text-xl font-semibold leading-6 text-gray-900 mb-4">
                 Enrolled Students
@@ -774,7 +774,7 @@ function Students() {
             <Skeleton />
           </>
         ) : (
-          <div className="mt-8 flow-root">
+          <div className="mt-8 flow-root h-[575px]">
             <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
                 <table className="min-w-full divide-y divide-gray-300">
@@ -838,7 +838,7 @@ function Students() {
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 ">
                           <Link
-                            to="#"
+                            to={`student-detail/${student.id.toString()}`}
                             className="text-indigo-600 hover:text-indigo-900 "
                           >
                             View
