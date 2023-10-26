@@ -1,5 +1,9 @@
+import PersonalDetails from "./PersonalDetails/PersonalDetails"
+
 function StudentDetail() {
-  return <div className="flex justify-center items-center">StudentDetail</div>
+  return <div className="">
+    <PersonalDetails/>
+  </div>
 }
 
 export default StudentDetail

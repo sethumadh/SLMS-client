@@ -47,6 +47,26 @@ const router = createBrowserRouter(
           <Route index element={<Students />} />
           <Route path="student-detail/:id" element={<StudentDetailLayout />}>
             <Route index element={<StudentDetail />} />
+            <Route
+              path="health"
+              element={
+                <div className="flex justify-center items-center">Health</div>
+              }
+            />
+            <Route
+              path="other"
+              element={
+                <div className="flex justify-center items-center">other</div>
+              }
+            />
+            <Route
+              path="declaration"
+              element={
+                <div className="flex justify-center items-center">
+                  declaration
+                </div>
+              }
+            />
           </Route>
 
           <Route

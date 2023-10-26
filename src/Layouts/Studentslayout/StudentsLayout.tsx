@@ -32,7 +32,7 @@ export default function StudentsNavbar() {
         >
           {tabs.map((tab) => (
             <NavLink
-              end={tab.end}
+              end
               key={tab.name}
               to={tab.to}
               className={({ isActive }) => {

@@ -2,6 +2,8 @@ import {
   PresentationChartBarIcon,
   Cog6ToothIcon,
   PowerIcon,
+  EnvelopeIcon,
+  PhoneIcon,
 } from "@heroicons/react/24/solid"
 import {
   LayoutDashboard,
@@ -16,7 +18,7 @@ import {
   Menu,
   Home,
   ChevronRight,
-  ChevronLeft
+  ChevronLeft,Undo2
 } from "lucide-react"
 
 export default {
@@ -35,5 +37,7 @@ export default {
   Menu,
   Home,
   ChevronRight,
-  ChevronLeft
+  ChevronLeft,
+  EnvelopeIcon,
+  PhoneIcon,Undo2
 }
