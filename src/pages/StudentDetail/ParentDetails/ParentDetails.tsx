@@ -37,9 +37,9 @@ function ParentDetails() {
   return (
     <div>
       <div className="px-4 sm:px-0 flex justify-between gap-x-4 lg:mt-4 ">
-        <div className="flex gap-x-4 flex-col sm:flex">
+        <div className="flex flex-col sm:flex sm:flex-row gap-x-4">
           <h3 className="sm:text-base font-semibold leading-7 text-gray-900  ">
-            Applicant's parents Information
+            Parents Information
           </h3>
           <p className="mt-1 max-w-2xl text-xs leading-6 text-gray-500 italic">
             *Parent details given by the applicatant.
@@ -83,12 +83,24 @@ function ParentDetails() {
 
                 <div className="px-4 py-2 sm:grid sm:grid-cols-4 sm:gap-x-4 sm:px-0">
                   <dt className="text-sm font-medium leading-6 text-gray-900">
-                    Parent Email address 
+                    Parent Email address
                   </dt>
                   {!isEdit ? (
-                    <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                      karansingh@example.com
-                    </dd>
+                    <>
+                      <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                        karansingh@example.com
+                      </dd>
+                      <Link
+                        to={`mailto:${parent.email}`}
+                        className="flex gap-2 items-center justify-center"
+                      >
+                        <Icons.EnvelopeIcon
+                          className="h-5 w-5 text-gray-400"
+                          aria-hidden="true"
+                        />
+                        Email
+                      </Link>
+                    </>
                   ) : (
                     <div className="sm:col-span-2 sm:mt-0">
                       <input
@@ -134,32 +146,6 @@ function ParentDetails() {
                   )}
                 </div>
               </dl>
-              <div className="-mt-px flex divide-x divide-gray-200 border rounded-xl ">
-                <div className="flex w-0 flex-1">
-                  <Link
-                    to={`mailto:${parent.email}`}
-                    className="relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900"
-                  >
-                    <Icons.EnvelopeIcon
-                      className="h-5 w-5 text-gray-400"
-                      aria-hidden="true"
-                    />
-                    Email
-                  </Link>
-                </div>
-                <div className="-ml-px flex w-0 flex-1">
-                  <Link
-                    to={`tel:${parent.telephone}`}
-                    className="relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-br-lg border border-transparent py-4 text-sm font-semibold text-gray-900"
-                  >
-                    <Icons.PhoneIcon
-                      className="h-5 w-5 text-gray-400"
-                      aria-hidden="true"
-                    />
-                    Call
-                  </Link>
-                </div>
-              </div>
             </div>
           </ul>
 

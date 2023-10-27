@@ -148,12 +148,10 @@ export const StudentPersonalDetailsSchema = z.object({
     .max(4, { message: "Invalid Post code" }),
 })
 
-/* 
-Student Detail Page 
-*/
-/* 
-Parents Detail Page 
-*/
+/* Student Detail Page */
+
+
+/* Parents Detail Page */
 export const StudentParentDetailsSchema = z.object({
   parentEmail: z
     .string({ required_error: "Parent's Email is required" })
@@ -162,8 +160,11 @@ export const StudentParentDetailsSchema = z.object({
     .string({ required_error: "Parent'sMobile number is required" })
     .regex(/^0\d{9}$/, "Please provide a valid Number!"),
 })
-/* 
-Parents Detail Page 
-*/
+/* Parents Detail Page */
+
+/* Emergency/health Detail Page */
+
+/* Emergency/health Detail Page */
+
 
 // *********Admin************

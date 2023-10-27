@@ -42,7 +42,7 @@ function PersonalDetails() {
   return (
     <div>
       <div className="px-4 sm:px-0 flex justify-between gap-x-4 lg:mt-4 ">
-        <div className="flex gap-x-4">
+        <div className="flex flex-col sm:flex sm:flex-row gap-x-4">
           <h3 className="text-base font-semibold leading-7 text-gray-900 ">
             Applicant Information
           </h3>
@@ -57,7 +57,7 @@ function PersonalDetails() {
           <span>
             <Icons.Undo2 className="w-4 h-4" />
           </span>
-          <p>Go Back</p>
+          <p className="hidden sm:block sm:text-sm">Go Back</p>
         </Link>
       </div>
       <FormProvider {...methods}>
@@ -174,14 +174,13 @@ function PersonalDetails() {
                     </div>
                   )}
 
-                    <div className="flex items-center">
-                      {methods.formState.errors.email?.message && (
-                        <span className="text-xs text-red-600">
-                          *{methods.formState.errors.email?.message}
-                        </span>
-                      )}
-                    </div>
-
+                  <div className="flex items-center">
+                    {methods.formState.errors.email?.message && (
+                      <span className="text-xs text-red-600">
+                        *{methods.formState.errors.email?.message}
+                      </span>
+                    )}
+                  </div>
                 </div>
 
                 <div className="px-4 py-2 sm:grid sm:grid-cols-4 sm:gap-x-4  sm:px-0">
@@ -254,13 +253,13 @@ function PersonalDetails() {
                     </div>
                   )}
                   {isEdit && (
-                  <div className="flex items-center">
-                    {methods.formState.errors.suburb?.message && (
-                      <span className="text-xs text-red-600">
-                        *{methods.formState.errors.suburb?.message}
-                      </span>
-                    )}
-                  </div>
+                    <div className="flex items-center">
+                      {methods.formState.errors.suburb?.message && (
+                        <span className="text-xs text-red-600">
+                          *{methods.formState.errors.suburb?.message}
+                        </span>
+                      )}
+                    </div>
                   )}
                 </div>
                 <div className="px-4 py-2 sm:grid sm:grid-cols-4 sm:gap-x-4  sm:px-0">
@@ -280,14 +279,13 @@ function PersonalDetails() {
                     </div>
                   )}
                   {isEdit && (
-
-                  <div className="flex items-center">
-                    {methods.formState.errors.postcode?.message && (
-                      <span className="text-xs text-red-600">
-                        *{methods.formState.errors.postcode?.message}
-                      </span>
-                    )}
-                  </div>
+                    <div className="flex items-center">
+                      {methods.formState.errors.postcode?.message && (
+                        <span className="text-xs text-red-600">
+                          *{methods.formState.errors.postcode?.message}
+                        </span>
+                      )}
+                    </div>
                   )}
                 </div>
                 <div className="px-4 py-2 sm:grid sm:grid-cols-4 sm:gap-x-4  sm:px-0">
@@ -297,7 +295,7 @@ function PersonalDetails() {
                   <dd className="mt-1 text-sm leading-6 text-gray-700  sm:mt-0">
                     Victoria
                   </dd>
-                {/* </div>
+                  {/* </div>
 
                 <div className="px-4 py-2 sm:grid sm:grid-cols-4 sm:gap-x-4  sm:px-0"> */}
                   <dt className="text-sm font-medium leading-6 text-gray-900">
@@ -340,7 +338,7 @@ function PersonalDetails() {
             </button>
 
             <button
-            disabled={!isEdit}
+              disabled={!isEdit}
               onClick={() => {
                 setIsEdit(false)
               }}
