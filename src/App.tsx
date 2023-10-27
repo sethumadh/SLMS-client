@@ -16,7 +16,7 @@ import SubmitPage from "@/pages/SubmitPage/SubmitPage"
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout/AdminDashboardLayout"
 import Dashboard from "@/pages/Admin/Dashboard/Dashboard"
 import LoadingSpinner from "@/components/Loadingspinner"
-import Students from "./pages/Admin/Students/Students"
+import Students from "./pages/Admin/Students/StudentList/StudentList"
 import Enrollment from "./pages/Admin/Enrollement/Enrollement"
 import Finance from "./pages/Admin/Finance/Finance"
 import Attendance from "./pages/Admin/Attendance/Attendance"
@@ -26,9 +26,12 @@ import Administration from "./pages/Admin/Administration/Administration"
 import PageNotFound from "./pages/PageNotFound/PageNotFound"
 import ClassesAndEvents from "./pages/ClassesAndEvents/ClassesAndEvents"
 import StudentsNavbar from "./Layouts/Studentslayout/StudentsLayout"
-import StudentDetailLayout from "./Layouts/StudentDetailLayout/StudentDetailyout"
-import PersonalDetails from "./pages/StudentDetail/PersonalDetails/PersonalDetails"
-import ParentDetails from "./pages/StudentDetail/ParentDetails/ParentDetails"
+import StudentDetailLayout from "./Layouts/StudentDetailLayout/StudentDetailLayout"
+import PersonalDetails from "./pages/Admin/Students/StudentDetail/PersonalDetails/PersonalDetails"
+import ParentDetails from "./pages/Admin/Students/StudentDetail/ParentDetails/ParentDetails"
+import HealthDetails from "./pages/Admin/Students/StudentDetail/HealthDetails.tsx/HealthDetails"
+import Declaration from "./pages/Admin/Students/StudentDetail/Declaration/Declaration"
+import SubjectDetails from "./pages/Admin/Students/StudentDetail/Subjects/SubjectDetails"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -47,26 +50,14 @@ const router = createBrowserRouter(
         <Route path="students" element={<StudentsNavbar />}>
           <Route index element={<Students />} />
           <Route path="student-detail/:id" element={<StudentDetailLayout />}>
-            <Route index element={<PersonalDetails/>} />
+            <Route index element={<PersonalDetails />} />
             <Route
-              path="health"
-              element={
-                <div className="flex justify-center items-center">Health</div>
-              }
+              path="manage-subjects-classes"
+              element={<SubjectDetails />}
             />
-            <Route
-              path="parent"
-              element={
-                <ParentDetails/>}
-            />
-            <Route
-              path="declaration"
-              element={
-                <div className="flex justify-center items-center">
-                  declaration
-                </div>
-              }
-            />
+            <Route path="health" element={<HealthDetails />} />
+            <Route path="parent" element={<ParentDetails />} />
+            <Route path="declaration" element={<Declaration />} />
           </Route>
 
           <Route

@@ -4,9 +4,10 @@ import { cn } from "@/lib/utils"
 
 const tabs = [
   { name: "Personal Details", href: ".", current: true },
+  { name: "Manage Subject and classes", href: "manage-subjects-classes", current: true },
+  { name: "Parent Details", href: "parent", current: false },
   { name: "Emergency and Health", href: "health", current: false },
   { name: "Declaration", href: "declaration", current: false },
-  { name: "Parent Details", href: "parent", current: false },
   // { name: "Declaration", href: "declaration", current: false },
 ]
 

@@ -47,7 +47,7 @@ function PersonalDetails() {
             Applicant Information
           </h3>
           <p className="mt-1 max-w-2xl text-xs leading-6 text-gray-500 italic">
-            *Personal details, parents information given by the applicatant.
+            *Personal details given by the applicatant.
           </p>
         </div>
         <Link

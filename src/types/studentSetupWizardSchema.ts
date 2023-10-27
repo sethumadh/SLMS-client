@@ -150,7 +150,6 @@ export const StudentPersonalDetailsSchema = z.object({
 
 /* Student Detail Page */
 
-
 /* Parents Detail Page */
 export const StudentParentDetailsSchema = z.object({
   parentEmail: z
@@ -163,8 +162,33 @@ export const StudentParentDetailsSchema = z.object({
 /* Parents Detail Page */
 
 /* Emergency/health Detail Page */
-
+export const StudentHealthDetailsSchema = z.object({
+  medicareNumber: z
+    .string({ required_error: "Post code is required" })
+    .min(10, { message: "Medicare number is minimum 10 digits" })
+    .max(10, { message: "Medicare number is maximum 10 digits" }),
+  ambulanceMembershipNumber: z.string().optional(),
+  medicalCondition: z
+    .string({ required_error: "Please give a valid answer" })
+    .min(3, { message: "Mininum 3 characters" }),
+  allergy: z
+    .string({ required_error: "valid" })
+    .min(3, { message: "Mininum 3 characters" }),
+})
 /* Emergency/health Detail Page */
 
+/*Subject Details*/
+export const StudentSubjectDetailsSchema = z.object({
+  subjects: z.array(z.string()).refine((subjects) => subjects.length > 0, {
+    message: "Please select at least one subject",
+  }),
+  subjectRelated: z
+    .array(z.string())
+    .refine((subjectRelated) => subjectRelated.length > 0, {
+      message: "Please select at least one option",
+    }),
+})
+
+/*Subject Details*/
 
 // *********Admin************
