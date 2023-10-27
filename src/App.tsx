@@ -26,8 +26,9 @@ import Administration from "./pages/Admin/Administration/Administration"
 import PageNotFound from "./pages/PageNotFound/PageNotFound"
 import ClassesAndEvents from "./pages/ClassesAndEvents/ClassesAndEvents"
 import StudentsNavbar from "./Layouts/Studentslayout/StudentsLayout"
-import StudentDetail from "./pages/StudentDetail/StudentDetail"
 import StudentDetailLayout from "./Layouts/StudentDetailLayout/StudentDetailyout"
+import PersonalDetails from "./pages/StudentDetail/PersonalDetails/PersonalDetails"
+import ParentDetails from "./pages/StudentDetail/ParentDetails/ParentDetails"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -46,7 +47,7 @@ const router = createBrowserRouter(
         <Route path="students" element={<StudentsNavbar />}>
           <Route index element={<Students />} />
           <Route path="student-detail/:id" element={<StudentDetailLayout />}>
-            <Route index element={<StudentDetail />} />
+            <Route index element={<PersonalDetails/>} />
             <Route
               path="health"
               element={
@@ -54,10 +55,9 @@ const router = createBrowserRouter(
               }
             />
             <Route
-              path="other"
+              path="parent"
               element={
-                <div className="flex justify-center items-center">other</div>
-              }
+                <ParentDetails/>}
             />
             <Route
               path="declaration"

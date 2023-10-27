@@ -6,7 +6,7 @@ const tabs = [
   { name: "Personal Details", href: ".", current: true },
   { name: "Emergency and Health", href: "health", current: false },
   { name: "Declaration", href: "declaration", current: false },
-  { name: "Any other", href: "other", current: false },
+  { name: "Parent Details", href: "parent", current: false },
   // { name: "Declaration", href: "declaration", current: false },
 ]
 

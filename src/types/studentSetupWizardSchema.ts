@@ -122,3 +122,48 @@ export const studentSchema = z.object({
   subjects: SubjectSchema,
   otherInformation: OtherInformationSchema,
 })
+
+// *********Admin************
+/* 
+Student Detail Page 
+*/
+
+export const StudentPersonalDetailsSchema = z.object({
+  email: z
+    .string({ required_error: "Email is required" })
+    .email({ message: "Invalid email address" }),
+  contact: z
+    .string({ required_error: "Mobile number is required" })
+    .regex(/^0\d{9}$/, "Invalid Number!"),
+  address: z
+    .string({ required_error: "Address is required" })
+    .min(3, { message: "minium 3 characters required" }),
+  suburb: z
+    .string({ required_error: "suburn is required" })
+    .min(3, { message: "minium 3 characters required" }),
+
+  postcode: z
+    .string({ required_error: "Post code is required" })
+    .min(4, { message: "Invalid Post code" })
+    .max(4, { message: "Invalid Post code" }),
+})
+
+/* 
+Student Detail Page 
+*/
+/* 
+Parents Detail Page 
+*/
+export const StudentParentDetailsSchema = z.object({
+  parentEmail: z
+    .string({ required_error: "Parent's Email is required" })
+    .email({ message: "Invalid email address" }),
+  parentContact: z
+    .string({ required_error: "Parent'sMobile number is required" })
+    .regex(/^0\d{9}$/, "Please provide a valid Number!"),
+})
+/* 
+Parents Detail Page 
+*/
+
+// *********Admin************
