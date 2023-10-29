@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { Link } from "react-router-dom"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { FormProvider, useForm } from "react-hook-form"
@@ -23,7 +23,9 @@ const people = [
 ]
 
 function PersonalDetails() {
+  const saveRef = useRef<HTMLButtonElement | null>(null)
   const [isEdit, setIsEdit] = useState(false)
+  const [item, setItem] = useState("")
   const methods = useForm<PersonalDetailsSchema>({
     resolver: zodResolver(StudentPersonalDetailsSchema),
 
@@ -123,57 +125,98 @@ function PersonalDetails() {
             ))}
             <div className="col-span-2  sm:px-4 sm:py-2 ">
               <dl className="divide-y divide-gray-100">
-                <div className="px-4 py-2 sm:grid sm:grid-cols-4 sm:gap-x-4  sm:px-0">
-                  <dt className="text-sm font-medium leading-6 text-gray-900">
-                    First name
-                  </dt>
-                  <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                    Karan
-                  </dd>
-                </div>
+                {/*  */}
 
                 <div className="px-4 py-2 sm:grid sm:grid-cols-4 sm:gap-x-4  sm:px-0">
                   <dt className="text-sm font-medium leading-6 text-gray-900">
-                    Last Name
+                    First Name
                   </dt>
-                  <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                  <dd className="mt-1 text-sm leading-6 text-gray-700  sm:mt-0">
+                    Karan
+                  </dd>
+
+                  <dt className="text-sm font-medium leading-6 text-gray-900">
+                    Last name
+                  </dt>
+                  <dd className="mt-1 text-sm leading-6 text-gray-700  sm:mt-0">
                     Singh
                   </dd>
                 </div>
+
+                {/*  */}
+
                 <div className="px-4 py-2 sm:grid sm:grid-cols-4 sm:gap-x-4  sm:px-0">
                   <dt className="text-sm font-medium leading-6 text-gray-900">
                     Gender
                   </dt>
-                  <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                  <dd className="mt-1 text-sm leading-6 text-gray-700  sm:mt-0">
                     Male
                   </dd>
-                </div>
-                <div className="px-4 py-2 sm:grid sm:grid-cols-4 sm:gap-x-4  sm:px-0">
+
                   <dt className="text-sm font-medium leading-6 text-gray-900">
                     Date of Birth
                   </dt>
-
-                  <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                  <dd className="mt-1 text-sm leading-6 text-gray-700  sm:mt-0">
                     01/01/2008
                   </dd>
                 </div>
+
+                {/*  */}
                 <div className="px-4 py-2 sm:grid sm:grid-cols-4 sm:gap-x-4 sm:px-0">
                   <dt className="text-sm font-medium leading-6 text-gray-900">
                     Email address
                   </dt>
-                  {!isEdit ? (
-                    <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                      karansingh@example.com
-                    </dd>
-                  ) : (
-                    <div className="sm:col-span-2 sm:mt-0">
-                      <input
-                        {...methods.register("email")}
-                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                      />
-                    </div>
+                  {item != "email" && (
+                    <>
+                      <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                        karansingh@example.com
+                      </dd>
+                      <button type="button">
+                        <Icons.Pencil
+                          className="w-4 h-4 flex justify-center items-center text-blue-400"
+                          onClick={() => {
+                            setIsEdit(true)
+                            setItem("email")
+                          }}
+                        />
+                      </button>
+                    </>
                   )}
 
+                  {isEdit && item == "email" && (
+                    <>
+                      <div className="sm:col-span-2 sm:mt-0 relative mt-2">
+                        <input
+                          {...methods.register("email")}
+                          className="peer block w-full border-0 bg-gray-50 p-0 text-gray-900 focus:ring-0 sm:text-sm sm:leading-6"
+                        />
+                        <div
+                          className="absolute inset-x-0 bottom-0 border-t border-gray-300 peer-focus:border-t-2 peer-focus:border-indigo-600"
+                          aria-hidden="true"
+                        />
+                      </div>
+                      <div className="flex gap-x-4">
+                        <button
+                          // type="submit"
+                          onClick={() => {
+                            saveRef.current?.click()
+                            setIsEdit(false)
+                            setItem("")
+                          }}
+                        >
+                          <Icons.Check className="w-4 h-4 text-blue-500" />
+                        </button>
+                        <button
+                          onClick={() => {
+                            setIsEdit(false)
+                            setItem("")
+                          }}
+                        >
+                          <Icons.X className="w-4 h-4 text-red-500" />
+                        </button>
+                      </div>
+                    </>
+                  )}
                   <div className="flex items-center">
                     {methods.formState.errors.email?.message && (
                       <span className="text-xs text-red-600">
@@ -187,17 +230,55 @@ function PersonalDetails() {
                   <dt className="text-sm font-medium leading-6 text-gray-900">
                     Contact
                   </dt>
-                  {!isEdit ? (
-                    <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                      0123456789
-                    </dd>
-                  ) : (
-                    <div className="sm:col-span-2 sm:mt-0">
-                      <input
-                        {...methods.register("contact")}
-                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                      />
-                    </div>
+                  {item != "contact" && (
+                    <>
+                      <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                        0123456789
+                      </dd>
+                      <button type="button">
+                        <Icons.Pencil
+                          className="w-4 h-4 flex justify-center items-center text-blue-400"
+                          onClick={() => {
+                            setIsEdit(true)
+                            setItem("contact")
+                          }}
+                        />
+                      </button>
+                    </>
+                  )}
+                  {isEdit && item == "contact" && (
+                    <>
+                      <div className="sm:col-span-2 sm:mt-0 relative mt-2">
+                        <input
+                          {...methods.register("contact")}
+                          className="peer block w-full border-0 bg-gray-50 p-0 text-gray-900 focus:ring-0 sm:text-sm sm:leading-6"
+                        />
+                        <div
+                          className="absolute inset-x-0 bottom-0 border-t border-gray-300 peer-focus:border-t-2 peer-focus:border-indigo-600"
+                          aria-hidden="true"
+                        />
+                      </div>
+                      <div className="flex gap-x-4">
+                        <button
+                          // type="submit"
+                          onClick={() => {
+                            saveRef.current?.click()
+                            setIsEdit(false)
+                            setItem("")
+                          }}
+                        >
+                          <Icons.Check className="w-4 h-4 text-blue-500" />
+                        </button>
+                        <button
+                          onClick={() => {
+                            setIsEdit(false)
+                            setItem("")
+                          }}
+                        >
+                          <Icons.X className="w-4 h-4 text-red-500" />
+                        </button>
+                      </div>
+                    </>
                   )}
                   {isEdit && (
                     <div className="flex items-center">
@@ -214,17 +295,55 @@ function PersonalDetails() {
                   <dt className="text-sm font-medium leading-6 text-gray-900">
                     Address
                   </dt>
-                  {!isEdit ? (
-                    <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                      Unit 1 , Plumtpton Court, 8th Gillinham street
-                    </dd>
-                  ) : (
-                    <div className="sm:col-span-2 sm:mt-0">
-                      <input
-                        {...methods.register("address")}
-                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                      />
-                    </div>
+                  {item != "address" && (
+                    <>
+                      <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                        Unit 1 , Plumtpton Court, 8th Gillinham street
+                      </dd>
+                      <button type="button">
+                        <Icons.Pencil
+                          className="w-4 h-4 flex justify-center items-center text-blue-400"
+                          onClick={() => {
+                            setIsEdit(true)
+                            setItem("address")
+                          }}
+                        />
+                      </button>
+                    </>
+                  )}
+                  {isEdit && item == "address" && (
+                    <>
+                      <div className="sm:col-span-2 sm:mt-0 relative mt-2">
+                        <input
+                          {...methods.register("address")}
+                          className="peer block w-full border-0 bg-gray-50 p-0 text-gray-900 focus:ring-0 sm:text-sm sm:leading-6"
+                        />
+                        <div
+                          className="absolute inset-x-0 bottom-0 border-t border-gray-300 peer-focus:border-t-2 peer-focus:border-indigo-600"
+                          aria-hidden="true"
+                        />
+                      </div>
+                      <div className="flex gap-x-4">
+                        <button
+                          // type="submit"
+                          onClick={() => {
+                            saveRef.current?.click()
+                            setIsEdit(false)
+                            setItem("")
+                          }}
+                        >
+                          <Icons.Check className="w-4 h-4 text-blue-500" />
+                        </button>
+                        <button
+                          onClick={() => {
+                            setIsEdit(false)
+                            setItem("")
+                          }}
+                        >
+                          <Icons.X className="w-4 h-4 text-red-500" />
+                        </button>
+                      </div>
+                    </>
                   )}
                   {isEdit && (
                     <div className="flex items-center">
@@ -240,17 +359,55 @@ function PersonalDetails() {
                   <dt className="text-sm font-medium leading-6 text-gray-900">
                     Suburb
                   </dt>
-                  {!isEdit ? (
-                    <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                      Dandenong
-                    </dd>
-                  ) : (
-                    <div className="sm:col-span-2 sm:mt-0">
-                      <input
-                        {...methods.register("suburb")}
-                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                      />
-                    </div>
+                  {item != "suburb" && (
+                    <>
+                      <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                        Dandenong
+                      </dd>
+                      <button type="button">
+                        <Icons.Pencil
+                          className="w-4 h-4 flex justify-center items-center text-blue-400"
+                          onClick={() => {
+                            setIsEdit(true)
+                            setItem("suburb")
+                          }}
+                        />
+                      </button>
+                    </>
+                  )}
+                  {isEdit && item == "suburb" && (
+                    <>
+                      <div className="sm:col-span-2 sm:mt-0 relative mt-2">
+                        <input
+                          {...methods.register("suburb")}
+                          className="peer block w-full border-0 bg-gray-50 p-0 text-gray-900 focus:ring-0 sm:text-sm sm:leading-6"
+                        />
+                        <div
+                          className="absolute inset-x-0 bottom-0 border-t border-gray-300 peer-focus:border-t-2 peer-focus:border-indigo-600"
+                          aria-hidden="true"
+                        />
+                      </div>
+                      <div className="flex gap-x-4">
+                        <button
+                          // type="submit"
+                          onClick={() => {
+                            saveRef.current?.click()
+                            setIsEdit(false)
+                            setItem("")
+                          }}
+                        >
+                          <Icons.Check className="w-4 h-4 text-blue-500" />
+                        </button>
+                        <button
+                          onClick={() => {
+                            setIsEdit(false)
+                            setItem("")
+                          }}
+                        >
+                          <Icons.X className="w-4 h-4 text-red-500" />
+                        </button>
+                      </div>
+                    </>
                   )}
                   {isEdit && (
                     <div className="flex items-center">
@@ -266,17 +423,55 @@ function PersonalDetails() {
                   <dt className="text-sm font-medium leading-6 text-gray-900">
                     Postcode
                   </dt>
-                  {!isEdit ? (
-                    <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                      4222
-                    </dd>
-                  ) : (
-                    <div className="">
-                      <input
-                        {...methods.register("postcode")}
-                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                      />
-                    </div>
+                  {item != "postcode" && (
+                    <>
+                      <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                        4222
+                      </dd>
+                      <button type="button">
+                        <Icons.Pencil
+                          className="w-4 h-4 flex justify-center items-center text-blue-400"
+                          onClick={() => {
+                            setIsEdit(true)
+                            setItem("postcode")
+                          }}
+                        />
+                      </button>
+                    </>
+                  )}
+                  {isEdit && item == "postcode" && (
+                    <>
+                      <div className="sm:col-span-2 sm:mt-0 relative mt-2">
+                        <input
+                          {...methods.register("postcode")}
+                          className="peer block w-full border-0 bg-gray-50 p-0 text-gray-900 focus:ring-0 sm:text-sm sm:leading-6"
+                        />
+                        <div
+                          className="absolute inset-x-0 bottom-0 border-t border-gray-300 peer-focus:border-t-2 peer-focus:border-indigo-600"
+                          aria-hidden="true"
+                        />
+                      </div>
+                      <div className="flex gap-x-4">
+                        <button
+                          // type="submit"
+                          onClick={() => {
+                            saveRef.current?.click()
+                            setIsEdit(false)
+                            setItem("")
+                          }}
+                        >
+                          <Icons.Check className="w-4 h-4 text-blue-500" />
+                        </button>
+                        <button
+                          onClick={() => {
+                            setIsEdit(false)
+                            setItem("")
+                          }}
+                        >
+                          <Icons.X className="w-4 h-4 text-red-500" />
+                        </button>
+                      </div>
+                    </>
                   )}
                   {isEdit && (
                     <div className="flex items-center">
@@ -295,9 +490,7 @@ function PersonalDetails() {
                   <dd className="mt-1 text-sm leading-6 text-gray-700  sm:mt-0">
                     Victoria
                   </dd>
-                  {/* </div>
 
-                <div className="px-4 py-2 sm:grid sm:grid-cols-4 sm:gap-x-4  sm:px-0"> */}
                   <dt className="text-sm font-medium leading-6 text-gray-900">
                     Country
                   </dt>
@@ -305,15 +498,6 @@ function PersonalDetails() {
                     Australia
                   </dd>
                 </div>
-
-                {/* <div className="px-4 py-2 sm:grid sm:grid-cols-4 sm:gap-x-4  sm:px-0 ">
-                  <dt className="text-sm font-medium leading-6 text-gray-900">
-                    Subjects
-                  </dt>
-                  <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                    Maths, Science
-                  </dd>
-                </div> */}
               </dl>
             </div>
           </ul>
@@ -325,14 +509,15 @@ function PersonalDetails() {
               }}
               type="button"
               disabled={isEdit}
-              className="disabled:bg-slate-400 disabled:cursor-not-allowed disabled:text-white rounded-md bg-indigo-50 px-2.5 py-1.5 text-sm font-semibold text-indigo-600 shadow-sm hover:bg-indigo-100"
+              className="hidden disabled:bg-slate-400 disabled:cursor-not-allowed disabled:text-white rounded-md bg-indigo-50 px-2.5 py-1.5 text-sm font-semibold text-indigo-600 shadow-sm hover:bg-indigo-100"
             >
               Edit
             </button>
             <button
+              ref={saveRef}
               disabled={!isEdit}
               type="submit"
-              className="disabled:bg-slate-400 disabled:cursor-not-allowed rounded-md bg-indigo-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              className="hidden disabled:bg-slate-400 disabled:cursor-not-allowed rounded-md bg-indigo-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
               Save
             </button>
@@ -343,7 +528,7 @@ function PersonalDetails() {
                 setIsEdit(false)
               }}
               type="button"
-              className="disabled:bg-slate-400 disabled:cursor-not-allowed rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+              className="hidden disabled:bg-slate-400 disabled:cursor-not-allowed rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
             >
               cancel
             </button>

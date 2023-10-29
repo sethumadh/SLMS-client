@@ -18,7 +18,10 @@ import {
   Menu,
   Home,
   ChevronRight,
-  ChevronLeft,Undo2
+  ChevronLeft,
+  Undo2,
+  Pencil,
+  Check,X
 } from "lucide-react"
 
 export default {
@@ -39,5 +42,8 @@ export default {
   ChevronRight,
   ChevronLeft,
   EnvelopeIcon,
-  PhoneIcon,Undo2
+  PhoneIcon,
+  Undo2,
+  Pencil,
+  Check,X
 }

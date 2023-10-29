@@ -174,6 +174,15 @@ export const StudentHealthDetailsSchema = z.object({
   allergy: z
     .string({ required_error: "valid" })
     .min(3, { message: "Mininum 3 characters" }),
+     contactPerson: z
+    .string({ required_error: "Contact person's name is required" })
+    .min(3, { message: "Minimum 3 characters" }),
+  contactNumber: z
+    .string({ required_error: "Contact person's Mobile number is required" })
+    .regex(/^0\d{9}$/, "Please provide a valid Number!"),
+  relationship: z
+    .string({ required_error: "Relationship with children is required" })
+    .min(3, { message: "Minimum 3 characters" }),
 })
 /* Emergency/health Detail Page */
 

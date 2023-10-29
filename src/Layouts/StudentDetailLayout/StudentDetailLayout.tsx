@@ -4,7 +4,11 @@ import { cn } from "@/lib/utils"
 
 const tabs = [
   { name: "Personal Details", href: ".", current: true },
-  { name: "Manage Subject and classes", href: "manage-subjects-classes", current: true },
+  {
+    name: "Manage Subject and classes",
+    href: "manage-subjects-classes",
+    current: true,
+  },
   { name: "Parent Details", href: "parent", current: false },
   { name: "Emergency and Health", href: "health", current: false },
   { name: "Declaration", href: "declaration", current: false },
@@ -14,7 +18,6 @@ const tabs = [
 export default function StudentDetailLayout() {
   const location = useLocation()
   const activeLink = location.pathname
-  console.log(activeLink)
 
   return (
     <div className="container">
