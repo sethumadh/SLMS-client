@@ -51,10 +51,7 @@ const router = createBrowserRouter(
           <Route index element={<Students />} />
           <Route path="student-detail/:id" element={<StudentDetailLayout />}>
             <Route index element={<PersonalDetails />} />
-            <Route
-              path="manage-subjects-classes"
-              element={<SubjectDetails />}
-            />
+            <Route path="manage-subjects-classes" element={<SubjectDetails />} />
             <Route path="health" element={<HealthDetails />} />
             <Route path="parent" element={<ParentDetails />} />
             <Route path="declaration" element={<Declaration />} />

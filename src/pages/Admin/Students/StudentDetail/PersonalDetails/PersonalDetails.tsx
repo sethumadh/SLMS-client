@@ -43,7 +43,7 @@ function PersonalDetails() {
   }
   return (
     <div>
-      <div className="px-4 sm:px-0 flex justify-between gap-x-4 lg:mt-4 ">
+      <div className="px-4 sm:px-0 flex justify-between gap-x-4 lg:mt-4">
         <div className="flex flex-col sm:flex sm:flex-row gap-x-4">
           <h3 className="text-base font-semibold leading-7 text-gray-900 ">
             Applicant Information
@@ -66,7 +66,7 @@ function PersonalDetails() {
         <form onSubmit={methods.handleSubmit(onSubmit)} noValidate>
           <ul
             role="list"
-            className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 lg:mt-4 border rounded-xl p-4"
+            className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 lg:mt-4 border rounded-xl p-4 "
           >
             {people.map((person) => (
               <li
@@ -298,7 +298,7 @@ function PersonalDetails() {
                   {item != "address" && (
                     <>
                       <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                        Unit 1 , Plumtpton Court, 8th Gillinham street
+                        Unit 1 , Plumtpton Court, 8th Gillingham streetUnit 1 , Plumtpton Court, 8th Gillinham street
                       </dd>
                       <button type="button">
                         <Icons.Pencil

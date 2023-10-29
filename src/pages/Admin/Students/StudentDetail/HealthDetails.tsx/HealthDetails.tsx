@@ -55,7 +55,7 @@ function HealthDetails() {
         <form onSubmit={methods.handleSubmit(onSubmit)} noValidate>
           <ul
             role="list"
-            className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 lg:mt-4 border rounded-xl p-4"
+            className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 lg:mt-4 border rounded-xl p-4"
           >
             <div className="col-span-2  sm:px-4 sm:py-2 ">
               <dl className="divide-y divide-gray-100">
@@ -124,7 +124,7 @@ function HealthDetails() {
                 </div>
                 <div className="px-4 py-2 sm:grid sm:grid-cols-4 sm:gap-x-4 sm:px-0">
                   <dt className="text-sm font-medium leading-6 text-gray-900">
-                    Ambulance Memb:
+                    Ambulance Membership
                   </dt>
                   {item != "ambulance" && (
                     <>
