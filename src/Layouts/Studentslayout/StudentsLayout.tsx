@@ -24,8 +24,8 @@ export default function StudentsNavbar() {
   const activeLink = location.pathname
   console.log(activeLink)
   return (
-    <div>
-      <div className="bg-gray-100">
+    <div className="">
+      <div className="bg-gray-100 ">
         <nav
           className=" flex space-x-4 rounded-lg container px-4 sm:px-6 lg:px-8 py-4"
           aria-label="Tabs"
