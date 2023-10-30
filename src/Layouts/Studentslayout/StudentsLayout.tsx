@@ -25,8 +25,11 @@ export default function StudentsNavbar() {
   console.log(activeLink)
   return (
     <div className="hidden sm:block">
-      <div className=" container">
-        <nav className="-mb-px flex border-b border-gray-200 bg-slate-50" aria-label="Tabs">
+      <div className="bg-slate-50 border-b">
+        <nav
+          className="-mb-px flex  border-gray-200 container"
+          aria-label="Tabs"
+        >
           {tabs.map((tab) => (
             <NavLink
               end

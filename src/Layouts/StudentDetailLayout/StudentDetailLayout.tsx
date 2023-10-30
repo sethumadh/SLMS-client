@@ -35,7 +35,7 @@ export default function StudentDetailLayout() {
               )}
               aria-current={tab.current ? "page" : undefined}
             >
-              <span className="hidden sm:text-sm lg:text-base">{tab.name}</span>
+              <span className="hidden sm:block sm:text-sm lg:text-base">{tab.name}</span>
               <span className="text-xs sm:hidden ">{tab.smName}</span>
               <NavLink
                 end
