@@ -24,7 +24,7 @@ export default function StudentsNavbar() {
   const activeLink = location.pathname
   console.log(activeLink)
   return (
-    <div className="hidden sm:block">
+    <div className="">
       <div className="bg-slate-50 border-b">
         <nav
           className="-mb-px flex  border-gray-200 container"

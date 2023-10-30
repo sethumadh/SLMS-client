@@ -2,6 +2,7 @@
 import { useCallback, useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import ReactPaginate from "react-paginate"
+import Select, { SingleValue } from "react-select"
 
 import Searchbar from "@/components/Searchbar/Searchbar"
 import Skeleton from "@/components/Skeleton"
@@ -689,7 +690,16 @@ const studentsEnrolled: studentListSchema = [
     fatherName: "Father 96",
   },
 ]
-
+const subjectOptions = [
+  { value: "maths", label: "Maths" },
+  { value: "science", label: "Science" },
+  { value: "english", label: "English" },
+]
+const classOptions = [
+  { value: "class1", label: "Class1 " },
+  { value: "class2", label: "Class2" },
+  { value: "class3", label: "Class3" },
+]
 function Students() {
   const [query, setQuery] = useState("")
   const [isLoading, setIsLoading] = useState(false)
@@ -729,17 +739,26 @@ function Students() {
     const currentPage = page.selected
     setCurrentPage(currentPage + 1)
   }
-
+  const handleSubjectSelect = (
+    selectedSubject: SingleValue<{ value: string; label: string }>
+  ) => {
+    console.log(selectedSubject)
+  }
+  const handleClassSelect = (
+    selectedClass: SingleValue<{ value: string; label: string }>
+  ) => {
+    console.log(selectedClass)
+  }
   return (
     <div className="container mt-2">
       <div className="">
         <div className="sm:flex sm:items-center">
-          <div className="sm:flex-auto ">
+          <div className="flex justify-between items-end sm:flex-auto ">
             <div className="">
               <h3 className="text-xl font-semibold leading-6 text-gray-900 mb-4">
                 Enrolled Students
               </h3>
-              <div className="w-full md:w-1/3 ">
+              <div className="w-full">
                 {/* <span className="mt-2 text-sm text-gray-700">
                 A list of all enrolled students.
                
@@ -751,10 +770,37 @@ function Students() {
                   // isLoading={isLoading}
                 />
               </div>
+
               <span className="italic text-xs text-slate-400">
                 *Search students using student's name or email, father's name or
                 mother's name, parent's contact or email.
               </span>
+            </div>
+            <div className="flex gap-12">
+              <div>
+                <Select
+                  className="absolute right-0 z-10 mt-2  origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                  options={subjectOptions}
+                  onChange={(
+                    val: SingleValue<{ value: string; label: string }>
+                  ) => handleSubjectSelect(val)}
+                />
+                <p className="text-slate-400 text-xs italic">
+                  *sort by subjects
+                </p>
+              </div>
+              <div>
+                <Select
+                  className="absolute right-0 z-10 mt-2  origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                  options={classOptions}
+                  onChange={(
+                    val: SingleValue<{ value: string; label: string }>
+                  ) => handleClassSelect(val)}
+                />
+                <p className="text-slate-400 text-xs italic">
+                  *sort by classes
+                </p>
+              </div>
             </div>
           </div>
           <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none"></div>

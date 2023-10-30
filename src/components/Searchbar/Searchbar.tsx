@@ -31,11 +31,12 @@ const Searchbar = ({ handleSearch, handleLoading }: Props) => {
   return (
     <div className="">
       <form className="w-full" onSubmit={(e) => e.preventDefault()}>
+      <label htmlFor="simple-search" className="sr-only">Search</label>
         <div className="relative">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
             <svg
               aria-hidden="true"
-              className="w-5 h-5 text-gray-500 dark:text-gray-400"
+              className="w-4 h-4 text-gray-500 dark:text-gray-400"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -55,8 +56,8 @@ const Searchbar = ({ handleSearch, handleLoading }: Props) => {
               setDebounceTerm(e.target.value)
             }}
             id="default-search"
-            className="block w-full border-b-[1px] p-3 pl-10 text-sm text-gray-900  border-gray-300 rounded-lg bg-white outline-none"
-            placeholder="Search Students"
+            className="block w-full border-b-[1px] p-3 pl-10 text-sm text-gray-900  border-gray-300 rounded-lg bg-white outline-none shadow-lg placeholder:italic placeholder:text-gray-400"
+            placeholder="Search"
             required
           />
         </div>
