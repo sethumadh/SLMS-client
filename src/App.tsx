@@ -17,7 +17,6 @@ import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout/AdminDashboardL
 import Dashboard from "@/pages/Admin/Dashboard/Dashboard"
 import LoadingSpinner from "@/components/Loadingspinner"
 import Students from "./pages/Admin/Students/StudentList/StudentList"
-import Enrollment from "./pages/Admin/Enrollement/Enrollement"
 import Finance from "./pages/Admin/Finance/Finance"
 import Attendance from "./pages/Admin/Attendance/Attendance"
 import Timetable from "./pages/Admin/Timetable/Timetable"
@@ -32,6 +31,8 @@ import ParentDetails from "./pages/Admin/Students/StudentDetail/ParentDetails/Pa
 import HealthDetails from "./pages/Admin/Students/StudentDetail/HealthDetails.tsx/HealthDetails"
 import Declaration from "./pages/Admin/Students/StudentDetail/Declaration/Declaration"
 import SubjectDetails from "./pages/Admin/Students/StudentDetail/Subjects/SubjectDetails"
+import Alumni from "./pages/Admin/Students/Alumni/Alumni"
+import EnrollmentNavbarLayout from "./Layouts/EnrollmentNavbarLayout/EnrollmentNavbarLayout"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -47,6 +48,7 @@ const router = createBrowserRouter(
       {/* Role = admin */}
       <Route path="/admin" element={<AdminDashboardLayout />}>
         <Route index element={<Dashboard />} />
+        {/* student */}
         <Route path="students" element={<StudentsNavbar />}>
           <Route index element={<Students />} />
           <Route path="student-detail/:id" element={<StudentDetailLayout />}>
@@ -60,18 +62,43 @@ const router = createBrowserRouter(
             <Route path="declaration" element={<Declaration />} />
           </Route>
 
+          <Route path="alumni" element={<Alumni />} />
+        </Route>
+        {/* eof student */}
+        {/* enrollment */}
+        <Route path="enrollment" element={<EnrollmentNavbarLayout />}>
           <Route
-            path="alumni"
+            index
             element={
               <>
                 <div className="flex justify-center items-center">
-                  Alumni section
+                  New applications
+                </div>
+              </>
+            }
+          />
+          <Route
+            path="waitlisted"
+            element={
+              <>
+                <div className="flex justify-center items-center">
+                  waitlisted applications
+                </div>
+              </>
+            }
+          />
+          <Route
+            path="rejected"
+            element={
+              <>
+                <div className="flex justify-center items-center">
+                  Rejected applications
                 </div>
               </>
             }
           />
         </Route>
-        <Route path="enrollment" element={<Enrollment />} />
+
         <Route path="finance" element={<Finance />} />
         <Route path="attendance" element={<Attendance />} />
         <Route path="communication" element={<Communication />} />

@@ -119,7 +119,7 @@ function SideNavBar() {
               if (!collapsed) setCollapsed(!collapsed)
             }}
             className={`${
-              activeLink == "/admin/enrollment"
+              activeLink.startsWith("/admin/enrollment")
                 ? "bg-gradient-to-r from-orange-400  to-yellow-300"
                 : ""
             }`}
@@ -133,7 +133,7 @@ function SideNavBar() {
               if (!collapsed) setCollapsed(!collapsed)
             }}
             className={`${
-              activeLink == "/admin/finance"
+              activeLink.startsWith("/admin/finance")
                 ? "bg-gradient-to-r from-orange-400  to-yellow-300"
                 : ""
             }`}
@@ -147,7 +147,7 @@ function SideNavBar() {
               if (!collapsed) setCollapsed(!collapsed)
             }}
             className={`${
-              activeLink == "/admin/attendance"
+              activeLink.startsWith("/admin/attendance")
                 ? "bg-gradient-to-r from-orange-400  to-yellow-300"
                 : ""
             }`}
@@ -161,7 +161,7 @@ function SideNavBar() {
               if (!collapsed) setCollapsed(!collapsed)
             }}
             className={`${
-              activeLink == "/admin/timetable"
+              activeLink.startsWith("/admin/timetable")
                 ? "bg-gradient-to-r from-orange-400  to-yellow-300"
                 : ""
             }`}
@@ -175,7 +175,7 @@ function SideNavBar() {
               if (!collapsed) setCollapsed(!collapsed)
             }}
             className={`${
-              activeLink == "/admin/communication"
+              activeLink.startsWith("/admin/communication")
                 ? "bg-gradient-to-r from-orange-400  to-yellow-300"
                 : ""
             }`}
@@ -189,7 +189,7 @@ function SideNavBar() {
               if (!collapsed) setCollapsed(!collapsed)
             }}
             className={`${
-              activeLink == "/admin/administration"
+              activeLink.startsWith("/admin/administration")
                 ? "bg-gradient-to-r from-orange-400  to-yellow-300"
                 : ""
             }`}
