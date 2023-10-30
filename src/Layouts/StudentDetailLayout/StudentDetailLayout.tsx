@@ -3,15 +3,15 @@ import { Link, NavLink, Outlet, useLocation } from "react-router-dom"
 import { cn } from "@/lib/utils"
 
 const tabs = [
-  { name: "Personal Details", href: ".", current: true },
+  { name: "Personal Details",smName:"Personal", href: ".", current: true },
   {
-    name: "Manage Subject and classes",
+    name: "Subject & classes",smName:"Classes",
     href: "manage-subjects-classes",
     current: true,
   },
-  { name: "Parent Details", href: "parent", current: false },
-  { name: "Emergency and Health", href: "health", current: false },
-  { name: "Declaration", href: "declaration", current: false },
+  { name: "Parents Details",smName:"Parents", href: "parent", current: false },
+  { name: "Emergency and Health",smName:"Health", href: "health", current: false },
+  { name: "Declaration",smName:"Terms", href: "declaration", current: false },
   // { name: "Declaration", href: "declaration", current: false },
 ]
 
@@ -21,7 +21,7 @@ export default function StudentDetailLayout() {
 
   return (
     <div className="container">
-      <div className="hidden sm:block">
+      <div className="sm:block">
         <nav
           className="isolate flex divide-x divide-gray-200 rounded-lg shadow"
           aria-label="Tabs"
@@ -35,7 +35,8 @@ export default function StudentDetailLayout() {
               )}
               aria-current={tab.current ? "page" : undefined}
             >
-              <span>{tab.name}</span>
+              <span className="hidden sm:text-sm lg:text-base">{tab.name}</span>
+              <span className="text-xs sm:hidden ">{tab.smName}</span>
               <NavLink
                 end
                 to={tab.href}

@@ -48,7 +48,7 @@ function SubjectDetails() {
             Manage Subjects and Classes
           </h3>
           <p className="mt-1 max-w-2xl text-xs leading-6 text-gray-500 italic">
-            {/* * As given by the applicatant. */}
+            * add or change subjects and classes.
           </p>
         </div>
         <Link

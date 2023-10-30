@@ -66,7 +66,7 @@ function PersonalDetails() {
         <form onSubmit={methods.handleSubmit(onSubmit)} noValidate>
           <ul
             role="list"
-            className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 lg:mt-4 border rounded-xl p-4 "
+            className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 lg:mt-4 border rounded-xl p-4 "
           >
             {people.map((person) => (
               <li
