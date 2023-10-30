@@ -2,7 +2,6 @@
 import { useCallback, useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import ReactPaginate from "react-paginate"
-import Select, { SingleValue } from "react-select"
 
 import Searchbar from "@/components/Searchbar/Searchbar"
 import Skeleton from "@/components/Skeleton"
