@@ -33,6 +33,13 @@ import Declaration from "./pages/Admin/Students/StudentDetail/Declaration/Declar
 import SubjectDetails from "./pages/Admin/Students/StudentDetail/Subjects/SubjectDetails"
 import Alumni from "./pages/Admin/Students/Alumni/Alumni"
 import EnrollmentNavbarLayout from "./Layouts/EnrollmentNavbarLayout/EnrollmentNavbarLayout"
+import NewStudentApplications from "./pages/Admin/Enrollement/NewApplications/NewApplications"
+import NewApplicatantDetailsLayout from "./Layouts/NewApplicationsDetailLayout/NewApplicationsDetailLayout"
+import NewApplicantPersonalDetails from "./pages/Admin/Enrollement/NewApplicantDetails/PersonalDetails/PersonalDetails"
+import NewApplicantParentDetails from "./pages/Admin/Enrollement/NewApplicantDetails/ParentDetails/ParentDetails"
+import NewApplicantHealthDetails from "./pages/Admin/Enrollement/NewApplicantDetails/HealthDetails.tsx/HealthDetails"
+import NewApplicantDeclaration from "./pages/Admin/Enrollement/NewApplicantDetails/Declaration/Declaration"
+import NewApplicantSubjectDetails from "./pages/Admin/Enrollement/NewApplicantDetails/Subjects/SubjectDetails"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -67,16 +74,14 @@ const router = createBrowserRouter(
         {/* eof student */}
         {/* enrollment */}
         <Route path="enrollment" element={<EnrollmentNavbarLayout />}>
-          <Route
-            index
-            element={
-              <>
-                <div className="flex justify-center items-center">
-                  New applications
-                </div>
-              </>
-            }
-          />
+          <Route index element={<NewStudentApplications />} />
+          <Route path="new-applicant-detail/:id" element={<NewApplicatantDetailsLayout/>}>
+            <Route index element={<NewApplicantPersonalDetails/>}/>
+            <Route path="manage-subjects-classes" element={<NewApplicantSubjectDetails/>}/>
+            <Route path="parent" element={<NewApplicantParentDetails/>}/>
+            <Route path="health" element={<NewApplicantHealthDetails/>}/>
+            <Route path="declaration" element={<NewApplicantDeclaration/>}/>
+          </Route>
           <Route
             path="waitlisted"
             element={
@@ -98,6 +103,7 @@ const router = createBrowserRouter(
             }
           />
         </Route>
+        {/* eof enrollment */}
 
         <Route path="finance" element={<Finance />} />
         <Route path="attendance" element={<Attendance />} />
