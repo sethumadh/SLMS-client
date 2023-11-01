@@ -18,7 +18,7 @@ const tabs = [
   },
 ]
 
-export default function StudentsNavbar() {
+export default function StudentsNavbarLayout() {
   // const [setActiveLink]
   const location = useLocation()
   const activeLink = location.pathname

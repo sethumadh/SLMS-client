@@ -24,7 +24,6 @@ import Communication from "./pages/Admin/Communication/Communication"
 import Administration from "./pages/Admin/Administration/Administration"
 import PageNotFound from "./pages/PageNotFound/PageNotFound"
 import ClassesAndEvents from "./pages/ClassesAndEvents/ClassesAndEvents"
-import StudentsNavbar from "./Layouts/Studentslayout/StudentsLayout"
 import StudentDetailLayout from "./Layouts/StudentDetailLayout/StudentDetailLayout"
 import PersonalDetails from "./pages/Admin/Students/StudentDetail/PersonalDetails/PersonalDetails"
 import ParentDetails from "./pages/Admin/Students/StudentDetail/ParentDetails/ParentDetails"
@@ -40,6 +39,7 @@ import NewApplicantParentDetails from "./pages/Admin/Enrollement/NewApplicantDet
 import NewApplicantHealthDetails from "./pages/Admin/Enrollement/NewApplicantDetails/HealthDetails.tsx/HealthDetails"
 import NewApplicantDeclaration from "./pages/Admin/Enrollement/NewApplicantDetails/Declaration/Declaration"
 import NewApplicantSubjectDetails from "./pages/Admin/Enrollement/NewApplicantDetails/Subjects/SubjectDetails"
+import StudentsNavbarLayout from "./Layouts/StudentsNavbarLayout/StudentsNavbarLayout"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -56,7 +56,7 @@ const router = createBrowserRouter(
       <Route path="/admin" element={<AdminDashboardLayout />}>
         <Route index element={<Dashboard />} />
         {/* student */}
-        <Route path="students" element={<StudentsNavbar />}>
+        <Route path="students" element={<StudentsNavbarLayout />}>
           <Route index element={<Students />} />
           <Route path="student-detail/:id" element={<StudentDetailLayout />}>
             <Route index element={<PersonalDetails />} />
@@ -75,12 +75,18 @@ const router = createBrowserRouter(
         {/* enrollment */}
         <Route path="enrollment" element={<EnrollmentNavbarLayout />}>
           <Route index element={<NewStudentApplications />} />
-          <Route path="new-applicant-detail/:id" element={<NewApplicatantDetailsLayout/>}>
-            <Route index element={<NewApplicantPersonalDetails/>}/>
-            <Route path="manage-subjects-classes" element={<NewApplicantSubjectDetails/>}/>
-            <Route path="parent" element={<NewApplicantParentDetails/>}/>
-            <Route path="health" element={<NewApplicantHealthDetails/>}/>
-            <Route path="declaration" element={<NewApplicantDeclaration/>}/>
+          <Route
+            path="new-applicant-detail/:id"
+            element={<NewApplicatantDetailsLayout />}
+          >
+            <Route index element={<NewApplicantPersonalDetails />} />
+            <Route
+              path="manage-subjects-classes"
+              element={<NewApplicantSubjectDetails />}
+            />
+            <Route path="parent" element={<NewApplicantParentDetails />} />
+            <Route path="health" element={<NewApplicantHealthDetails />} />
+            <Route path="declaration" element={<NewApplicantDeclaration />} />
           </Route>
           <Route
             path="waitlisted"
