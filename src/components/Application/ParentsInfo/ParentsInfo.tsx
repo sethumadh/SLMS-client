@@ -29,15 +29,15 @@ function ParentsInfo() {
                 <div className="mt-2">
                   <input
                     id="father-name"
-                    {...register("parentsSchema.fatherName")}
+                    {...register("parentsDetails.fatherName")}
                     type="text"
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
                 <div className="h-4">
-                  {formState.errors.parentsSchema?.fatherName?.message && (
+                  {formState.errors.parentsDetails?.fatherName?.message && (
                     <span className="text-xs text-red-600">
-                      {formState.errors.parentsSchema?.fatherName?.message}
+                      {formState.errors.parentsDetails?.fatherName?.message}
                     </span>
                   )}
                 </div>
@@ -54,15 +54,15 @@ function ParentsInfo() {
                 <div className="mt-2">
                   <input
                     id="mother-name"
-                    {...register("parentsSchema.motherName")}
+                    {...register("parentsDetails.motherName")}
                     type="text"
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
                 <div className="h-4">
-                  {formState.errors.parentsSchema?.motherName?.message && (
+                  {formState.errors.parentsDetails?.motherName?.message && (
                     <span className="text-xs text-red-600">
-                      {formState.errors.parentsSchema?.motherName?.message}
+                      {formState.errors.parentsDetails?.motherName?.message}
                     </span>
                   )}
                 </div>
@@ -79,15 +79,15 @@ function ParentsInfo() {
                 <div className="mt-2">
                   <input
                     id="parent-mobile"
-                    {...register("parentsSchema.parentContact")}
+                    {...register("parentsDetails.parentContact")}
                     type="text"
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
                 <div className="h-4">
-                  {formState.errors.parentsSchema?.parentContact?.message && (
+                  {formState.errors.parentsDetails?.parentContact?.message && (
                     <span className="text-xs text-red-600">
-                      {formState.errors.parentsSchema?.parentContact.message}
+                      {formState.errors.parentsDetails?.parentContact.message}
                     </span>
                   )}
                 </div>
@@ -104,15 +104,15 @@ function ParentsInfo() {
                 <div className="mt-2">
                   <input
                     id="parent-email"
-                    {...register("parentsSchema.parentEmail")}
+                    {...register("parentsDetails")}
                     type="text"
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
                 <div className="h-4">
-                  {formState.errors.parentsSchema?.parentEmail?.message && (
+                  {formState.errors.parentsDetails?.parentEmail?.message && (
                     <span className="text-xs text-red-600">
-                      {formState.errors.parentsSchema?.parentEmail?.message}
+                      {formState.errors.parentsDetails?.parentEmail?.message}
                     </span>
                   )}
                 </div>
