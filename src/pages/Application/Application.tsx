@@ -12,11 +12,12 @@ import EmergencyContact from "@/components/Application/EmergencyContact/Emergenc
 import HealthInformation from "@/components/Application/HealthInformation/HealthInformation"
 import Subjects from "@/components/Application/Subjects/Subjects"
 import OtherInfo from "@/components/Application/OtherInfo/OtherInfo"
+import axios from "axios"
 
 export type StudentWizardSchema = z.infer<typeof studentSetupWizardSchema>
 type FieldName =
   | "personalDetails"
-  | "parentsSchema"
+  | "parentsDetails"
   | "emergencyContact"
   | "healthInformation"
   | "subjects"
@@ -26,6 +27,7 @@ function Application() {
   const [nextPage, setNextPage] = useState(false)
   const navigate = useNavigate()
   const [step, setStep] = useState(0)
+  const baseURL = import.meta.env.VITE_BASE_URL
 
   const methods = useForm<StudentWizardSchema>({
     resolver: zodResolver(studentSetupWizardSchema),
@@ -44,7 +46,7 @@ function Application() {
     //     postcode: "",
     //     image: "",
     //   },
-    //   parentsSchema: {
+    //   parentsDetails: {
     //     fatherName: "",
     //     motherName: "",
     //     parentContact: "",
@@ -85,7 +87,7 @@ function Application() {
         postcode: "1234",
         image: "",
       },
-      parentsSchema: {
+      parentsDetails: {
         fatherName: "sethu",
         motherName: "sethu",
         parentContact: "0999999999",
@@ -122,7 +124,7 @@ function Application() {
   //     })
   //     if (validateStep) setStep(1)
   //   } else if (step == 1) {
-  //     const validateStep = await trigger(["parentsSchema"], {
+  //     const validateStep = await trigger(["parentsDetails"], {
   //       shouldFocus: true,
   //     })
   //     if (validateStep) setStep(2)
@@ -156,7 +158,7 @@ function Application() {
   const handleNextStep = async () => {
     const validationFields: FieldName[] = [
       "personalDetails",
-      "parentsSchema",
+      "parentsDetails",
       "emergencyContact",
       "healthInformation",
       "subjects",
@@ -177,11 +179,18 @@ function Application() {
       }
     }
   }
-
+  const handleSubmitApplication = async (data: StudentWizardSchema) => {
+    try {
+      await axios.post(`${baseURL}/api/v1/student/application/create`, data)
+    } catch (e) {
+      console.log(e)
+    }
+  }
   console.log()
   const onSubmit = (values: StudentWizardSchema) => {
-    console.log("hello")
     console.log(values)
+    handleSubmitApplication(values)
+
     navigate("/application-submit", { replace: true })
   }
   return (

@@ -108,7 +108,7 @@ export const OtherInformationSchema = z.object({
 
 export const studentSetupWizardSchema = z.object({
   personalDetails: PersonalSchema,
-  parentsSchema: ParentsSchema,
+  parentsDetails: ParentsSchema,
   emergencyContact: EmergencyContactSchema,
   healthInformation: HealthInformationSchema,
   subjects: SubjectSchema,
@@ -116,7 +116,7 @@ export const studentSetupWizardSchema = z.object({
 })
 export const studentSchema = z.object({
   personalDetails: PersonalSchema,
-  parentsSchema: ParentsSchema,
+  parentsDetails: ParentsSchema,
   emergencyContact: EmergencyContactSchema,
   healthInformation: HealthInformationSchema,
   subjects: SubjectSchema,
@@ -174,7 +174,7 @@ export const StudentHealthDetailsSchema = z.object({
   allergy: z
     .string({ required_error: "valid" })
     .min(3, { message: "Mininum 3 characters" }),
-     contactPerson: z
+  contactPerson: z
     .string({ required_error: "Contact person's name is required" })
     .min(3, { message: "Minimum 3 characters" }),
   contactNumber: z
