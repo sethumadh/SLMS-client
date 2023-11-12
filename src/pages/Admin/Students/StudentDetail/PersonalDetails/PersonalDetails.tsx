@@ -38,7 +38,7 @@ function PersonalDetails() {
     },
   })
   const onSubmit = (values: PersonalDetailsSchema) => {
-    console.log(values)
+    console.log({personalDetails:values})
     setIsEdit(false)
   }
   return (

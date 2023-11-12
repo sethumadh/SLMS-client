@@ -114,14 +114,7 @@ export const studentSetupWizardSchema = z.object({
   subjects: SubjectSchema,
   otherInformation: OtherInformationSchema,
 })
-export const studentSchema = z.object({
-  personalDetails: PersonalSchema,
-  parentsDetails: ParentsSchema,
-  emergencyContact: EmergencyContactSchema,
-  healthInformation: HealthInformationSchema,
-  subjects: SubjectSchema,
-  otherInformation: OtherInformationSchema,
-})
+export const studentSchema = studentSetupWizardSchema
 
 // *********Admin************
 /* 
