@@ -5,9 +5,9 @@ import { FormProvider, useForm } from "react-hook-form"
 import { z } from "zod"
 
 import Icons from "@/constants/icons"
-import { StudentPersonalDetailsSchema } from "@/types/studentSetupWizardSchema"
+import { applicantPersonalDetailsSchema } from "@/types/studentSetupWizardSchema"
 
-export type PersonalDetailsSchema = z.infer<typeof StudentPersonalDetailsSchema>
+export type PersonalDetailsSchema = z.infer<typeof applicantPersonalDetailsSchema>
 
 const people = [
   {
@@ -27,7 +27,7 @@ function NewApplicantPersonalDetails() {
   const [isEdit, setIsEdit] = useState(false)
   const [item, setItem] = useState("")
   const methods = useForm<PersonalDetailsSchema>({
-    resolver: zodResolver(StudentPersonalDetailsSchema),
+    resolver: zodResolver(applicantPersonalDetailsSchema),
 
     defaultValues: {
       email: "karansingh@example.com",

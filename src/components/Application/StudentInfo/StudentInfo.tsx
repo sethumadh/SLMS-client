@@ -1,4 +1,4 @@
-import { StudentWizardSchema } from "@/pages/Application/Application"
+import { ApplicantWizardSchema  } from "@/pages/Application/Application"
 import { PhotoIcon } from "@heroicons/react/24/solid"
 import { useState } from "react"
 import ReactDatePicker from "react-datepicker"
@@ -12,7 +12,7 @@ const options = [
 ]
 
 function StudentInfo() {
-  const { formState, control, register } = useFormContext<StudentWizardSchema>()
+  const { formState, control, register } = useFormContext<ApplicantWizardSchema >()
   const [imagePreview, setImagePreview] = useState<string | null>()
 
   return (

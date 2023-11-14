@@ -5,9 +5,9 @@ import { FormProvider, useForm } from "react-hook-form"
 import { z } from "zod"
 
 import Icons from "@/constants/icons"
-import { StudentParentDetailsSchema } from "@/types/studentSetupWizardSchema"
+import { applicantParentDetailsSchema } from "@/types/studentSetupWizardSchema"
 
-export type ParentDetailsSchema = z.infer<typeof StudentParentDetailsSchema>
+export type ParentDetailsSchema = z.infer<typeof applicantParentDetailsSchema>
 
 // More people...
 
@@ -16,7 +16,7 @@ function NewApplicantParentDetails() {
   const [isEdit, setIsEdit] = useState(false)
   const [item, setItem] = useState("")
   const methods = useForm<ParentDetailsSchema>({
-    resolver: zodResolver(StudentParentDetailsSchema),
+    resolver: zodResolver(applicantParentDetailsSchema),
 
     defaultValues: {
       parentEmail: "parent@example.com",

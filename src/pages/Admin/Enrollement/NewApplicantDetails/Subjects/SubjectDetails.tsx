@@ -5,9 +5,9 @@ import { FormProvider, useForm } from "react-hook-form"
 import { z } from "zod"
 
 import Icons from "@/constants/icons"
-import { StudentSubjectDetailsSchema } from "@/types/studentSetupWizardSchema"
+import { applicantSubjectDetailsSchema } from "@/types/studentSetupWizardSchema"
 
-export type SubjectDetailsSchema = z.infer<typeof StudentSubjectDetailsSchema>
+export type SubjectDetailsSchema = z.infer<typeof applicantSubjectDetailsSchema>
 const subjects = [
   "Math",
   "Science",
@@ -29,7 +29,7 @@ const subjectOptions = [
 function NewApplicantSubjectDetails() {
   const [isEdit, setIsEdit] = useState(false)
   const methods = useForm<SubjectDetailsSchema>({
-    resolver: zodResolver(StudentSubjectDetailsSchema),
+    resolver: zodResolver(applicantSubjectDetailsSchema),
 
     defaultValues: {
       subjects: [],

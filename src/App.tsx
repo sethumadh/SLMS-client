@@ -4,6 +4,7 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from "react-router-dom"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { Provider } from "react-redux"
 import { store } from "./redux/store"
 import { persistStore } from "redux-persist"
@@ -122,22 +123,30 @@ const router = createBrowserRouter(
     </>
   )
 )
-
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+})
 function App() {
   const persistor = persistStore(store)
   return (
-    <Provider store={store}>
-      <PersistGate
-        loading={
-          <div className="flex items-center justify-center h-screen mx-auto">
-            <LoadingSpinner className="w-20 h-20" />
-          </div>
-        }
-        persistor={persistor}
-      >
-        <RouterProvider router={router} />
-      </PersistGate>
-    </Provider>
+    <QueryClientProvider client={queryClient}>
+      <Provider store={store}>
+        <PersistGate
+          loading={
+            <div className="flex items-center justify-center h-screen mx-auto">
+              <LoadingSpinner className="w-20 h-20" />
+            </div>
+          }
+          persistor={persistor}
+        >
+          <RouterProvider router={router} />
+        </PersistGate>
+      </Provider>
+    </QueryClientProvider>
   )
 }
 

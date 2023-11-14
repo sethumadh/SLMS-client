@@ -5,16 +5,16 @@ import { FormProvider, useForm } from "react-hook-form"
 import { z } from "zod"
 
 import Icons from "@/constants/icons"
-import { StudentHealthDetailsSchema } from "@/types/studentSetupWizardSchema"
+import { applicantHealthDetailsSchema } from "@/types/studentSetupWizardSchema"
 
-export type HealthDetailsSchema = z.infer<typeof StudentHealthDetailsSchema>
+export type HealthDetailsSchema = z.infer<typeof applicantHealthDetailsSchema>
 
 function NewApplicantHealthDetails() {
   const saveRef = useRef<HTMLButtonElement | null>(null)
   const [isEdit, setIsEdit] = useState(false)
   const [item, setItem] = useState("")
   const methods = useForm<HealthDetailsSchema>({
-    resolver: zodResolver(StudentHealthDetailsSchema),
+    resolver: zodResolver(applicantHealthDetailsSchema),
 
     defaultValues: {
       medicareNumber: "1234567890",
