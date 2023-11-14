@@ -761,7 +761,6 @@ function Students() {
               <div className="w-full">
                 {/* <span className="mt-2 text-sm text-gray-700">
                 A list of all enrolled students.
-               
               </span> */}
 
                 <Searchbar

@@ -106,7 +106,7 @@ export const OtherInformationSchema = z.object({
     }),
 })
 
-export const studentSetupWizardSchema = z.object({
+export const applicantSetupWizardSchema = z.object({
   personalDetails: PersonalSchema,
   parentsDetails: ParentsSchema,
   emergencyContact: EmergencyContactSchema,
@@ -114,14 +114,14 @@ export const studentSetupWizardSchema = z.object({
   subjects: SubjectSchema,
   otherInformation: OtherInformationSchema,
 })
-export const studentSchema = studentSetupWizardSchema
+export const applicantSchema = applicantSetupWizardSchema
 
 // *********Admin************
 /* 
-Student Detail Page 
+applicant Detail Page
 */
 
-export const StudentPersonalDetailsSchema = z.object({
+export const applicantPersonalDetailsSchema = z.object({
   email: z
     .string({ required_error: "Email is required" })
     .email({ message: "Invalid email address" }),
@@ -141,10 +141,10 @@ export const StudentPersonalDetailsSchema = z.object({
     .max(4, { message: "Invalid Post code" }),
 })
 
-/* Student Detail Page */
+/* applicant Detail Page */
 
 /* Parents Detail Page */
-export const StudentParentDetailsSchema = z.object({
+export const applicantParentDetailsSchema = z.object({
   parentEmail: z
     .string({ required_error: "Parent's Email is required" })
     .email({ message: "Invalid email address" }),
@@ -155,7 +155,7 @@ export const StudentParentDetailsSchema = z.object({
 /* Parents Detail Page */
 
 /* Emergency/health Detail Page */
-export const StudentHealthDetailsSchema = z.object({
+export const applicantHealthDetailsSchema = z.object({
   medicareNumber: z
     .string({ required_error: "Post code is required" })
     .min(10, { message: "Medicare number is minimum 10 digits" })
@@ -180,7 +180,7 @@ export const StudentHealthDetailsSchema = z.object({
 /* Emergency/health Detail Page */
 
 /*Subject Details*/
-export const StudentSubjectDetailsSchema = z.object({
+export const applicantSubjectDetailsSchema = z.object({
   subjects: z.array(z.string()).refine((subjects) => subjects.length > 0, {
     message: "Please select at least one subject",
   }),

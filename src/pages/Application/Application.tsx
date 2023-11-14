@@ -4,7 +4,7 @@ import { z } from "zod"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
-import { studentSetupWizardSchema } from "@/types/studentSetupWizardSchema"
+import {applicantSetupWizardSchema } from "@/types/studentSetupWizardSchema"
 import { ApplicationFooterSection } from "@/components/Application/ApplicationFooterSection/ApplicationFooterSection"
 import StudentInfo from "@/components/Application/StudentInfo/StudentInfo"
 import ParentsInfo from "@/components/Application/ParentsInfo/ParentsInfo"
@@ -14,7 +14,7 @@ import Subjects from "@/components/Application/Subjects/Subjects"
 import OtherInfo from "@/components/Application/OtherInfo/OtherInfo"
 import axios from "axios"
 
-export type StudentWizardSchema = z.infer<typeof studentSetupWizardSchema>
+export type ApplicantWizardSchema = z.infer<typeof applicantSetupWizardSchema>
 type FieldName =
   | "personalDetails"
   | "parentsDetails"
@@ -29,8 +29,8 @@ function Application() {
   const [step, setStep] = useState(0)
   const baseURL = import.meta.env.VITE_BASE_URL
 
-  const methods = useForm<StudentWizardSchema>({
-    resolver: zodResolver(studentSetupWizardSchema),
+  const methods = useForm<ApplicantWizardSchema>({
+    resolver: zodResolver(applicantSetupWizardSchema),
     // defaultValues: {
     //   personalDetails: {
     //     firstName: "",
@@ -179,7 +179,7 @@ function Application() {
       }
     }
   }
-  const handleSubmitApplication = async (data: StudentWizardSchema) => {
+  const handleSubmitApplication = async (data: ApplicantWizardSchema) => {
     try {
       await axios.post(`${baseURL}/api/v1/student/application/create`, data)
     } catch (e) {
@@ -187,7 +187,7 @@ function Application() {
     }
   }
   console.log()
-  const onSubmit = (values: StudentWizardSchema) => {
+  const onSubmit = (values: ApplicantWizardSchema) => {
     console.log(values)
     handleSubmitApplication(values)
 

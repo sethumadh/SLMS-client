@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
-import axios from "axios"
-
+// import axios from "axios"
 
 function Administration() {
   const [isMounted, setIsMounted] = useState(false)
@@ -9,17 +8,7 @@ function Administration() {
     setIsMounted(true)
     const fetchStudents = async () => {
       if (isMounted) {
-        try {
-          const data = await axios.get(
-            "http://localhost:1337/api/v1/student/application/get",
-            {
-              signal: controller.signal,
-            }
-          )
-          console.log(data)
-        } catch (error) {
-          console.log(error)
-        }
+        console.log(isMounted)
       }
     }
     fetchStudents()
@@ -28,7 +17,7 @@ function Administration() {
       controller.abort()
     }
   }, [isMounted])
-  return <div>Administration</div>
+  return <div className="container bg-red-400">Administration</div>
 }
 
 export default Administration

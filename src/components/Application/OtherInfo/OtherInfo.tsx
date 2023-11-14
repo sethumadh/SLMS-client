@@ -1,5 +1,5 @@
 import { useFormContext } from "react-hook-form"
-import { StudentWizardSchema } from "@/pages/Application/Application"
+import { ApplicantWizardSchema } from "@/pages/Application/Application"
 
 const declaration = `Declaration:
 
@@ -38,7 +38,7 @@ I understand and agree that I will remain with my child(ren) at Akaal Shaouni Lt
 Please accept the terms & conditions to submit this form.
 `
 function OtherInfo() {
-  const { formState, register } = useFormContext<StudentWizardSchema>()
+  const { formState, register } = useFormContext<ApplicantWizardSchema>()
   return (
     <div className="space-y-10 divide-y divide-gray-900/10 container ">
       <div className="grid grid-cols-1 gap-x-8 gap-y-8 pt-10 md:grid-cols-3 ">
