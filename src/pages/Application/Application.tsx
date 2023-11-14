@@ -4,15 +4,17 @@ import { z } from "zod"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
-import {applicantSetupWizardSchema } from "@/types/studentSetupWizardSchema"
+import { applicantSetupWizardSchema } from "@/types/applicantSetupWizardSchema"
 import { ApplicationFooterSection } from "@/components/Application/ApplicationFooterSection/ApplicationFooterSection"
-import StudentInfo from "@/components/Application/StudentInfo/StudentInfo"
+import ApplicantInfo from "@/components/Application/ApplicantInfo/ApplicantInfo"
 import ParentsInfo from "@/components/Application/ParentsInfo/ParentsInfo"
 import EmergencyContact from "@/components/Application/EmergencyContact/EmergencyContact"
 import HealthInformation from "@/components/Application/HealthInformation/HealthInformation"
 import Subjects from "@/components/Application/Subjects/Subjects"
 import OtherInfo from "@/components/Application/OtherInfo/OtherInfo"
 import axios from "axios"
+import { useQuery } from "@tanstack/react-query"
+import { api } from "@/api/api"
 
 export type ApplicantWizardSchema = z.infer<typeof applicantSetupWizardSchema>
 type FieldName =
@@ -28,6 +30,11 @@ function Application() {
   const navigate = useNavigate()
   const [step, setStep] = useState(0)
   const baseURL = import.meta.env.VITE_BASE_URL
+  const currentTerm = useQuery({
+    queryKey: [api.application.currentTerm.getTermSubjects.queryKey],
+    queryFn: api.application.currentTerm.getTermSubjects.query,
+  })
+  console.log(currentTerm.data)
 
   const methods = useForm<ApplicantWizardSchema>({
     resolver: zodResolver(applicantSetupWizardSchema),
@@ -77,7 +84,7 @@ function Application() {
         firstName: "sethu",
         lastName: "sethu",
         DOB: new Date("01-01-2010"),
-        gender: "",
+        gender: "Male",
         email: "s@s.com",
         contact: "0999999999",
         address: "sethu",
@@ -112,6 +119,7 @@ function Application() {
         otherInfo: "",
         declaration: [],
       },
+      termName:currentTerm.data?.name
     },
   })
 
@@ -203,7 +211,7 @@ function Application() {
             className="bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl md:col-span-2"
           >
             <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8 mb-16">
-              {step == 0 && <StudentInfo />}
+              {step == 0 && <ApplicantInfo />}
               {step == 1 && <ParentsInfo />}
               {step == 2 && <EmergencyContact />}
               {step == 3 && <HealthInformation />}

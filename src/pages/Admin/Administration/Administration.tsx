@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 // import axios from "axios"
 
+// create a new term
+
 function Administration() {
   const [isMounted, setIsMounted] = useState(false)
   const controller = new AbortController()

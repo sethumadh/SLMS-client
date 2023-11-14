@@ -11,7 +11,7 @@ const options = [
   { value: "other", label: "Other" },
 ]
 
-function StudentInfo() {
+function ApplicantInfo() {
   const { formState, control, register } = useFormContext<ApplicantWizardSchema >()
   const [imagePreview, setImagePreview] = useState<string | null>()
 
@@ -459,4 +459,4 @@ function StudentInfo() {
     </div>
   )
 }
-export default StudentInfo
+export default ApplicantInfo

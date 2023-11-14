@@ -5,9 +5,11 @@ import { FormProvider, useForm } from "react-hook-form"
 import { z } from "zod"
 
 import Icons from "@/constants/icons"
-import { applicantPersonalDetailsSchema } from "@/types/studentSetupWizardSchema"
+import { applicantPersonalDetailsSchema } from "@/types/applicantSetupWizardSchema"
 
-export type PersonalDetailsSchema = z.infer<typeof applicantPersonalDetailsSchema>
+export type PersonalDetailsSchema = z.infer<
+  typeof applicantPersonalDetailsSchema
+>
 
 const people = [
   {
@@ -298,7 +300,8 @@ function NewApplicantPersonalDetails() {
                   {item != "address" && (
                     <>
                       <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                        Unit 1 , Plumtpton Court, 8th Gillingham streetUnit 1 , Plumtpton Court, 8th Gillinham street
+                        Unit 1 , Plumtpton Court, 8th Gillingham streetUnit 1 ,
+                        Plumtpton Court, 8th Gillinham street
                       </dd>
                       <button type="button">
                         <Icons.Pencil

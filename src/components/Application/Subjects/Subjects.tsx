@@ -1,14 +1,16 @@
 import { useFormContext } from "react-hook-form"
 import { ApplicantWizardSchema } from "@/pages/Application/Application"
+import { useQuery } from "@tanstack/react-query"
+import { api } from "@/api/api"
 
-const subjects = [
-  "Math",
-  "Science",
-  "History",
-  "English",
+// const subjects = [
+//   "Math",
+//   "Science",
+//   "History",
+//   "English",
 
-  // Add more subjects as needed
-]
+//   // Add more subjects as needed
+// ]
 const subjectOptions = [
   "option-1",
   "option-2",
@@ -21,6 +23,14 @@ const subjectOptions = [
 
 function Subjects() {
   const { formState, register } = useFormContext<ApplicantWizardSchema>()
+  const currentTerm = useQuery({
+    queryKey: [api.application.currentTerm.getTermSubjects.queryKey],
+    queryFn: api.application.currentTerm.getTermSubjects.query,
+  })
+  const termSubjects = currentTerm.data?.TermSubject
+  console.log(termSubjects)
+
+  // console.log(TermSubject)
   return (
     <div className="space-y-10 divide-y divide-gray-900/10 container">
       <div className="grid grid-cols-1 gap-x-8 gap-y-8 pt-10 md:grid-cols-3">
@@ -50,13 +60,13 @@ function Subjects() {
                   Subjects<span className="text-red-600">*</span>
                 </label>
                 <div className="mt-2">
-                  {subjects.map((subject) => (
-                    <div key={subject}>
+                  {termSubjects?.map((termSubject) => (
+                    <div key={termSubject.subject.id}>
                       <div className="relative flex gap-x-3">
                         <div className="flex h-6 items-center">
                           <input
-                            id={subject}
-                            value={subject}
+                            id={termSubject.subject.id.toString()}
+                            value={termSubject.subject.name}
                             {...register("subjects.subjects", {
                               required: {
                                 value: true,
@@ -69,10 +79,10 @@ function Subjects() {
                         </div>
                         <div className="text-sm leading-6">
                           <label
-                            htmlFor={subject}
+                            htmlFor={termSubject.subject.id.toString()}
                             className="font-medium text-gray-900"
                           >
-                            {subject}
+                            {termSubject.subject.name}
                           </label>
                         </div>
                       </div>
