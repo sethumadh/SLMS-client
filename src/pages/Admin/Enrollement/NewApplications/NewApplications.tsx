@@ -86,8 +86,8 @@ function NewStudentApplications() {
   }
 
   return (
-    <div className="container mt-2">
-      <div className="">
+    <div className="max-w-7xl mx-auto  mt-2">
+      <div className="container">
         <div className="sm:flex sm:items-center">
           <div className="flex justify-between items-end sm:flex-auto ">
             <div className="">

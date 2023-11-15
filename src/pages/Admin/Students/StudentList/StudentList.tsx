@@ -750,8 +750,8 @@ function Students() {
     console.log(selectedClass)
   }
   return (
-    <div className="container mt-2">
-      <div className="">
+    <div className="max-w-7xl mx-auto mt-2">
+      <div className="container">
         <div className="sm:flex sm:items-center">
           <div className="flex justify-between items-end sm:flex-auto ">
             <div className="">
@@ -819,7 +819,7 @@ function Students() {
             <Skeleton />
           </>
         ) : (
-          <div className="mt-8 flow-root h-[575px]">
+          <div className="mt-2 flow-root h-[575px]">
             <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
                 <table className="min-w-full divide-y divide-gray-300">
