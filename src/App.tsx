@@ -9,6 +9,7 @@ import { Provider } from "react-redux"
 import { store } from "./redux/store"
 import { persistStore } from "redux-persist"
 import { PersistGate } from "redux-persist/integration/react"
+import { ToastContainer } from "react-toastify"
 
 import Home from "@/pages/Home/Home"
 import Application from "@/pages/Application/Application"
@@ -41,6 +42,10 @@ import NewApplicantHealthDetails from "./pages/Admin/Enrollement/NewApplicantDet
 import NewApplicantDeclaration from "./pages/Admin/Enrollement/NewApplicantDetails/Declaration/Declaration"
 import NewApplicantSubjectDetails from "./pages/Admin/Enrollement/NewApplicantDetails/Subjects/SubjectDetails"
 import StudentsNavbarLayout from "./Layouts/StudentsNavbarLayout/StudentsNavbarLayout"
+import AdministrationLayout from "./Layouts/AdministrationLayout/AdministrationLayout"
+import ManageTermLayout from "./Layouts/AdministrationLayout/ManageTermLayout/ManageTermLayout"
+import ManageTerm from "./pages/Admin/Administration/ManageTerm/ManageTerm"
+// import TermLayout from "./pages/Admin/Administration/Terms/Terms"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -54,7 +59,7 @@ const router = createBrowserRouter(
       </Route>
 
       {/* Role = admin */}
-      <Route path="/admin" element={<AdminDashboardLayout />}>
+      <Route path="admin" element={<AdminDashboardLayout />}>
         <Route index element={<Dashboard />} />
         {/* student */}
         <Route path="students" element={<StudentsNavbarLayout />}>
@@ -115,7 +120,12 @@ const router = createBrowserRouter(
         <Route path="finance" element={<Finance />} />
         <Route path="attendance" element={<Attendance />} />
         <Route path="communication" element={<Communication />} />
-        <Route path="administration" element={<Administration />} />
+        <Route path="administration" element={<AdministrationLayout />}>
+          <Route index element={<Administration />} />
+          <Route path="manage-term" element={<ManageTermLayout />}>
+            <Route index element={<ManageTerm />} />
+          </Route>
+        </Route>
         <Route path="timetable" element={<Timetable />} />
       </Route>
       {/* Role = teacher */}
@@ -146,6 +156,7 @@ function App() {
           <RouterProvider router={router} />
         </PersistGate>
       </Provider>
+      <ToastContainer />
     </QueryClientProvider>
   )
 }

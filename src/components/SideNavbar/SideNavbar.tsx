@@ -37,7 +37,7 @@ function SideNavBar() {
     dispatch(setActivePath(location.pathname))
   }, [location, dispatch])
   return (
-    <div style={{ height: "auto", display: "flex" }} className="relative">
+    <div >
       <Sidebar
         style={{
           height: "auto",

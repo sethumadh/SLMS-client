@@ -20,7 +20,7 @@ const persistConfig = {
   key: "root",
   version: 1,
   storage,
-  //   blacklist: [studentListSlice.name, sidebarSlice.name],
+    blacklist: [sidebarSlice.name],
 }
 export const reducer = combineReducers({
   [sidebarSlice.name]: sidebarSlice.reducer,

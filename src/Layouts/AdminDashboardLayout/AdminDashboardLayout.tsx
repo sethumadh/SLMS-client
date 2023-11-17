@@ -3,9 +3,11 @@ import { Outlet } from "react-router-dom"
 
 function AdminDashboardLayout() {
   return (
-    <div>
+<div style={{ height: "auto", display: "flex" }} className="relative">
       <SideNavbar />
-      <Outlet />
+      <main className="w-full flex-1 md:pl-[70px]">
+        <Outlet />
+      </main>
     </div>
   )
 }

@@ -1,0 +1,9 @@
+const baseURL = import.meta.env.VITE_BASE_URL
+export const route = {
+  application: {
+    getCurrentTerm: `${baseURL}/api/v1/application/find-current-term`,
+  },
+  admin: {
+    changeCurrentTermName: `${baseURL}/api/v1/admin/administration/update/term-name`,
+  },
+}

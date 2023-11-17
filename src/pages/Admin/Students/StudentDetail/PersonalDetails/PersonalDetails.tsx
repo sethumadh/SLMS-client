@@ -185,7 +185,7 @@ function PersonalDetails() {
                     </>
                   )}
 
-                  {isEdit && item == "email" && (
+                  {isEdit && item === "email" && (
                     <>
                       <div className="sm:col-span-2 sm:mt-0 relative mt-2">
                         <input
@@ -248,7 +248,7 @@ function PersonalDetails() {
                       </button>
                     </>
                   )}
-                  {isEdit && item == "contact" && (
+                  {isEdit && item === "contact" && (
                     <>
                       <div className="sm:col-span-2 sm:mt-0 relative mt-2">
                         <input
@@ -314,7 +314,7 @@ function PersonalDetails() {
                       </button>
                     </>
                   )}
-                  {isEdit && item == "address" && (
+                  {isEdit && item === "address" && (
                     <>
                       <div className="sm:col-span-2 sm:mt-0 relative mt-2">
                         <input
@@ -378,7 +378,7 @@ function PersonalDetails() {
                       </button>
                     </>
                   )}
-                  {isEdit && item == "suburb" && (
+                  {isEdit && item === "suburb" && (
                     <>
                       <div className="sm:col-span-2 sm:mt-0 relative mt-2">
                         <input
@@ -442,7 +442,7 @@ function PersonalDetails() {
                       </button>
                     </>
                   )}
-                  {isEdit && item == "postcode" && (
+                  {isEdit && item === "postcode" && (
                     <>
                       <div className="sm:col-span-2 sm:mt-0 relative mt-2">
                         <input

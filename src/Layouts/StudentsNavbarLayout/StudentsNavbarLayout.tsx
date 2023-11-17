@@ -19,7 +19,6 @@ const tabs = [
 ]
 
 export default function StudentsNavbarLayout() {
-  // const [setActiveLink]
   const location = useLocation()
   const activeLink = location.pathname
 
@@ -50,7 +49,9 @@ export default function StudentsNavbarLayout() {
           ))}
         </nav>
       </div>
-      <Outlet />
+      <div className="max-w-7xl mx-auto">
+        <Outlet />
+      </div>
     </div>
   )
 }
