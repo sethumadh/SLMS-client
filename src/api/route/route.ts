@@ -5,5 +5,6 @@ export const route = {
   },
   admin: {
     changeCurrentTermName: `${baseURL}/api/v1/admin/administration/update/term-name`,
+    extendCurrentTerm: `${baseURL}/api/v1/admin/administration/update/extend-term`,
   },
 }

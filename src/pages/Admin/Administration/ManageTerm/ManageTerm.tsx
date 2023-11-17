@@ -3,22 +3,27 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { Link } from "react-router-dom"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { FormProvider, useForm } from "react-hook-form"
+import { Controller, FormProvider, useForm } from "react-hook-form"
 import { toast } from "react-toastify"
+import { useEffect, useState } from "react"
 
 import { api } from "@/api/api"
 import Icons from "@/constants/icons"
 import { formatDate } from "@/helpers/dateFormatter"
 import { capitalizeFirstCharacter } from "@/helpers/capitalizeFirstCharacter"
 import LoadingSpinner from "@/components/Loadingspinner"
-import { changeCurrentTermNameSchema } from "@/api/admin/admin"
-import { useEffect,useState } from "react"
-import { AxiosError } from "axios"
+import {
+  changeCurrentTermNameSchema,
+  extendCurrentTermSchema,
+} from "@/api/admin/admin"
+import TermDetails from "@/components/Administration/ManageTerm/Termdetails"
+import ReactDatePicker from "react-datepicker"
+import { handleAxiosError } from "@/helpers/errorhandler"
 
 export type ChangeCurrentTermNameSchema = z.infer<
   typeof changeCurrentTermNameSchema
 >
-
+export type ExtendCurrentTermSchema = z.infer<typeof extendCurrentTermSchema>
 function Term() {
   const [loadingToastId, setLoadingToastId] = useState<string | null>(null)
   const [isEdit, setIsEdit] = useState(false)
@@ -28,6 +33,28 @@ function Term() {
     queryKey: [api.application.currentTerm.getTermSubjects.queryKey],
     queryFn: api.application.currentTerm.getTermSubjects.query,
   })
+  const { mutateAsync: termExtendMutation, isPending: termExtendIsPending } =
+    useMutation({
+      mutationFn: api.admin.term.extendCurrentTerm.mutation,
+      onSuccess: (data) => {
+        queryClient.invalidateQueries({
+          queryKey: [api.application.currentTerm.getTermSubjects.queryKey],
+        })
+        if (loadingToastId) toast.dismiss(loadingToastId)
+
+        // Access the 'date' property from the data object
+        const extendedDate = data.date
+
+        // Use your formatDate function to format the date string
+        const formattedDate = formatDate(extendedDate.toString())
+
+        toast.success(`Term is extended to ${formattedDate} 👌`)
+      },
+      onError: (error: unknown) => {
+        if (loadingToastId) toast.dismiss(loadingToastId)
+        handleAxiosError(error)
+      },
+    })
   const {
     mutateAsync: termNameChangeMutation,
     isPending: termNameChangeIsPending,
@@ -42,17 +69,13 @@ function Term() {
     },
     onError: (error: unknown) => {
       if (loadingToastId) toast.dismiss(loadingToastId)
-      if (error instanceof AxiosError) {
-        const errorData = error.response?.data as { message?: string }
-        if (errorData && errorData.message) {
-          toast.error(`${errorData.message}`)
-        } else {
-          toast.error("An unknown error occurred")
-        }
-      } else {
-        console.log("An error occurred, Please contact Administrator")
-        // toast.error('An error occurred, but it was not an Axios error');
-      }
+      handleAxiosError(error)
+    },
+  })
+  const termExtendMethods = useForm<ExtendCurrentTermSchema>({
+    resolver: zodResolver(extendCurrentTermSchema),
+    defaultValues: {
+      date: currentTerm?.endDate ? new Date(currentTerm.endDate) : new Date(),
     },
   })
   const termNameMethods = useForm<ChangeCurrentTermNameSchema>({
@@ -61,6 +84,21 @@ function Term() {
       name: !isLoading ? currentTerm?.name : "",
     },
   })
+  const onTermExtendSubmit = async (values: ExtendCurrentTermSchema) => {
+    if (currentTerm?.id) {
+      const toastId = toast.loading(`Extending term , please wait`)
+      setLoadingToastId(toastId.toString())
+      await termExtendMutation({
+        eDate: values.date,
+        id: currentTerm?.id,
+      })
+    } else {
+      toast.error(`There is no such term in the database.`)
+    }
+
+    setItem("")
+    setIsEdit(false)
+  }
   const onTermNameSubmit = async (values: ChangeCurrentTermNameSchema) => {
     if (currentTerm?.id) {
       const toastId = toast.loading(`Term Name is Getting updated`)
@@ -81,8 +119,11 @@ function Term() {
       termNameMethods.reset({
         name: currentTerm.name,
       })
+      termExtendMethods.reset({
+        date: new Date(currentTerm?.endDate),
+      })
     }
-  }, [currentTerm, isLoading, termNameMethods])
+  }, [currentTerm, isLoading, termNameMethods, termExtendMethods])
 
   return (
     <div>
@@ -153,6 +194,7 @@ function Term() {
                       <>
                         <div className="sm:col-span-2 sm:mt-0 relative mt-2">
                           <input
+                            autoComplete="off"
                             {...termNameMethods.register("name")}
                             className="peer block w-full border-0 bg-gray-50 p-0 text-gray-900 focus:ring-0 sm:text-sm sm:leading-6"
                           />
@@ -186,93 +228,145 @@ function Term() {
               </div>
             </form>
           </FormProvider>
+          {currentTerm && (
+            <>
+              <TermDetails
+                description=" Start date"
+                value={currentTerm?.startDate}
+              />
+            </>
+          )}
+          <FormProvider {...termExtendMethods}>
+            <form
+              onSubmit={termExtendMethods.handleSubmit(onTermExtendSubmit)}
+              noValidate
+            >
+              <div className="px-4 py-2 sm:grid sm:grid-cols-4 sm:gap-x-4 sm:px-0">
+                <dt className="text-sm font-medium leading-6 text-gray-900">
+                  End date
+                </dt>
+                {item != "termExtend" && (
+                  <>
+                    <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                      {currentTerm?.endDate && formatDate(currentTerm?.endDate)}
+                    </dd>
+                    <button
+                      onClick={() => {
+                        setIsEdit(true)
+                        setItem("termExtend")
+                      }}
+                      type="button"
+                      className="rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500"
+                    >
+                      Extend term
+                    </button>
+                  </>
+                )}
+                {isEdit && item === "termExtend" && (
+                  <>
+                    {termExtendIsPending ? (
+                      <>
+                        <div className="sm:col-span-2 sm:mt-0 relative mt-2">
+                          <div>
+                            <LoadingSpinner className="peer block w-full" />
+                          </div>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="sm:col-span-2 sm:mt-0 relative mt-2">
+                          <Controller
+                            name="date"
+                            control={termExtendMethods.control}
+                            render={({ field }) => (
+                              <ReactDatePicker
+                                className="peer block w-full border-0 bg-gray-50 p-0 text-gray-900 focus:ring-0 sm:text-sm sm:leading-6"
+                                placeholderText="Select date"
+                                onChange={(date: Date) => field.onChange(date)}
+                                selected={field.value}
+                                peekNextMonth
+                                showMonthDropdown
+                                showYearDropdown
+                                dropdownMode="select"
+                                showIcon
+                                icon={
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="1em"
+                                    height="1em"
+                                    viewBox="0 0 48 48"
+                                  >
+                                    <mask id="ipSApplication0">
+                                      <g
+                                        fill="none"
+                                        stroke="#fff"
+                                        strokeLinejoin="round"
+                                        strokeWidth="4"
+                                      >
+                                        <path
+                                          strokeLinecap="round"
+                                          d="M40.04 22v20h-32V22"
+                                        ></path>
+                                        <path
+                                          fill="#fff"
+                                          d="M5.842 13.777C4.312 17.737 7.263 22 11.51 22c3.314 0 6.019-2.686 6.019-6a6 6 0 0 0 6 6h1.018a6 6 0 0 0 6-6c0 3.314 2.706 6 6.02 6c4.248 0 7.201-4.265 5.67-8.228L39.234 6H8.845l-3.003 7.777Z"
+                                        ></path>
+                                      </g>
+                                    </mask>
+                                    <path
+                                      fill="currentColor"
+                                      d="M0 0h48v48H0z"
+                                      mask="url(#ipSApplication0)"
+                                    ></path>
+                                  </svg>
+                                }
+                              />
+                            )}
+                          />
+                          <div
+                            className="absolute inset-x-0 bottom-0 border-t border-gray-300 peer-focus:border-t-2 peer-focus:border-indigo-600"
+                            aria-hidden="true"
+                          />
+                        </div>
+                      </>
+                    )}
+                    <div className="flex justify-center gap-x-4 ">
+                      <button
+                        className="rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500"
+                        type="submit"
+                      >
+                        confirm
+                      </button>
+                      <button
+                        type="button"
+                        className="rounded-md bg-white font-medium text-red-600 hover:text-red-500"
+                        onClick={() => {
+                          setIsEdit(false)
+                          setItem("")
+                        }}
+                      >
+                        cancel
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+            </form>
+          </FormProvider>
+          {currentTerm && (
+            <>
+              <TermDetails
+                description="Created on"
+                value={currentTerm?.createdAt}
+              />
+              <TermDetails
+                description="Last Updated on"
+                value={currentTerm?.updatedAt}
+              />
+              <TermDetails description="Total Students" value={100} />
+            </>
+          )}
 
-          <div className="px-4 py-2 sm:grid sm:grid-cols-4 sm:gap-x-4 sm:px-0">
-            <dt className="text-sm font-medium leading-6 text-gray-900">
-              Start date
-            </dt>
-            <dd className="mt-1 flex text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-              <span className="flex-grow">
-                {currentTerm?.startDate && formatDate(currentTerm?.startDate)}
-              </span>
-              <span className="ml-4 flex-shrink-0">
-                <button
-                  type="button"
-                  className="rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500"
-                ></button>
-              </span>
-            </dd>
-          </div>
-          <div className="px-4 py-2 sm:grid sm:grid-cols-4 sm:gap-x-4 sm:px-0">
-            <dt className="text-sm font-medium leading-6 text-gray-900">
-              End date
-            </dt>
-            <dd className="mt-1 flex text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-              <span className="flex-grow">
-                {currentTerm?.endDate && formatDate(currentTerm?.endDate)}
-              </span>
-              <span className="ml-4 flex-shrink-0">
-                <button
-                  type="button"
-                  className="rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500"
-                ></button>
-              </span>
-              <span className="ml-4 flex-shrink-0">
-                <button
-                  type="button"
-                  className="rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500"
-                >
-                  Extend term
-                </button>
-              </span>
-            </dd>
-          </div>
-          <div className="px-4 py-2 sm:grid sm:grid-cols-4 sm:gap-x-4 sm:px-0">
-            <dt className="text-sm font-medium leading-6 text-gray-900">
-              Created on
-            </dt>
-            <dd className="mt-1 flex text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-              <span className="flex-grow">
-                {currentTerm?.createdAt && formatDate(currentTerm?.createdAt)}
-              </span>
-              <span className="ml-4 flex-shrink-0">
-                <button
-                  type="button"
-                  className="rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500"
-                ></button>
-              </span>
-            </dd>
-          </div>
-          <div className="px-4 py-2 sm:grid sm:grid-cols-4 sm:gap-x-4 sm:px-0">
-            <dt className="text-sm font-medium leading-6 text-gray-900">
-              Last Updated on
-            </dt>
-            <dd className="mt-1 flex text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-              <span className="flex-grow">
-                {currentTerm?.updatedAt && formatDate(currentTerm?.updatedAt)}
-              </span>
-              <span className="ml-4 flex-shrink-0">
-                <button
-                  type="button"
-                  className="rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500"
-                ></button>
-              </span>
-            </dd>
-          </div>
-          <div className="px-4 py-2 sm:grid sm:grid-cols-4 sm:gap-x-4 sm:px-0">
-            <dt className="text-sm font-medium leading-6 text-gray-900">
-              Total Students
-            </dt>
-            <dd className="mt-1 flex text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-              <span className="flex-grow">100</span>
-              <span className="ml-4 flex-shrink-0">
-                <button
-                  type="button"
-                  className="rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500"
-                ></button>
-              </span>
-            </dd>
-          </div>
           <div className="px-4 py-2 sm:grid sm:grid-cols-4 sm:gap-x-4 sm:px-0">
             <dt className="text-sm font-medium leading-6 text-gray-900">
               Subjects Details
