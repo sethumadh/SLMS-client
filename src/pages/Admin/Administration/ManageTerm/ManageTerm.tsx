@@ -16,7 +16,7 @@ import {
   changeCurrentTermNameSchema,
   extendCurrentTermSchema,
 } from "@/api/admin/admin"
-import TermDetails from "@/components/Administration/ManageTerm/Termdetails"
+import TermDetails from "@/components/Administration/ManageTerm/TermDetails"
 import ReactDatePicker from "react-datepicker"
 import { handleAxiosError } from "@/helpers/errorhandler"
 
