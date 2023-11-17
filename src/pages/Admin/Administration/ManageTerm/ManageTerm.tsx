@@ -12,7 +12,7 @@ import { formatDate } from "@/helpers/dateFormatter"
 import { capitalizeFirstCharacter } from "@/helpers/capitalizeFirstCharacter"
 import LoadingSpinner from "@/components/Loadingspinner"
 import { changeCurrentTermNameSchema } from "@/api/admin/admin"
-import { useEffect, useRef, useState } from "react"
+import { useEffect,useState } from "react"
 import { AxiosError } from "axios"
 
 export type ChangeCurrentTermNameSchema = z.infer<
@@ -65,7 +65,7 @@ function Term() {
     if (currentTerm?.id) {
       const toastId = toast.loading(`Term Name is Getting updated`)
       setLoadingToastId(toastId.toString())
-      const res = await termNameChangeMutation({
+      await termNameChangeMutation({
         name: values.name,
         id: currentTerm?.id,
       })
