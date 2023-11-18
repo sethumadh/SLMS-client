@@ -2,34 +2,78 @@ import { z } from "zod"
 import axios from "axios"
 import { route } from "../route/route"
 
-export const changeCurrentTermNameSchema = z.object({
-  name: z.string().min(4, { message: "Minimum four characters is required" }),
+const levelSchema = z.object({
+  id: z.number(),
+  name: z.string(),
 })
-export const extendCurrentTermSchema = z.object({
-  date: z.date({ required_error: "Date is required" }),
+
+const subjectLevelSchema = z.object({
+  level: levelSchema,
 })
+
+const feeSchema = z.object({
+  id: z.number(),
+  amount: z.number(),
+  subjectId: z.number(),
+  paymentType: z.enum(["MONTHLY", "TERM"]),
+})
+
+const subjectSchema = z.object({
+  name: z.string(),
+  fee: feeSchema,
+  isActive: z.boolean(),
+  id: z.number(),
+  SubjectLevel: z.array(subjectLevelSchema),
+})
+
+const termSubjectSchema = z.object({
+  subject: subjectSchema,
+})
+
+const termSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  currentTerm: z.boolean(),
+  startDate: z.string(), // or use z.date() if you want to validate actual Date objects
+  endDate: z.string(), // or use z.date()
+  createdAt: z.string(), // or use z.date()
+  updatedAt: z.string(), // or use z.date()
+  TermSubject: z.array(termSubjectSchema),
+})
+export type TermSchema = z.infer<typeof termSchema>
 
 export const term = {
   changeCurrentTermName: {
-    schema: changeCurrentTermNameSchema,
-    mutation: async ({ id, name }: { id: number; name: string }) => {
-      const response = await axios.patch(
+    schema: termSchema,
+    mutation: async ({
+      id,
+      updatedTerm,
+    }: {
+      id: number
+      updatedTerm: TermSchema
+    }) => {
+      const response = await axios.put(
         `${route.admin.changeCurrentTermName}/${id}`,
-        { name }
+        { updatedTerm }
       )
-      return changeCurrentTermNameSchema.parse(response.data)
+      return termSchema.parse(response.data)
     },
   },
   extendCurrentTerm: {
-    schema: changeCurrentTermNameSchema,
-    mutation: async ({ id, eDate }: { id: number; eDate: Date }) => {
-      const date = eDate.toString()
-      const response = await axios.patch(
+    schema: termSchema,
+    mutation: async ({
+      id,
+      updatedTerm,
+    }: {
+      id: number
+      updatedTerm: TermSchema
+    }) => {
+      const response = await axios.put(
         `${route.admin.extendCurrentTerm}/${id}`,
-        { date }
+        { updatedTerm }
       )
-      const newDate = new Date(response.data)
-      return extendCurrentTermSchema.parse({ date: newDate })
+
+      return termSchema.parse(response.data)
     },
   },
 }

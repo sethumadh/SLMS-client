@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 // import axios from "axios"
 
@@ -45,21 +44,6 @@ const actionPanels = [
   // More actionPanels...
 ]
 function Administration() {
-  const [isMounted, setIsMounted] = useState(false)
-  const controller = new AbortController()
-  useEffect(() => {
-    setIsMounted(true)
-    const fetchStudents = async () => {
-      if (isMounted) {
-        console.log(isMounted)
-      }
-    }
-    fetchStudents()
-    return () => {
-      setIsMounted(false)
-      controller.abort()
-    }
-  }, [isMounted])
   return (
     <div className="mt-2">
       <div className="bg-white container">
