@@ -6,7 +6,7 @@ import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Controller, FormProvider, useForm } from "react-hook-form"
 import { toast } from "react-toastify"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 import { api } from "@/api/api"
 import Icons from "@/constants/icons"
@@ -21,12 +21,19 @@ import {
   changeCurrentTermNameSchema,
   extendCurrentTermSchema,
 } from "@/types/Admin/Term/Term"
+import { useAppDispatch } from "@/redux/store"
+import { setOpenModal } from "@/redux/slice/modalSlice"
+import TermNameModal from "@/components/Modal/TermNameModal"
+import TermDateModal from "@/components/Modal/TermDateModal"
 
 export type ChangeCurrentTermNameSchema = z.infer<
   typeof changeCurrentTermNameSchema
 >
 export type ExtendCurrentTermSchema = z.infer<typeof extendCurrentTermSchema>
 function Term() {
+  const dispatch = useAppDispatch()
+  const saveTermNameRef = useRef<HTMLButtonElement | null>(null)
+  const saveTermDateRef = useRef<HTMLButtonElement | null>(null)
   const [loadingToastId, setLoadingToastId] = useState<string | null>(null)
   const [isEdit, setIsEdit] = useState(false)
   const [item, setItem] = useState("")
@@ -100,6 +107,12 @@ function Term() {
   }
   const onTermNameSubmit = async (values: ChangeCurrentTermNameSchema) => {
     if (currentTerm?.id) {
+      dispatch(
+        setOpenModal({
+          isOpen: false,
+          type: "",
+        })
+      )
       const toastId = toast.loading(`Term Name is Getting updated`)
       setLoadingToastId(toastId.toString())
       const updatedTerm = { ...currentTerm, name: values.name }
@@ -124,7 +137,6 @@ function Term() {
       })
     }
   }, [currentTerm, isLoading, termNameMethods, termExtendMethods])
-
   return (
     <div>
       <div className="px-4 sm:px-0 flex justify-between gap-x-4 lg:mt-4">
@@ -207,10 +219,25 @@ function Term() {
                         )}
                         <div className="flex justify-center gap-x-4 ">
                           <button
-                            className="rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500"
+                            ref={saveTermNameRef}
+                            className="hidden rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500"
                             type="submit"
                           >
                             confirm
+                          </button>
+                          <button
+                            onClick={() => {
+                              dispatch(
+                                setOpenModal({
+                                  isOpen: true,
+                                  type: "termChange",
+                                })
+                              )
+                            }}
+                            className="rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500"
+                            type="button"
+                          >
+                            save
                           </button>
                           <button
                             type="button"
@@ -335,10 +362,25 @@ function Term() {
                         )}
                         <div className="flex justify-center gap-x-4 ">
                           <button
-                            className="rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500"
+                            ref={saveTermDateRef}
+                            className="hidden rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500"
                             type="submit"
                           >
                             confirm
+                          </button>
+                          <button
+                            onClick={() => {
+                              dispatch(
+                                setOpenModal({
+                                  isOpen: true,
+                                  type: "termDate",
+                                })
+                              )
+                            }}
+                            className="rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500"
+                            type="button"
+                          >
+                            save
                           </button>
                           <button
                             type="button"
@@ -438,6 +480,8 @@ function Term() {
           </div>
         </>
       )}
+      <TermNameModal ref={saveTermNameRef} />
+      <TermDateModal ref={saveTermDateRef} />
     </div>
   )
 }
