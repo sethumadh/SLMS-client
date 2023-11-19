@@ -130,13 +130,14 @@ function Term() {
   useEffect(() => {
     if (currentTerm && !isLoading) {
       termNameMethods.reset({
-        name: currentTerm.name,
+        name: currentTerm?.name,
       })
       termExtendMethods.reset({
         date: new Date(currentTerm?.endDate),
       })
     }
   }, [currentTerm, isLoading, termNameMethods, termExtendMethods])
+
   return (
     <div>
       <div className="px-4 sm:px-0 flex justify-between gap-x-4 lg:mt-4">
@@ -226,13 +227,18 @@ function Term() {
                             confirm
                           </button>
                           <button
-                            onClick={() => {
-                              dispatch(
-                                setOpenModal({
-                                  isOpen: true,
-                                  type: "termChange",
-                                })
-                              )
+                            onClick={async () => {
+                              const validate = await termNameMethods.trigger([
+                                "name",
+                              ])
+                              if (validate) {
+                                dispatch(
+                                  setOpenModal({
+                                    isOpen: true,
+                                    type: "termName",
+                                  })
+                                )
+                              }
                             }}
                             className="rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500"
                             type="button"
@@ -243,6 +249,9 @@ function Term() {
                             type="button"
                             className="rounded-md bg-white font-medium text-red-600 hover:text-red-500"
                             onClick={() => {
+                              termNameMethods.reset({
+                                name: currentTerm?.name,
+                              })
                               setIsEdit(false)
                               setItem("")
                             }}
@@ -253,6 +262,17 @@ function Term() {
                       </>
                     )}
                   </div>
+
+                  {termNameMethods.formState.errors?.name?.message && (
+                    <span className="hidden">
+                      {toast.error(
+                        `${termNameMethods.formState.errors?.name?.message}`,
+                        {
+                          toastId: `${123}`,
+                        }
+                      )}
+                    </span>
+                  )}
                 </form>
               </FormProvider>
               {currentTerm && (
@@ -373,7 +393,7 @@ function Term() {
                               dispatch(
                                 setOpenModal({
                                   isOpen: true,
-                                  type: "termDate",
+                                  type: "termExtend",
                                 })
                               )
                             }}
@@ -395,6 +415,16 @@ function Term() {
                         </div>
                       </>
                     )}
+                    {termExtendMethods.formState.errors?.date?.message && (
+                    <span className="hidden">
+                      {toast.error(
+                        `${termExtendMethods.formState.errors?.date?.message}`,
+                        {
+                          toastId: `${334}`,
+                        }
+                      )}
+                    </span>
+                  )}
                   </div>
                 </form>
               </FormProvider>

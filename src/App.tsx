@@ -45,8 +45,6 @@ import StudentsNavbarLayout from "./Layouts/StudentsNavbarLayout/StudentsNavbarL
 import AdministrationLayout from "./Layouts/AdministrationLayout/AdministrationLayout"
 import ManageTermLayout from "./Layouts/AdministrationLayout/ManageTermLayout/ManageTermLayout"
 import ManageTerm from "./pages/Admin/Administration/ManageTerm/ManageTerm"
-// import TermNameModal from "./components/Modal/TermNameModal"
-// import TermLayout from "./pages/Admin/Administration/Terms/Terms"
 
 const router = createBrowserRouter(
   createRoutesFromElements(

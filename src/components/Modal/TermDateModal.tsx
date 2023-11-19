@@ -8,7 +8,7 @@ const TermDateModal = forwardRef<HTMLButtonElement>((_props, ref) => {
   const dispatch = useAppDispatch()
   const { isOpen, type } = useAppSelector((state) => state.modal)
   const cancelButtonRef = useRef(null)
-  const IsModalOpen = isOpen && type === "termDate"
+  const IsModalOpen = isOpen && type === "termExtend"
 
   return (
     <Transition.Root show={IsModalOpen} as={Fragment}>

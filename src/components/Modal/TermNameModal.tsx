@@ -8,7 +8,7 @@ const TermNameModal = forwardRef<HTMLButtonElement>((_props, ref) => {
   const dispatch = useAppDispatch()
   const { isOpen, type } = useAppSelector((state) => state.modal)
   const cancelButtonRef = useRef(null)
-  const IsModalOpen = isOpen && type === "termChange"
+  const IsModalOpen = isOpen && type === "termName"
 
   return (
     <Transition.Root show={IsModalOpen} as={Fragment}>
@@ -77,7 +77,6 @@ const TermNameModal = forwardRef<HTMLButtonElement>((_props, ref) => {
                     // ref={saveRef}
                     className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
                     onClick={() => {
-                      console.log("helllo")
                       if (ref && "current" in ref && ref.current)
                         ref?.current.click()
                       dispatch(
