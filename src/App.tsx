@@ -45,6 +45,7 @@ import StudentsNavbarLayout from "./Layouts/StudentsNavbarLayout/StudentsNavbarL
 import AdministrationLayout from "./Layouts/AdministrationLayout/AdministrationLayout"
 import ManageTermLayout from "./Layouts/AdministrationLayout/ManageTermLayout/ManageTermLayout"
 import ManageTerm from "./pages/Admin/Administration/ManageTerm/ManageTerm"
+import CreateTerm from "./pages/Admin/Administration/CreateTerm/CreateTerm"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -123,6 +124,7 @@ const router = createBrowserRouter(
           <Route index element={<Administration />} />
           <Route path="manage-term" element={<ManageTermLayout />}>
             <Route index element={<ManageTerm />} />
+            <Route path="create-term" element={<CreateTerm />} />
           </Route>
         </Route>
         <Route path="timetable" element={<Timetable />} />

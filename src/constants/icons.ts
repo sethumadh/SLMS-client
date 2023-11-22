@@ -21,11 +21,16 @@ import {
   ChevronLeft,
   Undo2,
   Pencil,
-  Check,X
+  Check,
+  X,
+  Trash2,
+  PlusIcon,
+  CheckCircleIcon,
 } from "lucide-react"
 
 export default {
   Cog6ToothIcon,
+  PlusIcon,
   PowerIcon,
   PresentationChartBarIcon,
   LayoutDashboard,
@@ -45,5 +50,8 @@ export default {
   PhoneIcon,
   Undo2,
   Pencil,
-  Check,X
+  Check,
+  X,
+  Trash2,
+  CheckCircleIcon,
 }

@@ -2,7 +2,7 @@ import { formatDate } from "@/helpers/dateFormatter"
 
 type TermDetailsProps = {
   description: string
-  value: string | number
+  value: string | number | boolean
 }
 
 function TermDetails({ description, value }: TermDetailsProps) {
@@ -18,6 +18,9 @@ function TermDetails({ description, value }: TermDetailsProps) {
           )}
           {typeof value === "number" && (
             <span className="flex-grow">{value}</span>
+          )}
+          {typeof value === "boolean" && (
+            <span className="flex-grow">{value ? "Yes" : "NO"}</span>
           )}
           <span className="ml-4 flex-shrink-0">
             <button

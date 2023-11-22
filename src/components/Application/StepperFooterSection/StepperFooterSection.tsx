@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 
-type ApplicationFooterSection = {
+type StepperFooterSection = {
   showPrevBtn: boolean
   prevText: string
   prevOnClick: () => void
@@ -9,7 +9,7 @@ type ApplicationFooterSection = {
   type: "button" | "submit" | "reset"
 }
 
-export function ApplicationFooterSection({
+export function StepperFooterSection({
   showPrevBtn,
   prevText,
   prevOnClick,
@@ -17,7 +17,7 @@ export function ApplicationFooterSection({
   nextOnClick,
   type,
 }: //   isSubmitting
-ApplicationFooterSection) {
+StepperFooterSection) {
   return (
     <div className="fixed right-4 bottom-0 w-full bg-white">
       <hr className="border-t" />

@@ -27,8 +27,8 @@ function Subjects() {
     queryKey: [api.application.currentTerm.getTermSubjects.queryKey],
     queryFn: api.application.currentTerm.getTermSubjects.query,
   })
-  const termSubjects = currentTerm.data?.TermSubject
-  console.log(termSubjects)
+  const termSubjects = currentTerm.data?.termSubject
+
 
   // console.log(TermSubject)
   return (

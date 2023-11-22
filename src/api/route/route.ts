@@ -6,5 +6,9 @@ export const route = {
   admin: {
     changeCurrentTermName: `${baseURL}/api/v1/admin/administration/update/term-name`,
     extendCurrentTerm: `${baseURL}/api/v1/admin/administration/update/extend-term`,
+    level: {
+      findAllLevels: `${baseURL}/api/v1/admin/administration/get-all-levels`,
+    },
   },
 }
+// /get-all-levels

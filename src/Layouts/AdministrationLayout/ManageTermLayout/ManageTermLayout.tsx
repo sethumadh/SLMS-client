@@ -7,7 +7,7 @@ const tabs = [
   {
     name: "Create New Term",
     smName: "Create",
-    href: "manage-subjects-classes",
+    href: "create-term",
     current: true,
   },
   {

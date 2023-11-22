@@ -38,7 +38,7 @@ function Term() {
   const [isEdit, setIsEdit] = useState(false)
   const [item, setItem] = useState("")
   const queryClient = useQueryClient()
-  const { data: currentTerm, isLoading } = useQuery({
+  const { data: currentTerm, isLoading, error} = useQuery({
     queryKey: [api.application.currentTerm.getTermSubjects.queryKey],
     queryFn: api.application.currentTerm.getTermSubjects.query,
   })
@@ -82,12 +82,14 @@ function Term() {
     defaultValues: {
       date: currentTerm?.endDate ? new Date(currentTerm.endDate) : new Date(),
     },
+    shouldFocusError: true,
   })
   const termNameMethods = useForm<ChangeCurrentTermNameSchema>({
     resolver: zodResolver(changeCurrentTermNameSchema),
     defaultValues: {
       name: !isLoading ? currentTerm?.name : "",
     },
+    shouldFocusError: true,
   })
   const onTermExtendSubmit = async (values: ExtendCurrentTermSchema) => {
     if (currentTerm?.id) {
@@ -137,7 +139,13 @@ function Term() {
       })
     }
   }, [currentTerm, isLoading, termNameMethods, termExtendMethods])
-
+  if (!currentTerm?.name) {
+    return (
+      <div className="h-screen textxl font-medium flex justify-center items-center">
+        <h1 className="italic">There are no data to show</h1>
+      </div>
+    )
+  }
   return (
     <div>
       <div className="px-4 sm:px-0 flex justify-between gap-x-4 lg:mt-4">
@@ -159,6 +167,7 @@ function Term() {
           <p className="hidden sm:block sm:text-sm">Go Back</p>
         </Link>
       </div>
+
       {isLoading ? (
         <div className="flex justify-center items-center ">
           <LoadingSpinner className="w-12 h-12" />
@@ -280,6 +289,10 @@ function Term() {
                   <TermDetails
                     description=" Start date"
                     value={currentTerm?.startDate}
+                  />
+                  <TermDetails
+                    description="Pusblished"
+                    value={currentTerm?.isPublish}
                   />
                 </>
               )}
@@ -416,15 +429,15 @@ function Term() {
                       </>
                     )}
                     {termExtendMethods.formState.errors?.date?.message && (
-                    <span className="hidden">
-                      {toast.error(
-                        `${termExtendMethods.formState.errors?.date?.message}`,
-                        {
-                          toastId: `${334}`,
-                        }
-                      )}
-                    </span>
-                  )}
+                      <span className="hidden">
+                        {toast.error(
+                          `${termExtendMethods.formState.errors?.date?.message}`,
+                          {
+                            toastId: `${334}`,
+                          }
+                        )}
+                      </span>
+                    )}
                   </div>
                 </form>
               </FormProvider>
@@ -449,59 +462,65 @@ function Term() {
                 <dd className="mt-1 flex text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                   <div className="flex-grow">
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                      {currentTerm?.TermSubject.map((term) => (
-                        <div
-                          key={term.subject.id}
-                          className="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400"
-                        >
-                          <div className="min-w-0 flex-1">
-                            <div className="focus:outline-none ">
-                              <span
-                                className="absolute inset-0"
-                                aria-hidden="true"
-                              />
-                              <div className="flex gap-1">
-                                <p className="text-sm  text-gray-900 w-1/3">
-                                  Name
-                                </p>
-                                <p className="text-sm font-medium text-gray-900 w-full">
-                                  {term.subject.name &&
-                                    capitalizeFirstCharacter(term.subject.name)}
-                                </p>
-                              </div>
-                              <div className="flex gap-1">
-                                <p className="text-sm  text-gray-900 w-1/3">
-                                  Fee
-                                </p>
-                                <p className="text-sm font-medium text-gray-900 w-full">
-                                  {term.subject.fee.amount}
-                                </p>
-                              </div>
+                      {currentTerm?.termSubject.length > 0 ? (
+                        currentTerm?.termSubject.map((term) => (
+                          <div
+                            key={term.subject.id}
+                            className="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400"
+                          >
+                            <div className="min-w-0 flex-1">
+                              <div className="focus:outline-none ">
+                                <span
+                                  className="absolute inset-0"
+                                  aria-hidden="true"
+                                />
+                                <div className="flex gap-1">
+                                  <p className="text-sm  text-gray-900 w-1/3">
+                                    Name
+                                  </p>
+                                  <p className="text-sm font-medium text-gray-900 w-full">
+                                    {term.subject.name &&
+                                      capitalizeFirstCharacter(
+                                        term.subject.name
+                                      )}
+                                  </p>
+                                </div>
+                                <div className="flex gap-1">
+                                  <p className="text-sm  text-gray-900 w-1/3">
+                                    Fee
+                                  </p>
+                                  <p className="text-sm font-medium text-gray-900 w-full">
+                                    {term.fee.amount}
+                                  </p>
+                                </div>
 
-                              <div className="flex gap-1">
-                                <p className="text-sm text-gray-900 w-1/3">
-                                  Fee Interval
-                                </p>
-                                <p className="text-sm font-medium text-gray-900 w-full">
-                                  {capitalizeFirstCharacter(
-                                    term.subject.fee.paymentType.toLowerCase()
-                                  )}
-                                </p>
-                              </div>
-                              <div className="flex gap-1">
-                                <p className="text-sm text-gray-900 w-1/3">
-                                  Levels
-                                </p>
-                                <p className="text-sm font-medium text-gray-900 w-full">
-                                  {term.subject.SubjectLevel.map((level) =>
-                                    capitalizeFirstCharacter(level.level.name)
-                                  ).join(", ")}
-                                </p>
+                                <div className="flex gap-1">
+                                  <p className="text-sm text-gray-900 w-1/3">
+                                    Fee Interval
+                                  </p>
+                                  <p className="text-sm font-medium text-gray-900 w-full">
+                                    {capitalizeFirstCharacter(
+                                      term.fee.paymentType.toLowerCase()
+                                    )}
+                                  </p>
+                                </div>
+                                <div className="flex gap-1">
+                                  <p className="text-sm text-gray-900 w-1/3">
+                                    Levels
+                                  </p>
+                                  <p className="text-sm font-medium text-gray-900 w-full">
+                                    {term.level.map((l) =>
+                                      capitalizeFirstCharacter(l.name)
+                                    ).join(", ")}
+                                  </p>
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      ))}
+                        ))
+                      ) : (
+                        <div>There are no subjects to show</div>
+                      )}
                     </div>
                   </div>
                 </dd>

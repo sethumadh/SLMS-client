@@ -3,33 +3,26 @@ import axios from "axios"
 import { route } from "../route/route"
 
 const levelSchema = z.object({
-  id: z.number(),
+  id: z.number().optional(),
   name: z.string(),
 })
 
-const subjectLevelSchema = z.object({
-  level: levelSchema,
-})
-
 const feeSchema = z.object({
-  id: z.number(),
   amount: z.number(),
-  subjectId: z.number(),
   paymentType: z.enum(["MONTHLY", "TERM"]),
 })
 
 const subjectSchema = z.object({
   name: z.string(),
-  fee: feeSchema,
   isActive: z.boolean(),
   id: z.number(),
-  SubjectLevel: z.array(subjectLevelSchema),
 })
 
 const termSubjectSchema = z.object({
   subject: subjectSchema,
+  level: z.array(levelSchema),
+  fee: feeSchema,
 })
-
 const termSchema = z.object({
   id: z.number(),
   name: z.string(),
@@ -38,7 +31,7 @@ const termSchema = z.object({
   endDate: z.string(), // or use z.date()
   createdAt: z.string(), // or use z.date()
   updatedAt: z.string(), // or use z.date()
-  TermSubject: z.array(termSubjectSchema),
+  termSubject: z.array(termSubjectSchema),
 })
 export type TermSchema = z.infer<typeof termSchema>
 
@@ -74,6 +67,17 @@ export const term = {
       )
 
       return termSchema.parse(response.data)
+    },
+  },
+}
+
+export const levels = {
+  findAllLevels: {
+    querykey: "getAllLevels",
+    schema: z.array(levelSchema),
+    query: async () => {
+      const response = await axios.get(`${route.admin.level.findAllLevels}`)
+      return z.array(levelSchema).parse(response.data)
     },
   },
 }

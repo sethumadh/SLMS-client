@@ -5,7 +5,7 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 import { applicantSetupWizardSchema } from "@/types/applicantSetupWizardSchema"
-import { ApplicationFooterSection } from "@/components/Application/ApplicationFooterSection/ApplicationFooterSection"
+import { StepperFooterSection } from "@/components/Application/StepperFooterSection/StepperFooterSection"
 import ApplicantInfo from "@/components/Application/ApplicantInfo/ApplicantInfo"
 import ParentsInfo from "@/components/Application/ParentsInfo/ParentsInfo"
 import EmergencyContact from "@/components/Application/EmergencyContact/EmergencyContact"
@@ -34,7 +34,6 @@ function Application() {
     queryKey: [api.application.currentTerm.getTermSubjects.queryKey],
     queryFn: api.application.currentTerm.getTermSubjects.query,
   })
-  console.log(currentTerm.data)
 
   const methods = useForm<ApplicantWizardSchema>({
     resolver: zodResolver(applicantSetupWizardSchema),
@@ -119,7 +118,7 @@ function Application() {
         otherInfo: "",
         declaration: [],
       },
-      termName:currentTerm.data?.name
+      termName: currentTerm.data?.name,
     },
   })
 
@@ -218,7 +217,7 @@ function Application() {
               {step == 4 && <Subjects />}
               {step == 5 && <OtherInfo />}
               <div className="">
-                <ApplicationFooterSection
+                <StepperFooterSection
                   showPrevBtn={step == 0 ? false : true}
                   prevText={"Previous"}
                   prevOnClick={() => {

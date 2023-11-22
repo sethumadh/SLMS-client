@@ -1,4 +1,4 @@
-import { ApplicantWizardSchema  } from "@/pages/Application/Application"
+import { ApplicantWizardSchema } from "@/pages/Application/Application"
 import { PhotoIcon } from "@heroicons/react/24/solid"
 import { useState } from "react"
 import ReactDatePicker from "react-datepicker"
@@ -12,7 +12,8 @@ const options = [
 ]
 
 function ApplicantInfo() {
-  const { formState, control, register } = useFormContext<ApplicantWizardSchema >()
+  const { formState, control, register } =
+    useFormContext<ApplicantWizardSchema>()
   const [imagePreview, setImagePreview] = useState<string | null>()
 
   return (
@@ -39,14 +40,15 @@ function ApplicantInfo() {
                   <span className="italic text-xs text-gray-500">
                     (including middle name)
                   </span>
+                  <div className="mt-2">
+                    <input
+                      id="first-name"
+                      {...register("personalDetails.firstName")}
+                      type="text"
+                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    />
+                  </div>
                 </label>
-                <div className="mt-2">
-                  <input
-                    {...register("personalDetails.firstName")}
-                    type="text"
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  />
-                </div>
                 <div className="h-4">
                   {formState.errors.personalDetails?.firstName?.message && (
                     <span className="text-xs text-red-600">
@@ -62,20 +64,21 @@ function ApplicantInfo() {
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
                   Last name<span className="text-red-600">*</span>
-                </label>
-                <div className="mt-2">
-                  <input
-                    {...register("personalDetails.lastName")}
-                    type="text"
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  />
-                  <div className="h-4">
-                    {formState.errors.personalDetails?.lastName?.message && (
-                      <span className="text-xs text-red-600">
-                        {formState.errors.personalDetails?.lastName?.message}
-                      </span>
-                    )}
+                  <div className="mt-2">
+                    <input
+                    id="last-name"
+                      {...register("personalDetails.lastName")}
+                      type="text"
+                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    />
                   </div>
+                </label>
+                <div className="h-4">
+                  {formState.errors.personalDetails?.lastName?.message && (
+                    <span className="text-xs text-red-600">
+                      {formState.errors.personalDetails?.lastName?.message}
+                    </span>
+                  )}
                 </div>
               </div>
 
