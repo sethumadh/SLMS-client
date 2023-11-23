@@ -16,7 +16,7 @@ import storage from "redux-persist/lib/storage"
 import persistStore from "redux-persist/es/persistStore"
 import sidebarSlice from "./slice/sidebarSlice"
 import modalSlice from "./slice/modalSlice"
-import termSlice from "./slice/TermSlice"
+import termSlice from "./slice/termSlice"
 
 const persistConfig = {
   key: "root",

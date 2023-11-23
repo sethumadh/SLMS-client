@@ -5,7 +5,7 @@ import Create from "@/components/Administration/CreateTerm/Create"
 import Review from "@/components/Administration/CreateTerm/Review"
 import { StepperSection } from "@/components/Administration/CreateTerm/StepperSection"
 import { handleAxiosError } from "@/helpers/errorhandler"
-import { setTermData } from "@/redux/slice/TermSlice"
+import { setTermData } from "@/redux/slice/termSlice"
 import { setOpenModal } from "@/redux/slice/modalSlice"
 import { useAppDispatch, useAppSelector } from "@/redux/store"
 

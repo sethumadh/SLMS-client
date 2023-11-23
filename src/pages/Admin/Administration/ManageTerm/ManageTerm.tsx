@@ -41,7 +41,6 @@ function Term() {
   const {
     data: currentTerm,
     isLoading,
-    error,
   } = useQuery({
     queryKey: [api.application.currentTerm.getTermSubjects.queryKey],
     queryFn: api.application.currentTerm.getTermSubjects.query,
