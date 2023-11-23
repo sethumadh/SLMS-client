@@ -38,7 +38,11 @@ function Term() {
   const [isEdit, setIsEdit] = useState(false)
   const [item, setItem] = useState("")
   const queryClient = useQueryClient()
-  const { data: currentTerm, isLoading, error} = useQuery({
+  const {
+    data: currentTerm,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: [api.application.currentTerm.getTermSubjects.queryKey],
     queryFn: api.application.currentTerm.getTermSubjects.query,
   })
@@ -462,7 +466,7 @@ function Term() {
                 <dd className="mt-1 flex text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                   <div className="flex-grow">
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                      {currentTerm?.termSubject.length > 0 ? (
+                      {!isLoading ? (
                         currentTerm?.termSubject.map((term) => (
                           <div
                             key={term.subject.id}
@@ -509,9 +513,11 @@ function Term() {
                                     Levels
                                   </p>
                                   <p className="text-sm font-medium text-gray-900 w-full">
-                                    {term.level.map((l) =>
-                                      capitalizeFirstCharacter(l.name)
-                                    ).join(", ")}
+                                    {term.level
+                                      .map((l) =>
+                                        capitalizeFirstCharacter(l.name)
+                                      )
+                                      .join(", ")}
                                   </p>
                                 </div>
                               </div>
@@ -519,7 +525,10 @@ function Term() {
                           </div>
                         ))
                       ) : (
-                        <div>There are no subjects to show</div>
+                        <>
+                        {/* {currentTerm?.termSubject.length > 0 ?"":""} */}
+                          <div>There are no subjects to show</div>
+                        </>
                       )}
                     </div>
                   </div>

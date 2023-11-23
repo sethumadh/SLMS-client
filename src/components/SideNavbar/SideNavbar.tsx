@@ -37,7 +37,7 @@ function SideNavBar() {
     dispatch(setActivePath(location.pathname))
   }, [location, dispatch])
   return (
-    <div >
+    <div>
       <Sidebar
         style={{
           height: "auto",
@@ -48,9 +48,9 @@ function SideNavBar() {
         }}
         collapsed={collapsed}
         transitionDuration={400}
-        className="bg-white hidden md:block"
+        className={`bg-white hidden md:block`}
       >
-        <Menu className="min-h-screen border-r-2 bg-white">
+        <Menu className="min-h-screen border-r-2 bg-white ">
           <MenuItem
             className="bg-white "
             icon={<icons.Menu />}

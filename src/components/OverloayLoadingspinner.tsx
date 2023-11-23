@@ -4,7 +4,7 @@
 
 const OverloayLoadingspinner = () => {
   return (
-    <div className="text-center">
+    <div className="flex justify-center items-center h-full w-full bg-transparent">
     <div role="status">
       <svg
         aria-hidden="true"

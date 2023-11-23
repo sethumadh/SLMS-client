@@ -16,16 +16,18 @@ import storage from "redux-persist/lib/storage"
 import persistStore from "redux-persist/es/persistStore"
 import sidebarSlice from "./slice/sidebarSlice"
 import modalSlice from "./slice/modalSlice"
+import termSlice from "./slice/TermSlice"
 
 const persistConfig = {
   key: "root",
   version: 1,
   storage,
-  blacklist: [sidebarSlice.name, modalSlice.name],
+  blacklist: [sidebarSlice.name, modalSlice.name, termSlice.name],
 }
 export const reducer = combineReducers({
   [sidebarSlice.name]: sidebarSlice.reducer,
   [modalSlice.name]: modalSlice.reducer,
+  [termSlice.name]: termSlice.reducer,
 })
 const persistedReducer = persistReducer(persistConfig, reducer)
 

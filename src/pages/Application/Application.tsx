@@ -193,7 +193,6 @@ function Application() {
       console.log(e)
     }
   }
-  console.log()
   const onSubmit = (values: ApplicantWizardSchema) => {
     console.log(values)
     handleSubmitApplication(values)

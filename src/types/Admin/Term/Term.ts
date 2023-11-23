@@ -10,14 +10,16 @@ export const extendCurrentTermSchema = z.object({
 export const createTermWithSubjectSchema = z
   .object({
     termName: z.string().min(4, { message: "Minimum 4 characters required" }),
-    startDate: z.date().optional(),
-    endDate: z.date().optional(),
+    startDate: z.date(),
+    endDate: z.date(),
     subjects: z.array(
       z.object({
         subject: z
           .string()
           .min(4, { message: "Minimum 4 characters required" }),
-        fee: z.string({ required_error: "fee is required" }),
+        fee: z
+          .string({ required_error: "fee is required" })
+          .min(1, { message: "Please enter a fee" }),
         feeInterval: z.enum(["MONTHLY", "TERM"]),
         levels: z
           .array(z.string())
@@ -30,5 +32,18 @@ export const createTermWithSubjectSchema = z
     {
       message: "End date must be after start date",
       path: ["endDate"],
+    }
+  )
+  .refine(
+    (data) => {
+      const subjectNames = data.subjects.map((subject) =>
+        subject.subject.toLowerCase()
+      )
+      const uniqueSubjectNames = new Set(subjectNames)
+      return uniqueSubjectNames.size === subjectNames.length
+    },
+    {
+      message: "Subject names must be unique",
+      path: ["subjects"],
     }
   )

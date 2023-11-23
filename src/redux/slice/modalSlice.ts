@@ -4,7 +4,11 @@ import { createSlice } from "@reduxjs/toolkit"
 
 type initialStateProps = {
   isOpen: boolean
-  type: "" | "termName" |"termExtend"
+  type: "" | "termName" | "termExtend" | "isCurrentTerm"
+  data?: {
+    id?: number
+    value?: string
+  }
 }
 const initialState: initialStateProps = {
   isOpen: false,
@@ -16,8 +20,10 @@ const modalSlice = createSlice({
   initialState,
   reducers: {
     setOpenModal: (state, action: PayloadAction<initialStateProps>) => {
+      console.log(action.payload, "from redux")
       state.isOpen = action.payload.isOpen
       state.type = action.payload.type
+      state.data = action.payload.data || {}
     },
   },
   extraReducers: (builder) => {

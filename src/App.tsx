@@ -46,6 +46,7 @@ import AdministrationLayout from "./Layouts/AdministrationLayout/AdministrationL
 import ManageTermLayout from "./Layouts/AdministrationLayout/ManageTermLayout/ManageTermLayout"
 import ManageTerm from "./pages/Admin/Administration/ManageTerm/ManageTerm"
 import CreateTerm from "./pages/Admin/Administration/CreateTerm/CreateTerm"
+// import IsCurrentTermModal from "./components/Modal/IsCurrentTermModal"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -154,6 +155,7 @@ function App() {
           }
           persistor={persistor}
         >
+          {/* <IsCurrentTermModal /> */}
           <RouterProvider router={router} />
         </PersistGate>
         {/* <TermNameModal /> */}

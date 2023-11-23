@@ -24,7 +24,7 @@ const termSubjectSchema = z.object({
   fee: feeSchema,
 })
 const termSchema = z.object({
-  id: z.number(),
+  id: z.number().optional(),
   name: z.string(),
   currentTerm: z.boolean(),
   startDate: z.string(), // or use z.date() if you want to validate actual Date objects
@@ -35,6 +35,24 @@ const termSchema = z.object({
 })
 export type TermSchema = z.infer<typeof termSchema>
 
+export const createTermWithSubjectSchema = z.object({
+  termName: z.string().min(4, { message: "Minimum 4 characters required" }),
+  startDate: z.string(),
+  endDate: z.string(),
+  subjects: z.array(
+    z.object({
+      subject: z.string().min(4, { message: "Minimum 4 characters required" }),
+      fee: z.string({ required_error: "fee is required" }),
+      feeInterval: z.enum(["MONTHLY", "TERM"]),
+      levels: z
+        .array(z.string())
+        .min(1, { message: "Minimum 1 level required" }),
+    })
+  ),
+})
+export type CreateTermWithSubjectSchema = z.infer<
+  typeof createTermWithSubjectSchema
+>
 export const term = {
   changeCurrentTermName: {
     schema: termSchema,
@@ -69,6 +87,27 @@ export const term = {
       return termSchema.parse(response.data)
     },
   },
+  createTermWithSubjectsSetup: {
+    schema: termSchema,
+    mutation: async (termData: CreateTermWithSubjectSchema) => {
+      const response = await axios.post(
+        route.admin.createTermWithSubjectsSetup,
+        termData
+      )
+      console.log(response.data)
+      return z
+        .object({
+          id: z.number(),
+          name: z.string(),
+        })
+        .parse(response.data.createdTerm)
+    },
+  },
+  makeCurrentTerm: {
+    mutation: async ({ id }: { id: number }) => {
+      await axios.patch(`${route.admin.makeCurrentTerm}/${id}`)
+    },
+  },
 }
 
 export const levels = {
@@ -76,7 +115,7 @@ export const levels = {
     querykey: "getAllLevels",
     schema: z.array(levelSchema),
     query: async () => {
-      const response = await axios.get(`${route.admin.level.findAllLevels}`)
+      const response = await axios.get(route.admin.level.findAllLevels)
       return z.array(levelSchema).parse(response.data)
     },
   },
