@@ -47,7 +47,7 @@ import ManageTermLayout from "./Layouts/AdministrationLayout/ManageTermLayout/Ma
 import ManageTerm from "./pages/Admin/Administration/ManageTerm/ManageTerm"
 import CreateTerm from "./pages/Admin/Administration/CreateTerm/CreateTerm"
 import AllTerms from "./pages/Admin/Administration/AllTerms/AllTerms"
-import TermDetails from "./pages/Admin/Administration/AllTerms/TermDetails/termDetail"
+import TermDetails from "./pages/Admin/Administration/AllTerms/TermDetails/TermDetail"
 // import IsCurrentTermModal from "./components/Modal/IsCurrentTermModal"
 
 const router = createBrowserRouter(
