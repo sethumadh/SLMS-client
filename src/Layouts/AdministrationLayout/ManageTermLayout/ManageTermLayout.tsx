@@ -13,7 +13,7 @@ const tabs = [
   {
     name: "All Terms",
     smName: "All Terms",
-    href: "parent",
+    href: "all-terms",
     current: false,
   },
  

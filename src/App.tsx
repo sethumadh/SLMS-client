@@ -46,6 +46,7 @@ import AdministrationLayout from "./Layouts/AdministrationLayout/AdministrationL
 import ManageTermLayout from "./Layouts/AdministrationLayout/ManageTermLayout/ManageTermLayout"
 import ManageTerm from "./pages/Admin/Administration/ManageTerm/ManageTerm"
 import CreateTerm from "./pages/Admin/Administration/CreateTerm/CreateTerm"
+import AllTerms from "./pages/Admin/Administration/AllTerms/AllTerms"
 // import IsCurrentTermModal from "./components/Modal/IsCurrentTermModal"
 
 const router = createBrowserRouter(
@@ -126,6 +127,7 @@ const router = createBrowserRouter(
           <Route path="manage-term" element={<ManageTermLayout />}>
             <Route index element={<ManageTerm />} />
             <Route path="create-term" element={<CreateTerm />} />
+            <Route path="all-terms" element={<AllTerms />} />
           </Route>
         </Route>
         <Route path="timetable" element={<Timetable />} />
