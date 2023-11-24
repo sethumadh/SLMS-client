@@ -20,7 +20,6 @@ const modalSlice = createSlice({
   initialState,
   reducers: {
     setOpenModal: (state, action: PayloadAction<initialStateProps>) => {
-      console.log(action.payload, "from redux")
       state.isOpen = action.payload.isOpen
       state.type = action.payload.type
       state.data = action.payload.data || {}

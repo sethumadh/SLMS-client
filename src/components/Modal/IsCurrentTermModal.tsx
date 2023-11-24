@@ -15,7 +15,7 @@ const IsCurrentTermModal = () => {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const { isOpen, type, data } = useAppSelector((state) => state.modal)
-  console.log(data?.id, "from slice")
+
   const cancelButtonRef = useRef(null)
   const IsModalOpen = isOpen && type === "isCurrentTerm"
   const queryClient = useQueryClient()
@@ -124,9 +124,7 @@ const IsCurrentTermModal = () => {
                         `making term a current term, please wait`
                       )
                       setLoadingToastId(toastId.toString())
-                      console.log("hello before")
                       if (data?.id) {
-                          console.log("hello after")
                         await makeCurrent({ id: data?.id })
                       }
                     }}

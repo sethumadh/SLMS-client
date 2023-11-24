@@ -1,5 +1,5 @@
 import { currentTerm } from "./application/application"
-import { term, levels } from "./admin/admin"
+import { term, levels, subjects } from "./admin/admin"
 
 export const api = {
   application: {
@@ -7,6 +7,7 @@ export const api = {
   },
   admin: {
     term,
+    subjects,
     levels,
   },
 }

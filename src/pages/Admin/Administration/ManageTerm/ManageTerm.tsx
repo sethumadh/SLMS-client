@@ -38,10 +38,7 @@ function Term() {
   const [isEdit, setIsEdit] = useState(false)
   const [item, setItem] = useState("")
   const queryClient = useQueryClient()
-  const {
-    data: currentTerm,
-    isLoading,
-  } = useQuery({
+  const { data: currentTerm, isLoading } = useQuery({
     queryKey: [api.application.currentTerm.getTermSubjects.queryKey],
     queryFn: api.application.currentTerm.getTermSubjects.query,
   })
@@ -293,10 +290,6 @@ function Term() {
                     description=" Start date"
                     value={currentTerm?.startDate}
                   />
-                  <TermDetails
-                    description="Pusblished"
-                    value={currentTerm?.isPublish}
-                  />
                 </>
               )}
               <FormProvider {...termExtendMethods}>
@@ -525,7 +518,7 @@ function Term() {
                         ))
                       ) : (
                         <>
-                        {/* {currentTerm?.termSubject.length > 0 ?"":""} */}
+                          {/* {currentTerm?.termSubject.length > 0 ?"":""} */}
                           <div>There are no subjects to show</div>
                         </>
                       )}

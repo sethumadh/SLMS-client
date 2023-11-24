@@ -109,7 +109,19 @@ export const term = {
     },
   },
 }
+/* Subjects*/
+export const subjects= {
+  findAllLevels: {
+    querykey: "getAllSubjects",
+    schema: z.array(subjectSchema),
+    query: async () => {
+      const response = await axios.get(route.admin.subject.findAllSubjects)
+      return z.array(subjectSchema).parse(response.data)
+    },
+  },
+}
 
+/* Levels*/
 export const levels = {
   findAllLevels: {
     querykey: "getAllLevels",

@@ -18,35 +18,48 @@ const options = [
   { value: "MONTHLY", label: "Monthly" },
   { value: "TERM", label: "Term" },
 ]
-const levels = [
-  { value: "beginner", label: "static Beginner" },
-  { value: "intermediate", label: "static  Intermediate" },
-  { value: "advanced", label: "static Advanced" },
-]
+
 export type CreateTermWithSubjectSchema = z.infer<
   typeof createTermWithSubjectSchema
 >
 function Create() {
-  const { data, isLoading} = useQuery({
+  const { data: allLevelsData, isLoading: allLevelsLoading } = useQuery({
     queryKey: [api.admin.levels.findAllLevels.querykey],
     queryFn: api.admin.levels.findAllLevels.query,
   })
+  // find all subjects and then apply creatable
+  const { data: allSubjectData, isLoading: allSubjectLoading } = useQuery({
+    queryKey: [api.admin.subjects.findAllLevels.querykey],
+    queryFn: api.admin.subjects.findAllLevels.query,
+  })
+  const [newSubjects, setNewSubjects] =
+    useState<{ value: string; label: string }[]>()
   const [newLevels, setNewLevels] =
     useState<{ value: string; label: string }[]>()
+
+  const subjectData: { value: string; label: string }[] | undefined =
+    useMemo(() => {
+      return allSubjectData?.map((s) => ({
+        value: s.name,
+        label: capitalizeFirstCharacter(s.name),
+        isDisabled: !s.isActive,
+      }))
+    }, [allSubjectData])
   const levelData: { value: string; label: string }[] | undefined =
     useMemo(() => {
-      return (
-        data?.map((l) => ({
-          value: l.name,
-          label: capitalizeFirstCharacter(l.name),
-        })) || levels
-      )
-    }, [data])
+      return allLevelsData?.map((l) => ({
+        value: l.name,
+        label: capitalizeFirstCharacter(l.name),
+      }))
+    }, [allLevelsData])
   useEffect(() => {
-    if (levelData?.length && !isLoading && levelData?.length > 0) {
+    if (levelData?.length && !allLevelsLoading && levelData?.length > 0) {
       setNewLevels(levelData)
     }
-  }, [levelData, isLoading])
+    if (subjectData?.length && !allSubjectLoading && subjectData?.length > 0) {
+      setNewSubjects(subjectData)
+    }
+  }, [levelData, allLevelsLoading, subjectData, allSubjectLoading])
 
   const { control, register, formState } =
     useFormContext<CreateTermWithSubjectSchema>()
@@ -54,8 +67,6 @@ function Create() {
     name: "subjects",
     control,
   })
-
-
 
   return (
     <div className="space-y-10 divide-y divide-gray-900/10 container">
@@ -248,13 +259,55 @@ function Create() {
                         className="block text-sm font-medium leading-6 text-gray-900"
                       >
                         Subject Name<span className="text-red-600">*</span>
-                        <input
+                        {/* <input
                           id="name"
                           type="text"
                           placeholder="Maths"
                           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                           {...register(`subjects.${index}.subject` as const)}
-                        />
+                        /> */}
+                        {allLevelsLoading ? (
+                          <OverloayLoadingspinner />
+                        ) : (
+                          <Controller
+                            name={`subjects.${index}.subject` as const}
+                            control={control}
+                            render={({ field }) => (
+                              <CreatableSelect
+                                id="name"
+                                isClearable
+                                options={newSubjects}
+                                className="no-outline"
+                                {...field}
+                                value={newSubjects?.filter((subject) =>
+                                  field?.value?.includes(subject?.value)
+                                )}
+                                onChange={(
+                                  subject: SingleValue<{
+                                    value: string
+                                    label: string
+                                  }>
+                                ) =>
+                                  field.onChange(subject ? subject.value : null)
+                                }
+                                onCreateOption={(inputValue) => {
+                                  const newOption = {
+                                    value: inputValue,
+                                    label: inputValue,
+                                  }
+                                  setNewSubjects((prev) => {
+                                    const l =
+                                      prev?.length && prev?.length > 0
+                                        ? [...prev]
+                                        : []
+                                    return [...l, newOption]
+                                  })
+                                  field.onChange(inputValue)
+                                }}
+                              />
+                            )}
+                          />
+                        )}
                         <div className="">
                           {formState.errors.subjects &&
                             formState.errors?.subjects[index]?.subject
@@ -353,11 +406,11 @@ function Create() {
                           Subject levels
                           <span className="text-red-600">*</span>
                         </label>
-                        {isLoading ? (
+                        {allLevelsLoading ? (
                           <OverloayLoadingspinner />
                         ) : (
                           <Controller
-                            name={`subjects.${index}.levels`}
+                            name={`subjects.${index}.levels` as const}
                             control={control}
                             render={({ field }) => (
                               <CreatableSelect

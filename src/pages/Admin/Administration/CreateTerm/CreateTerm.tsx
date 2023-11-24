@@ -17,7 +17,7 @@ import { FormProvider, useForm } from "react-hook-form"
 import { toast } from "react-toastify"
 import { z } from "zod"
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
+
 export type CreateTermWithSubjectSchema = z.infer<
   typeof createTermWithSubjectSchema
 >
@@ -28,7 +28,7 @@ function CreateTerm() {
   const [step, setStep] = useState(0)
   const dispatch = useAppDispatch()
   const queryClient = useQueryClient()
-  const { mutateAsync: createTermSetup } = useMutation({
+  const { mutateAsync: createTermSetup, isPending:createTermPending } = useMutation({
     mutationFn: api.admin.term.createTermWithSubjectsSetup.mutation,
     onSuccess: (data) => {
       console.log(data)
@@ -150,6 +150,7 @@ function CreateTerm() {
             {step == 1 && <Review />}
             <div className="border border-red-400">
               <StepperSection
+              isSubmitting={createTermPending}
                 showPrevBtn={step == 0 ? false : true}
                 prevText={"Previous"}
                 prevOnClick={() => {

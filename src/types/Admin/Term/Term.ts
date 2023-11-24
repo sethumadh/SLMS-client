@@ -19,10 +19,17 @@ export const createTermWithSubjectSchema = z
           .min(4, { message: "Minimum 4 characters required" }),
         fee: z
           .string({ required_error: "fee is required" })
+          .regex(/^\d+$/, { message: "Please enter a valid amount" })
           .min(1, { message: "Please enter a fee" }),
         feeInterval: z.enum(["MONTHLY", "TERM"]),
         levels: z
-          .array(z.string())
+          .array(
+            z
+              .string()
+              .regex(/^[^\s]+$/, {
+                message: "Fee interval must not contain whitespace",
+              })
+          )
           .min(1, { message: "Minimum 1 level required" }),
       })
     ),
