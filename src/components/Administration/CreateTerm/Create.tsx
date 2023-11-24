@@ -29,9 +29,10 @@ function Create() {
   })
   // find all subjects and then apply creatable
   const { data: allSubjectData, isLoading: allSubjectLoading } = useQuery({
-    queryKey: [api.admin.subjects.findAllLevels.querykey],
-    queryFn: api.admin.subjects.findAllLevels.query,
+    queryKey: [api.admin.subjects.findAllSubjects.querykey],
+    queryFn: api.admin.subjects.findAllSubjects.query,
   })
+
   const [newSubjects, setNewSubjects] =
     useState<{ value: string; label: string }[]>()
   const [newLevels, setNewLevels] =

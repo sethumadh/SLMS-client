@@ -10,38 +10,40 @@ import { api } from "@/api/api"
 import { toast } from "react-toastify"
 import { handleAxiosError } from "@/helpers/errorhandler"
 
-const IsCurrentTermModal = () => {
+const DeleteTermModal = () => {
   const [loadingToastId, setLoadingToastId] = useState<string | null>(null)
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const { isOpen, type, data } = useAppSelector((state) => state.modal)
 
   const cancelButtonRef = useRef(null)
-  const IsModalOpen = isOpen && type === "isCurrentTerm"
+  const IsModalOpen = isOpen && type === "deleteTerm"
   const queryClient = useQueryClient()
 
-  const { mutateAsync: makeCurrent } = useMutation({
-    mutationFn: api.admin.term.makeCurrentTerm.mutation,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [api.application.currentTerm.getTermSubjects.queryKey],
-      })
-      // add inavlidate for getting all terms
-      if (loadingToastId) toast.dismiss(loadingToastId)
-      toast.success(`Making current action is scuccessful 👌`)
-      dispatch(
-        setOpenModal({
-          isOpen: false,
-          type: "",
+  const { mutateAsync: deleteTerm, isPending: deleteTermPending } = useMutation(
+    {
+      mutationFn: api.admin.term.deleteTerm.mutation,
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: [api.admin.term.findAllTerms.queryKey],
         })
-      )
-      navigate("administration/manage-term")
-    },
-    onError: (error: unknown) => {
-      if (loadingToastId) toast.dismiss(loadingToastId)
-      handleAxiosError(error)
-    },
-  })
+        // add inavlidate for getting all terms
+        if (loadingToastId) toast.dismiss(loadingToastId)
+        toast.success(`Deleted Term Successsfully 👌`)
+        dispatch(
+          setOpenModal({
+            isOpen: false,
+            type: "",
+          })
+        )
+        navigate("administration/manage-term/all-terms")
+      },
+      onError: (error: unknown) => {
+        if (loadingToastId) toast.dismiss(loadingToastId)
+        handleAxiosError(error)
+      },
+    }
+  )
 
   return (
     <Transition.Root show={IsModalOpen} as={Fragment}>
@@ -85,7 +87,7 @@ const IsCurrentTermModal = () => {
                 <div>
                   <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
                     <Icons.Check
-                      className="h-6 w-6 text-green-600"
+                      className="h-6 w-6 text-red-600"
                       aria-hidden="true"
                     />
                   </div>
@@ -94,23 +96,19 @@ const IsCurrentTermModal = () => {
                       as="h3"
                       className="text-base font-semibold leading-6 text-gray-900"
                     >
-                      Term is now created successfully
+                      Do you really want to delete this term?
                     </Dialog.Title>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">
-                        Do you want to publish the term and make this term
-                        cuurent now? If you wish to make it publish click
-                        publish now. If you publisj this term , this action make
-                        the this newaly created term as the curent term and this
-                        will be displayed in the application page
+                        If you proceed , this will permanently delete the term
+                        from the database and this action is irreversible.
                       </p>
                     </div>
                   </div>
                 </div>
                 <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
                   <button
-                    // ref={saveRef}
-                    className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
+                    className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 sm:col-start-2"
                     onClick={async () => {
                       dispatch(
                         setOpenModal({
@@ -123,11 +121,34 @@ const IsCurrentTermModal = () => {
                       )
                       setLoadingToastId(toastId.toString())
                       if (data?.id) {
-                        await makeCurrent({ id: data?.id })
+                        await deleteTerm({ id: data?.id })
                       }
                     }}
                   >
-                    Publish now
+                    {deleteTermPending ? (
+                      <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"
+                          opacity=".25"
+                        />
+                        <path d="M10.14,1.16a11,11,0,0,0-9,8.92A1.59,1.59,0,0,0,2.46,12,1.52,1.52,0,0,0,4.11,10.7a8,8,0,0,1,6.66-6.61A1.42,1.42,0,0,0,12,2.69h0A1.57,1.57,0,0,0,10.14,1.16Z">
+                          <animateTransform
+                            attributeName="transform"
+                            type="rotate"
+                            dur="0.75s"
+                            values="0 12 12;360 12 12"
+                            repeatCount="indefinite"
+                          />
+                        </path>
+                      </svg>
+                    ) : (
+                      <p>Delete Now</p>
+                    )}
                   </button>
                   <button
                     type="button"
@@ -139,11 +160,11 @@ const IsCurrentTermModal = () => {
                           type: "",
                         })
                       )
-                      navigate("administration/manage-term")
+                      navigate("administration/manage-term/all-terms")
                     }}
                     ref={cancelButtonRef}
                   >
-                    Publish later
+                    Cancel
                   </button>
                 </div>
               </Dialog.Panel>
@@ -154,4 +175,4 @@ const IsCurrentTermModal = () => {
     </Transition.Root>
   )
 }
-export default IsCurrentTermModal
+export default DeleteTermModal

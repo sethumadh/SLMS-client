@@ -53,6 +53,9 @@ export const createTermWithSubjectSchema = z.object({
 export type CreateTermWithSubjectSchema = z.infer<
   typeof createTermWithSubjectSchema
 >
+
+/*Terms*/
+
 export const term = {
   changeCurrentTermName: {
     schema: termSchema,
@@ -108,10 +111,63 @@ export const term = {
       await axios.patch(`${route.admin.makeCurrentTerm}/${id}`)
     },
   },
+  deleteTerm: {
+    mutation: async ({ id }: { id: number }) => {
+      await axios.delete(`${route.admin.deleteTerm}/${id}`)
+    },
+  },
+  // findAllTerms: {
+  //   queryKey: "getAllTerms",
+  //   schema: z.array(termSchema),
+  //   query: async () => {
+  //     const response = await axios.get(route.admin.findAllTerms)
+  //     console.log(response.data)
+  //     return z.array(termSchema).parse(response.data)
+  //   },
+  // },
+  findAllTerms: {
+    queryKey: "getAllTerms",
+    schema: z.array(termSchema),
+    query: async () => {
+      try {
+        const response = await axios.get(route.admin.findAllTerms)
+        return z.array(termSchema).parse(response.data)
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          // Handle Zod validation error
+          console.error("Zod validation error:", error.issues)
+        } else {
+          // Handle other types of errors (e.g., network errors)
+          console.error("Error:", error)
+        }
+        throw error // Re-throw the error if you want to propagate it
+      }
+    },
+  },
+  findUniqueTerm: {
+    queryKey: "getUniqueTerm",
+    schema: termSchema,
+    query: async (id: string) => {
+      try {
+        const response = await axios.get(`${route.admin.findUniqueTerm}/${id}`)
+        console.log("Response Data:", response.data)
+        return termSchema.parse(response.data)
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          // Handle Zod validation error
+          console.error("Zod validation error:", error.issues)
+        } else {
+          // Handle other types of errors (e.g., network errors)
+          console.error("Error:", error)
+        }
+        throw error // Re-throw the error if you want to propagate it
+      }
+    },
+  },
 }
-/* Subjects*/
-export const subjects= {
-  findAllLevels: {
+/*Subjects*/
+export const subjects = {
+  findAllSubjects: {
     querykey: "getAllSubjects",
     schema: z.array(subjectSchema),
     query: async () => {
@@ -121,7 +177,7 @@ export const subjects= {
   },
 }
 
-/* Levels*/
+/*Levels*/
 export const levels = {
   findAllLevels: {
     querykey: "getAllLevels",
