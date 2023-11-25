@@ -1,5 +1,5 @@
 import { useFormContext } from "react-hook-form"
-import { ApplicantWizardSchema } from "@/pages/Application/Application"
+import { ApplicantSchema } from "@/pages/Application/Application"
 import { useQuery } from "@tanstack/react-query"
 import { api } from "@/api/api"
 
@@ -22,7 +22,7 @@ const subjectOptions = [
 ]
 
 function Subjects() {
-  const { formState, register } = useFormContext<ApplicantWizardSchema>()
+  const { formState, register } = useFormContext<ApplicantSchema>()
   const currentTerm = useQuery({
     queryKey: [api.application.currentTerm.getTermSubjects.queryKey],
     queryFn: api.application.currentTerm.getTermSubjects.query,

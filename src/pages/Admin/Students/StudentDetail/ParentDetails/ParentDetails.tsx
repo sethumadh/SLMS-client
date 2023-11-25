@@ -5,7 +5,7 @@ import { FormProvider, useForm } from "react-hook-form"
 import { z } from "zod"
 
 import Icons from "@/constants/icons"
-import { applicantParentDetailsSchema } from "@/types/applicantSetupWizardSchema"
+import { applicantParentDetailsSchema } from "@/types/applicantSchema"
 
 export type ParentDetailsSchema = z.infer<typeof applicantParentDetailsSchema>
 

@@ -5,7 +5,7 @@ import { FormProvider, useForm } from "react-hook-form"
 import { z } from "zod"
 
 import Icons from "@/constants/icons"
-import { applicantHealthDetailsSchema } from "@/types/applicantSetupWizardSchema"
+import { applicantHealthDetailsSchema } from "@/types/applicantSchema"
 
 export type HealthDetailsSchema = z.infer<typeof applicantHealthDetailsSchema>
 

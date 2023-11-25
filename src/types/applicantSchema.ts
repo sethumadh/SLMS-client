@@ -108,7 +108,7 @@ export const OtherInformationSchema = z.object({
 
 export const TermSchema = z.string()
 
-export const applicantSetupWizardSchema = z.object({
+export const applicantSchema = z.object({
   personalDetails: PersonalSchema,
   parentsDetails: ParentsSchema,
   emergencyContact: EmergencyContactSchema,
@@ -117,7 +117,7 @@ export const applicantSetupWizardSchema = z.object({
   otherInformation: OtherInformationSchema,
   termName: TermSchema,
 })
-export const applicantSchema = applicantSetupWizardSchema
+
 
 // *********Admin************
 /* 

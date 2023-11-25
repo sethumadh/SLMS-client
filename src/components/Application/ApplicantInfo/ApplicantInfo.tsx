@@ -1,4 +1,4 @@
-import { ApplicantWizardSchema } from "@/pages/Application/Application"
+import { ApplicantSchema } from "@/pages/Application/Application"
 import { PhotoIcon } from "@heroicons/react/24/solid"
 import { useState } from "react"
 import ReactDatePicker from "react-datepicker"
@@ -13,7 +13,7 @@ const options = [
 
 function ApplicantInfo() {
   const { formState, control, register } =
-    useFormContext<ApplicantWizardSchema>()
+    useFormContext<ApplicantSchema>()
   const [imagePreview, setImagePreview] = useState<string | null>()
 
   return (
