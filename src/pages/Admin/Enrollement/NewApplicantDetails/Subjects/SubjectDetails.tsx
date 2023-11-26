@@ -5,7 +5,7 @@ import { FormProvider, useForm } from "react-hook-form"
 import { z } from "zod"
 
 import Icons from "@/constants/icons"
-import { applicantSubjectDetailsSchema } from "@/types/applicantSchema"
+import { applicantSubjectDetailsSchema } from "@/types/Application/applicantSchema"
 
 export type SubjectDetailsSchema = z.infer<typeof applicantSubjectDetailsSchema>
 const subjects = [

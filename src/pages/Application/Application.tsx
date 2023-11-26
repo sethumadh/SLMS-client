@@ -11,24 +11,23 @@ import EmergencyContact from "@/components/Application/EmergencyContact/Emergenc
 import HealthInformation from "@/components/Application/HealthInformation/HealthInformation"
 import Subjects from "@/components/Application/Subjects/Subjects"
 import OtherInfo from "@/components/Application/OtherInfo/OtherInfo"
-import axios from "axios"
 import { useQuery } from "@tanstack/react-query"
 import { api } from "@/api/api"
-import { applicantSchema } from "@/types/applicantSchema"
+import { applicantSchema } from "@/types/Application/applicantSchema"
+import { useAppDispatch } from "@/redux/store"
+import { setOpenModal } from "@/redux/slice/modalSlice"
 
 export type ApplicantSchema = z.infer<typeof applicantSchema>
 
-
 function Application() {
+  const dispatch = useAppDispatch()
   const [nextPage, setNextPage] = useState(false)
   const navigate = useNavigate()
   const [step, setStep] = useState(0)
-  const baseURL = import.meta.env.VITE_BASE_URL
   const currentTerm = useQuery({
     queryKey: [api.application.currentTerm.getTermSubjects.queryKey],
     queryFn: api.application.currentTerm.getTermSubjects.query,
   })
-
   const methods = useForm<ApplicantSchema>({
     resolver: zodResolver(applicantSchema),
     // defaultValues: {
@@ -156,17 +155,22 @@ function Application() {
     }
   }
 
-
-  const handleSubmitApplication = async (data: ApplicantSchema) => {
-    try {
-      await axios.post(`${baseURL}/api/v1/student/application/create`, data)
-    } catch (e) {
-      console.log(e)
-    }
-  }
+  // const handleSubmitApplication = async (data: ApplicantSchema) => {
+  //   try {
+  //     await axios.post(`${baseURL}/api/v1/student/application/create`, data)
+  //   } catch (e) {
+  //     console.log(e)
+  //   }
+  // }
   const onSubmit = (values: ApplicantSchema) => {
     console.log(values)
-    handleSubmitApplication(values)
+    dispatch(
+      setOpenModal({
+        isOpen: true,
+        type: "submitApplicant",
+      })
+    )
+    // handleSubmitApplication(values)
 
     navigate("/application-submit", { replace: true })
   }
@@ -205,6 +209,7 @@ function Application() {
           </form>
         </FormProvider>
       </div>
+
     </div>
   )
 }

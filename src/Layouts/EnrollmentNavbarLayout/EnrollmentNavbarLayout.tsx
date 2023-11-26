@@ -29,7 +29,6 @@ export default function EnrollmentNavbarLayout() {
   // const [setActiveLink]
   const location = useLocation()
   const activeLink = location.pathname
-  console.log(activeLink)
 
   return (
     <div className="">
