@@ -29,7 +29,6 @@ function Subjects() {
   })
   const termSubjects = currentTerm.data?.termSubject
 
-
   // console.log(TermSubject)
   return (
     <div className="space-y-10 divide-y divide-gray-900/10 container">
@@ -67,7 +66,7 @@ function Subjects() {
                           <input
                             id={termSubject.subject.id.toString()}
                             value={termSubject.subject.name}
-                            {...register("subjects.subjects", {
+                            {...register("subjectInterest.subjectsChosen", {
                               required: {
                                 value: true,
                                 message: "choose a subject",
@@ -89,9 +88,13 @@ function Subjects() {
                     </div>
                   ))}
                   <div className="h-4">
-                    {formState.errors.subjects?.subjects?.message && (
+                    {formState.errors.subjectInterest?.subjectsChosen
+                      ?.message && (
                       <span className="text-xs text-red-600">
-                        {formState.errors.subjects?.subjects?.message}
+                        {
+                          formState.errors.subjectInterest?.subjectsChosen
+                            ?.message
+                        }
                       </span>
                     )}
                   </div>
@@ -130,7 +133,7 @@ function Subjects() {
                           <input
                             id={subjectOption}
                             value={subjectOption}
-                            {...register("subjects.subjectRelated", {
+                            {...register("subjectInterest.subjectRelated", {
                               required: {
                                 value: true,
                                 message: "choose an option",
@@ -152,9 +155,13 @@ function Subjects() {
                     </div>
                   ))}
                   <div className="h-4">
-                    {formState.errors.subjects?.subjectRelated?.message && (
+                    {formState.errors.subjectInterest?.subjectRelated
+                      ?.message && (
                       <span className="text-xs text-red-600">
-                        {formState.errors.subjects?.subjectRelated?.message}
+                        {
+                          formState.errors.subjectInterest?.subjectRelated
+                            ?.message
+                        }
                       </span>
                     )}
                   </div>

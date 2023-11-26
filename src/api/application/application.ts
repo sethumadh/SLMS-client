@@ -150,7 +150,7 @@ export const OtherInformationSchema = z.object({
       message: "Please give your declaration",
     }),
 })
-
+export const TermSchema = z.string()
 // To create a new student at the application level
 export const newApplicantSchema = z.object({
   personalDetails: PersonalSchema,
@@ -159,6 +159,7 @@ export const newApplicantSchema = z.object({
   healthInformation: HealthInformationSchema,
   subjectInterest: SubjectInterest,
   otherInformation: OtherInformationSchema,
+  termName: TermSchema,
 })
 
 export type NewApplicantSchema = z.infer<typeof newApplicantSchema>

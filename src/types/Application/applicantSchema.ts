@@ -86,8 +86,8 @@ export const HealthInformationSchema = z.object({
     .min(3, { message: "Mininum 3 characters" }),
 })
 
-export const SubjectSchema = z.object({
-  subjects: z.array(z.string()).refine((subjects) => subjects.length > 0, {
+export const SubjectInterest = z.object({
+  subjectsChosen: z.array(z.string()).refine((subjects) => subjects.length > 0, {
     message: "Please select at least one subject",
   }),
   subjectRelated: z
@@ -113,7 +113,7 @@ export const applicantSchema = z.object({
   parentsDetails: ParentsSchema,
   emergencyContact: EmergencyContactSchema,
   healthInformation: HealthInformationSchema,
-  subjects: SubjectSchema,
+  subjectInterest: SubjectInterest,
   otherInformation: OtherInformationSchema,
   termName: TermSchema,
 })

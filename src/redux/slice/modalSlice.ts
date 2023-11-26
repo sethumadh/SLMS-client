@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { PURGE } from "redux-persist"
 import type { PayloadAction } from "@reduxjs/toolkit"
 import { createSlice } from "@reduxjs/toolkit"
@@ -7,7 +8,7 @@ type initialStateProps = {
   type: "" | "termName" | "termExtend" | "isCurrentTerm" |"deleteTerm"|"submitApplicant"
   data?: {
     id?: number
-    value?: string
+    value?: any
   }
 }
 const initialState: initialStateProps = {
@@ -20,6 +21,7 @@ const modalSlice = createSlice({
   initialState,
   reducers: {
     setOpenModal: (state, action: PayloadAction<initialStateProps>) => {
+      console.log(action.payload, "from redux" )
       state.isOpen = action.payload.isOpen
       state.type = action.payload.type
       state.data = action.payload.data || {}

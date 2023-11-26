@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { FormProvider, useForm } from "react-hook-form"
 import { z } from "zod"
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+// import { useNavigate } from "react-router-dom"
 
 import { StepperFooterSection } from "@/components/Application/StepperFooterSection/StepperFooterSection"
 import ApplicantInfo from "@/components/Application/ApplicantInfo/ApplicantInfo"
@@ -14,16 +14,20 @@ import OtherInfo from "@/components/Application/OtherInfo/OtherInfo"
 import { useQuery } from "@tanstack/react-query"
 import { api } from "@/api/api"
 import { applicantSchema } from "@/types/Application/applicantSchema"
-import { useAppDispatch } from "@/redux/store"
+import { useAppDispatch} from "@/redux/store"
 import { setOpenModal } from "@/redux/slice/modalSlice"
+
+import { NewApplicantSchema } from "@/api/application/application"
 
 export type ApplicantSchema = z.infer<typeof applicantSchema>
 
 function Application() {
   const dispatch = useAppDispatch()
   const [nextPage, setNextPage] = useState(false)
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
   const [step, setStep] = useState(0)
+
+
   const currentTerm = useQuery({
     queryKey: [api.application.currentTerm.getTermSubjects.queryKey],
     queryFn: api.application.currentTerm.getTermSubjects.query,
@@ -103,8 +107,8 @@ function Application() {
         medicalCondition: "sssss",
         allergy: "ssssss",
       },
-      subjects: {
-        subjects: [],
+      subjectInterest: {
+        subjectsChosen: [],
         subjectRelated: [],
       },
       otherInformation: {
@@ -141,13 +145,12 @@ function Application() {
       })
       if (validateStep) setStep(4)
     } else if (step == 4) {
-      const validateStep = await trigger(["subjects"], {
+      const validateStep = await trigger(["subjectInterest"], {
         shouldFocus: true,
       })
-
       if (validateStep) setStep(5)
     } else if (step == 5) {
-      const validateStep = await trigger(["subjects"], {
+      const validateStep = await trigger(["otherInformation"], {
         shouldFocus: true,
       })
 
@@ -164,15 +167,26 @@ function Application() {
   // }
   const onSubmit = (values: ApplicantSchema) => {
     console.log(values)
+    const formattedValues:NewApplicantSchema = {
+      ...values,
+      personalDetails: {
+        ...values.personalDetails,
+        DOB: values.personalDetails.DOB.toString(),
+      },
+    }
     dispatch(
       setOpenModal({
         isOpen: true,
         type: "submitApplicant",
+        data: {
+          value: formattedValues,
+        },
       })
     )
     // handleSubmitApplication(values)
 
-    navigate("/application-submit", { replace: true })
+    // navigate("/application-submit")
+    // navigate("/application-submit", { replace: true })
   }
   return (
     <div>
