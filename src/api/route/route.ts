@@ -18,11 +18,15 @@ export const route = {
     level: {
       findAllLevels: `${baseURL}/api/v1/admin/administration/get-all-levels`,
     },
-    students: {
-      applicant: {
-        createApplicant: `${baseURL}/api/v1/application/create-applicant`,
-      },
+    applicant: {
+      createApplicant: `${baseURL}/api/v1/application/create-applicant`,
+    },
+    student: {
       getAllStudents: `${baseURL}/api/v1/admin/administration/get-all-students`,
+    },
+    enrollment: {
+      getAllApplicants: `${baseURL}/api/v1/admin/applicant/get-all-applicants`,
+      searchApplicants: `${baseURL}/api/v1/admin/applicant/search-applicants`,
     },
   },
 }

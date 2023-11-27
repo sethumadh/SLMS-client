@@ -116,15 +116,7 @@ export const term = {
       await axios.delete(`${route.admin.deleteTerm}/${id}`)
     },
   },
-  // findAllTerms: {
-  //   queryKey: "getAllTerms",
-  //   schema: z.array(termSchema),
-  //   query: async () => {
-  //     const response = await axios.get(route.admin.findAllTerms)
-  //     console.log(response.data)
-  //     return z.array(termSchema).parse(response.data)
-  //   },
-  // },
+
   findAllTerms: {
     queryKey: "getAllTerms",
     schema: z.array(termSchema),
@@ -201,14 +193,98 @@ export const students = {
   },
 }
 
-/*Applicants*/
-export const applicants = {
+/*enrollment*/
+//applicant schema
+const PersonalDetailsSchema = z.object({
+  id: z.number(),
+  firstName: z.string(),
+  lastName: z.string(),
+  DOB: z.string(),
+  gender: z.string(),
+  email: z.string().email(),
+  contact: z.string(),
+  address: z.string(),
+  suburb: z.string(),
+  state: z.string(),
+  country: z.string(),
+  postcode: z.string(),
+  image: z.string().optional(),
+})
+
+const ParentsDetailsSchema = z.object({
+  id: z.number(),
+  fatherName: z.string(),
+  motherName: z.string(),
+  parentEmail: z.string().email(),
+  parentContact: z.string(),
+})
+
+const EmergencyContactSchema = z.object({
+  id: z.number(),
+  contactPerson: z.string(),
+  contactNumber: z.string(),
+  relationship: z.string(),
+})
+
+const HealthInformationSchema = z.object({
+  id: z.number(),
+  medicareNumber: z.string(),
+  ambulanceMembershipNumber: z.string(),
+  medicalCondition: z.string(),
+  allergy: z.string(),
+})
+
+const OtherInformationSchema = z.object({
+  id: z.number(),
+  otherInfo: z.string(),
+  declaration: z.array(z.string()),
+})
+
+const ApplicantSchema = z.object({
+  id: z.number(),
+  role: z.literal("APPLICANT"),
+  personalDetails: PersonalDetailsSchema,
+  parentsDetails: ParentsDetailsSchema,
+  emergencyContact: EmergencyContactSchema,
+  healthInformation: HealthInformationSchema,
+  subjectRelated: z.array(z.string()),
+  subjectsChosen: z.array(z.string()),
+  otherInformation: OtherInformationSchema,
+  createdAt: z.string(),
+})
+
+const ApplicantsDataSchema = z.object({
+  applicants: z.array(ApplicantSchema),
+  count: z.object({
+    _count: z.object({
+      id: z.number(),
+    }),
+  }),
+})
+
+export const enrollment = {
   findAllApplicants: {
     querykey: "getAllApplicants",
-    // schema: z.array(levelSchema),
-    query: async () => {
-      const response = await axios.get(route.admin.level.findAllLevels)
-      return z.array(levelSchema).parse(response.data)
+    schema: ApplicantsDataSchema,
+    query: async (page = 0) => {
+      const response = await axios.get(
+        route.admin.enrollment.getAllApplicants,
+        { params: { page } }
+      )
+
+      return ApplicantsDataSchema.parse(response.data)
+    },
+  },
+  searchApplicants: {
+    querykey: "searchApplicants",
+    schema: ApplicantsDataSchema,
+    query: async (search = "", page = 0) => {
+      const response = await axios.get(
+        route.admin.enrollment.searchApplicants,
+        { params: { search, page } }
+      )
+
+      return ApplicantsDataSchema.parse(response.data)
     },
   },
 }

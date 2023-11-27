@@ -4,7 +4,6 @@ import { useEffect, useState } from "react"
 interface Props {
   handleSearch: (query: string) => void
   handleLoading: (bool: boolean) => void
-  isLoading?: boolean
 }
 
 const Searchbar = ({ handleSearch, handleLoading }: Props) => {
@@ -18,7 +17,7 @@ const Searchbar = ({ handleSearch, handleLoading }: Props) => {
     }, 500)
     handleLoading(true)
     return () => clearTimeout(timer)
-  }, [debounceTerm])
+  }, [debounceTerm, handleLoading])
 
   useEffect(() => {
     if (term?.trim().length != 0) {
@@ -31,7 +30,9 @@ const Searchbar = ({ handleSearch, handleLoading }: Props) => {
   return (
     <div className="">
       <form className="w-full" onSubmit={(e) => e.preventDefault()}>
-      <label htmlFor="simple-search" className="sr-only">Search</label>
+        <label htmlFor="simple-search" className="sr-only">
+          Search
+        </label>
         <div className="relative">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
             <svg

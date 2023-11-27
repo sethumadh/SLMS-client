@@ -23,8 +23,7 @@ const SubmitApplicantModal = () => {
   const { mutateAsync: createApplicant, isPending: createApplicantPending } =
     useMutation({
       mutationFn: api.application.create.createApplicant.query,
-      onSuccess: (data) => {
-        console.log(data)
+      onSuccess: () => {
         queryClient.invalidateQueries({
           queryKey: [api.admin.students.findAllStudents.querykey],
         })
