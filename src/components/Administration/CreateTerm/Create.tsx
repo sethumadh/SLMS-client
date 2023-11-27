@@ -12,7 +12,7 @@ import Icons from "@/constants/icons"
 import { createTermWithSubjectSchema } from "@/types/Admin/Term/Term"
 import { api } from "@/api/api"
 import { capitalizeFirstCharacter } from "@/helpers/capitalizeFirstCharacter"
-import OverloayLoadingspinner from "@/components/OverloayLoadingspinner"
+import OverlayLoadingspinner from "@/components/OverlayLoadingspinner"
 
 const options = [
   { value: "MONTHLY", label: "Monthly" },
@@ -268,7 +268,7 @@ function Create() {
                           {...register(`subjects.${index}.subject` as const)}
                         /> */}
                         {allLevelsLoading ? (
-                          <OverloayLoadingspinner />
+                          <OverlayLoadingspinner />
                         ) : (
                           <Controller
                             name={`subjects.${index}.subject` as const}
@@ -408,7 +408,7 @@ function Create() {
                           <span className="text-red-600">*</span>
                         </label>
                         {allLevelsLoading ? (
-                          <OverloayLoadingspinner />
+                          <OverlayLoadingspinner />
                         ) : (
                           <Controller
                             name={`subjects.${index}.levels` as const}

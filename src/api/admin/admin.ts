@@ -188,3 +188,27 @@ export const levels = {
     },
   },
 }
+
+/*Students*/
+export const students = {
+  findAllStudents: {
+    querykey: "getAllStudents",
+    // schema: z.array(levelSchema),
+    query: async () => {
+      const response = await axios.get(route.admin.level.findAllLevels)
+      return z.array(levelSchema).parse(response.data)
+    },
+  },
+}
+
+/*Applicants*/
+export const applicants = {
+  findAllApplicants: {
+    querykey: "getAllApplicants",
+    // schema: z.array(levelSchema),
+    query: async () => {
+      const response = await axios.get(route.admin.level.findAllLevels)
+      return z.array(levelSchema).parse(response.data)
+    },
+  },
+}

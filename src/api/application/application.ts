@@ -159,7 +159,6 @@ export const newApplicantSchema = z.object({
   healthInformation: HealthInformationSchema,
   subjectInterest: SubjectInterest,
   otherInformation: OtherInformationSchema,
-  termName: TermSchema,
 })
 
 export type NewApplicantSchema = z.infer<typeof newApplicantSchema>
@@ -168,10 +167,11 @@ export const create = {
   createApplicant: {
     schema: newApplicantSchema,
     query: async ({ applicantData }: { applicantData: NewApplicantSchema }) => {
-      const response = await axios.post(
-        `${(route.admin.students.applicant.createApplicant, { applicantData })}`
+      console.log(applicantData)
+      await axios.post(
+        route.admin.students.applicant.createApplicant,
+        applicantData
       )
-      return newApplicantSchema.parse(response.data)
     },
   },
 }

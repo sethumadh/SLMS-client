@@ -2,7 +2,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { FormProvider, useForm } from "react-hook-form"
 import { z } from "zod"
 import { useState } from "react"
-// import { useNavigate } from "react-router-dom"
 
 import { StepperFooterSection } from "@/components/Application/StepperFooterSection/StepperFooterSection"
 import ApplicantInfo from "@/components/Application/ApplicantInfo/ApplicantInfo"
@@ -14,24 +13,22 @@ import OtherInfo from "@/components/Application/OtherInfo/OtherInfo"
 import { useQuery } from "@tanstack/react-query"
 import { api } from "@/api/api"
 import { applicantSchema } from "@/types/Application/applicantSchema"
-import { useAppDispatch} from "@/redux/store"
+import { useAppDispatch } from "@/redux/store"
 import { setOpenModal } from "@/redux/slice/modalSlice"
-
 import { NewApplicantSchema } from "@/api/application/application"
+import SubmitApplicantModal from "@/components/Modal/SubmitApplicantModal"
 
 export type ApplicantSchema = z.infer<typeof applicantSchema>
 
 function Application() {
   const dispatch = useAppDispatch()
   const [nextPage, setNextPage] = useState(false)
-  // const navigate = useNavigate()
   const [step, setStep] = useState(0)
-
-
   const currentTerm = useQuery({
     queryKey: [api.application.currentTerm.getTermSubjects.queryKey],
     queryFn: api.application.currentTerm.getTermSubjects.query,
   })
+  console.log()
   const methods = useForm<ApplicantSchema>({
     resolver: zodResolver(applicantSchema),
     // defaultValues: {
@@ -115,7 +112,6 @@ function Application() {
         otherInfo: "",
         declaration: [],
       },
-      termName: currentTerm.data?.name,
     },
   })
 
@@ -158,35 +154,25 @@ function Application() {
     }
   }
 
-  // const handleSubmitApplication = async (data: ApplicantSchema) => {
-  //   try {
-  //     await axios.post(`${baseURL}/api/v1/student/application/create`, data)
-  //   } catch (e) {
-  //     console.log(e)
-  //   }
-  // }
-  const onSubmit = (values: ApplicantSchema) => {
-    console.log(values)
-    const formattedValues:NewApplicantSchema = {
-      ...values,
-      personalDetails: {
-        ...values.personalDetails,
-        DOB: values.personalDetails.DOB.toString(),
-      },
-    }
-    dispatch(
-      setOpenModal({
-        isOpen: true,
-        type: "submitApplicant",
-        data: {
-          value: formattedValues,
+  const onSubmit = async (values: ApplicantSchema) => {
+    if (currentTerm.data?.name) {
+      const formattedValues: NewApplicantSchema = {
+        ...values,
+        personalDetails: {
+          ...values.personalDetails,
+          DOB: values.personalDetails.DOB.toString(),
         },
-      })
-    )
-    // handleSubmitApplication(values)
-
-    // navigate("/application-submit")
-    // navigate("/application-submit", { replace: true })
+      }
+      dispatch(
+        setOpenModal({
+          isOpen: true,
+          type: "submitApplicant",
+          data: {
+            value: formattedValues,
+          },
+        })
+      )
+    }
   }
   return (
     <div>
@@ -223,7 +209,7 @@ function Application() {
           </form>
         </FormProvider>
       </div>
-
+      <SubmitApplicantModal />
     </div>
   )
 }

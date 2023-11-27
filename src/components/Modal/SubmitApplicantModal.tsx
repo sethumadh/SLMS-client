@@ -5,31 +5,29 @@ import { useNavigate } from "react-router-dom"
 import { useAppDispatch, useAppSelector } from "@/redux/store"
 import { setOpenModal } from "@/redux/slice/modalSlice"
 import Icons from "@/constants/icons"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { api } from "@/api/api"
 import { toast } from "react-toastify"
 import { handleAxiosError } from "@/helpers/errorhandler"
+import LoadingIcon from "../LoadingIcon"
 
 const SubmitApplicantModal = () => {
   const [loadingToastId, setLoadingToastId] = useState<string | null>(null)
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const { isOpen, type, data } = useAppSelector((state) => state.modal)
-
   const cancelButtonRef = useRef(null)
   const IsModalOpen = isOpen && type === "submitApplicant"
-  //   console.log({IsModalOpen})
-  console.log({ data })
-  //   const queryClient = useQueryClient()
+  const queryClient = useQueryClient()
 
   const { mutateAsync: createApplicant, isPending: createApplicantPending } =
     useMutation({
       mutationFn: api.application.create.createApplicant.query,
-      onSuccess: () => {
-        //   queryClient.invalidateQueries({
-        //     queryKey: [api.application.currentTerm.getTermSubjects.queryKey],
-        //   })
-        // add inavlidate for getting all terms--> invalidate getallapplications
+      onSuccess: (data) => {
+        console.log(data)
+        queryClient.invalidateQueries({
+          queryKey: [api.admin.students.findAllStudents.querykey],
+        })
         if (loadingToastId) toast.dismiss(loadingToastId)
         toast.success(`Application successfully submitted 👌`)
         dispatch(
@@ -38,7 +36,7 @@ const SubmitApplicantModal = () => {
             type: "",
           })
         )
-        navigate("/application-submit", { replace: true })
+        navigate("/application-submit")
       },
       onError: (error: unknown) => {
         if (loadingToastId) toast.dismiss(loadingToastId)
@@ -73,7 +71,7 @@ const SubmitApplicantModal = () => {
           <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
         </Transition.Child>
 
-        <div className="fixed inset-0 z-10 overflow-y-auto">
+        <div className="fixed inset-0 z-10 overflow-y-auto ">
           <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
             <Transition.Child
               as={Fragment}
@@ -122,14 +120,21 @@ const SubmitApplicantModal = () => {
                       )
                       setLoadingToastId(toastId.toString())
 
-                      // await createApplicant({ })
+                      await createApplicant({ applicantData: data?.value })
                     }}
                   >
-                    Submit now
+                    {createApplicantPending ? (
+                      <>
+                        <LoadingIcon />
+                      </>
+                    ) : (
+                      <p>Submit now</p>
+                    )}
                   </button>
                   <button
+                    disabled={createApplicantPending}
                     type="button"
-                    className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
+                    className="disabled:bg-slate-300 mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
                     onClick={() => {
                       dispatch(
                         setOpenModal({

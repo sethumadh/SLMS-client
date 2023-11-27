@@ -2,7 +2,7 @@
 
 
 
-const OverloayLoadingspinner = () => {
+const OverlayLoadingspinner = () => {
   return (
     <div className="flex justify-center items-center h-full w-full bg-transparent">
     <div role="status">
@@ -28,4 +28,4 @@ const OverloayLoadingspinner = () => {
   )
 }
 
-export default OverloayLoadingspinner
+export default OverlayLoadingspinner

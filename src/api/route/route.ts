@@ -8,9 +8,9 @@ export const route = {
     extendCurrentTerm: `${baseURL}/api/v1/admin/administration/update/extend-term`,
     makeCurrentTerm: `${baseURL}/api/v1/admin/administration/update/make-current-term`,
     createTermWithSubjectsSetup: `${baseURL}/api/v1/admin/administration/create-new-term-setup`,
-    findAllTerms:`${baseURL}/api/v1/admin/administration/find-all-terms`,
-    findUniqueTerm:`${baseURL}/api/v1/admin/administration/find/term-detail`,
-    deleteTerm:`${baseURL}/api/v1/admin/administration/delete-term`,
+    findAllTerms: `${baseURL}/api/v1/admin/administration/find-all-terms`,
+    findUniqueTerm: `${baseURL}/api/v1/admin/administration/find/term-detail`,
+    deleteTerm: `${baseURL}/api/v1/admin/administration/delete-term`,
     // /find-all-terms
     subject: {
       findAllSubjects: `${baseURL}/api/v1/admin/administration/get-all-subjects`,
@@ -18,11 +18,12 @@ export const route = {
     level: {
       findAllLevels: `${baseURL}/api/v1/admin/administration/get-all-levels`,
     },
-    students:{
-      applicant:{
-        createApplicant:`${baseURL}/api/v1/admin/administration/create-applicant`,
-      }
-    }
+    students: {
+      applicant: {
+        createApplicant: `${baseURL}/api/v1/application/create-applicant`,
+      },
+      getAllStudents: `${baseURL}/api/v1/admin/administration/get-all-students`,
+    },
   },
 }
 // /get-all-levels

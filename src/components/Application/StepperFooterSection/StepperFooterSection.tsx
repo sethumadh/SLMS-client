@@ -5,7 +5,7 @@ type StepperFooterSection = {
   prevText: string
   prevOnClick: () => void
   nextText: string
-  nextOnClick: () => void
+  nextOnClick: (() => void) | undefined
   type: "button" | "submit" | "reset"
 }
 

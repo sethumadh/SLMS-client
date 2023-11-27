@@ -106,7 +106,7 @@ export const OtherInformationSchema = z.object({
     }),
 })
 
-export const TermSchema = z.string()
+
 
 export const applicantSchema = z.object({
   personalDetails: PersonalSchema,
@@ -115,7 +115,7 @@ export const applicantSchema = z.object({
   healthInformation: HealthInformationSchema,
   subjectInterest: SubjectInterest,
   otherInformation: OtherInformationSchema,
-  termName: TermSchema,
+
 })
 
 
