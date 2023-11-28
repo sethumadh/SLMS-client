@@ -63,8 +63,8 @@ function Application() {
     //     medicalCondition: "",
     //     allergy: "",
     //   },
-    //   subjects: {
-    //     subjects: [],
+    //    subjectInterest: {
+    //     subjectsChosen: [],
     //     subjectRelated: [],
     //   },
     //   otherInformation: {

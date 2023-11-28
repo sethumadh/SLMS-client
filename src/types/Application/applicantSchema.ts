@@ -73,10 +73,7 @@ export const EmergencyContactSchema = z.object({
     .min(3, { message: "Minimum 3 characters" }),
 })
 export const HealthInformationSchema = z.object({
-  medicareNumber: z
-    .string({ required_error: "Post code is required" })
-    .min(10, { message: "Medicare number is minimum 10 digits" })
-    .max(10, { message: "Medicare number is maximum 10 digits" }),
+  medicareNumber: z.string().optional(),
   ambulanceMembershipNumber: z.string().optional(),
   medicalCondition: z
     .string({ required_error: "Please give a valid answer" })
@@ -87,9 +84,11 @@ export const HealthInformationSchema = z.object({
 })
 
 export const SubjectInterest = z.object({
-  subjectsChosen: z.array(z.string()).refine((subjects) => subjects.length > 0, {
-    message: "Please select at least one subject",
-  }),
+  subjectsChosen: z
+    .array(z.string())
+    .refine((subjects) => subjects.length > 0, {
+      message: "Please select at least one subject",
+    }),
   subjectRelated: z
     .array(z.string())
     .refine((subjectRelated) => subjectRelated.length > 0, {
@@ -106,8 +105,6 @@ export const OtherInformationSchema = z.object({
     }),
 })
 
-
-
 export const applicantSchema = z.object({
   personalDetails: PersonalSchema,
   parentsDetails: ParentsSchema,
@@ -115,9 +112,7 @@ export const applicantSchema = z.object({
   healthInformation: HealthInformationSchema,
   subjectInterest: SubjectInterest,
   otherInformation: OtherInformationSchema,
-
 })
-
 
 // *********Admin************
 /* 
@@ -159,10 +154,7 @@ export const applicantParentDetailsSchema = z.object({
 
 /* Emergency/health Detail Page */
 export const applicantHealthDetailsSchema = z.object({
-  medicareNumber: z
-    .string({ required_error: "Post code is required" })
-    .min(10, { message: "Medicare number is minimum 10 digits" })
-    .max(10, { message: "Medicare number is maximum 10 digits" }),
+  medicareNumber: z.string().optional(),
   ambulanceMembershipNumber: z.string().optional(),
   medicalCondition: z
     .string({ required_error: "Please give a valid answer" })

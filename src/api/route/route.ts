@@ -11,7 +11,6 @@ export const route = {
     findAllTerms: `${baseURL}/api/v1/admin/administration/find-all-terms`,
     findUniqueTerm: `${baseURL}/api/v1/admin/administration/find/term-detail`,
     deleteTerm: `${baseURL}/api/v1/admin/administration/delete-term`,
-    // /find-all-terms
     subject: {
       findAllSubjects: `${baseURL}/api/v1/admin/administration/get-all-subjects`,
     },
@@ -27,7 +26,7 @@ export const route = {
     enrollment: {
       getAllApplicants: `${baseURL}/api/v1/admin/applicant/get-all-applicants`,
       searchApplicants: `${baseURL}/api/v1/admin/applicant/search-applicants`,
+      findApplicantById: `${baseURL}/api/v1/admin/applicant/applicant-detail`,
     },
   },
 }
-// /get-all-levels

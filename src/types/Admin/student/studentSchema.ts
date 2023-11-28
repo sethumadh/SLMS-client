@@ -40,11 +40,7 @@ export const applicantPersonalDetailsSchema = z.object({
   
   /* Emergency/health Detail Page */
   export const applicantHealthDetailsSchema = z.object({
-    medicareNumber: z
-      .string({ required_error: "Post code is required" })
-      .min(10, { message: "Medicare number is minimum 10 digits" })
-      .max(10, { message: "Medicare number is maximum 10 digits" }),
-    ambulanceMembershipNumber: z.string().optional(),
+    medicareNumber: z.string().optional(),
     medicalCondition: z
       .string({ required_error: "Please give a valid answer" })
       .min(3, { message: "Mininum 3 characters" }),

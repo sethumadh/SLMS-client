@@ -228,7 +228,7 @@ const EmergencyContactSchema = z.object({
 
 const HealthInformationSchema = z.object({
   id: z.number(),
-  medicareNumber: z.string(),
+  medicareNumber: z.string().optional(),
   ambulanceMembershipNumber: z.string(),
   medicalCondition: z.string(),
   allergy: z.string(),
@@ -285,6 +285,17 @@ export const enrollment = {
       )
 
       return ApplicantsDataSchema.parse(response.data)
+    },
+  },
+  findApplicantById: {
+    querykey: "findApplicantById",
+    schema: ApplicantSchema,
+    query: async (id: string) => {
+      const response = await axios.get(
+        `${route.admin.enrollment.findApplicantById}/${id}`
+      )
+
+      return ApplicantSchema.parse(response.data)
     },
   },
 }

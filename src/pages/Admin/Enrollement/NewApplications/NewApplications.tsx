@@ -17,7 +17,7 @@ function NewStudentApplications() {
   const {
     data: allApplicantData,
     isLoading: allApplicantDataLoading,
-    isError: _allApplicantDataIsError,
+    isError: allApplicantDataIsError,
     error: _allApplicantDataError,
   } = useQuery({
     queryKey: [
@@ -213,12 +213,21 @@ function NewStudentApplications() {
               {/* <div>{JSON.stringify(pageNumber, null, 2)}</div> */}
             </div>
           </>
-        ) : (
+        ) : allApplicantDataIsError ? (
           <div className="flex flex-row h-[650px] w-full justify-center items-center ">
             <p className="font-medium ">There are no Applicants data to show</p>
           </div>
+        ) : (
+          <>
+            <>
+              <div className="flex flex-row h-[650px] w-full justify-center items-center ">
+                <p className="font-medium ">
+                  There are no Applicants data to show. Some error happened
+                </p>
+              </div>
+            </>
+          </>
         )}
-        {/* pagination */}
       </div>
     </div>
   )

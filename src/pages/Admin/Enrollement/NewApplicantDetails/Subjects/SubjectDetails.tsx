@@ -1,32 +1,19 @@
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { FormProvider, useForm } from "react-hook-form"
 import { z } from "zod"
 
 import Icons from "@/constants/icons"
 import { applicantSubjectDetailsSchema } from "@/types/Application/applicantSchema"
+import { useQuery } from "@tanstack/react-query"
+import { api } from "@/api/api"
 
 export type SubjectDetailsSchema = z.infer<typeof applicantSubjectDetailsSchema>
-const subjects = [
-  "Math",
-  "Science",
-  "History",
-  "English",
-
-  // Add more subjects as needed
-]
-const subjectOptions = [
-  "option-1",
-  "option-2",
-  "option-3",
-  "option-4",
-  "option-5",
-  "option-6",
-  // Add more subjects as needed
-]
 
 function NewApplicantSubjectDetails() {
+  const params = useParams()
+  console.log(params)
   const [isEdit, setIsEdit] = useState(false)
   const methods = useForm<SubjectDetailsSchema>({
     resolver: zodResolver(applicantSubjectDetailsSchema),
@@ -36,6 +23,25 @@ function NewApplicantSubjectDetails() {
       subjectRelated: [],
     },
   })
+  const {
+    data: applicantData,
+
+    // isLoading: _applicantDataIsLoading,
+    // isError: applicantDataIsError,
+    // error: applicantDataError,
+  } = useQuery({
+    queryKey: [api.admin.enrollment.findApplicantById.querykey, params.id],
+    queryFn: () => {
+      if (params.id) {
+        return api.admin.enrollment.findApplicantById.query(params.id)
+      }
+    },
+    enabled: !!params.id,
+  })
+  console.log(applicantData)
+  const subjectRelated = applicantData?.subjectRelated
+  const subjectsChosen = applicantData?.subjectsChosen
+  console.log(subjectRelated, subjectsChosen)
   const onSubmit = (values: SubjectDetailsSchema) => {
     console.log(values)
     setIsEdit(false)
@@ -73,101 +79,19 @@ function NewApplicantSubjectDetails() {
                   <dt className="text-sm font-medium leading-6 text-gray-900 sm:col-span-2">
                     Subjects
                   </dt>
-                  {!isEdit ? (
-                    <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                      Maths, Science
-                    </dd>
-                  ) : (
-                    <div className="mt-2">
-                      {subjects.map((subject) => (
-                        <div key={subject}>
-                          <div className="relative flex gap-x-3">
-                            <div className="flex h-6 items-center">
-                              <input
-                                id={subject}
-                                value={subject}
-                                {...methods.register("subjects", {
-                                  required: {
-                                    value: true,
-                                    message: "choose a subject",
-                                  },
-                                })}
-                                type="checkbox"
-                                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                              />
-                            </div>
-                            <div className="text-sm leading-6">
-                              <label
-                                htmlFor={subject}
-                                className="font-medium text-gray-900"
-                              >
-                                {subject}
-                              </label>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                  {isEdit && (
-                    <div className="flex items-center">
-                      {methods.formState.errors.subjects?.message && (
-                        <span className="text-xs text-red-600">
-                          *{methods.formState.errors.subjects?.message}
-                        </span>
-                      )}
-                    </div>
-                  )}
+
+                  <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                    {subjectsChosen?.join(", ")}
+                  </dd>
                 </div>
                 <div className="px-4 py-2 sm:grid sm:grid-cols-4 sm:gap-x-4  sm:px-0">
                   <dt className="text-sm font-medium leading-6 text-gray-900 sm:col-span-2">
                     Options
                   </dt>
-                  {!isEdit ? (
-                    <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                      option 1 and option 2
-                    </dd>
-                  ) : (
-                    <div className="mt-2">
-                      {subjectOptions.map((subjectOption) => (
-                        <div key={subjectOption}>
-                          <div className="relative flex gap-x-3">
-                            <div className="flex h-6 items-center">
-                              <input
-                                id={subjectOption}
-                                value={subjectOption}
-                                {...methods.register("subjectRelated", {
-                                  required: {
-                                    value: true,
-                                    message: "choose an option",
-                                  },
-                                })}
-                                type="checkbox"
-                                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                              />
-                            </div>
-                            <div className="text-sm leading-6">
-                              <label
-                                htmlFor={subjectOption}
-                                className="font-medium text-gray-900"
-                              >
-                                {subjectOption}
-                              </label>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                  {isEdit && (
-                    <div className="flex items-center">
-                      {methods.formState.errors.subjectRelated?.message && (
-                        <span className="text-xs text-red-600">
-                          *{methods.formState.errors.subjectRelated?.message}
-                        </span>
-                      )}
-                    </div>
-                  )}
+
+                  <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                    {subjectRelated?.join(" ")}
+                  </dd>
                 </div>
               </dl>
             </div>

@@ -43,9 +43,6 @@ function Subjects() {
               ਲੈਂਦਾ ਹੋਵੇ ।
             </span>
           </h2>
-          {/* <p className="mt-1 text-sm leading-6 text-gray-600">
-            Please provide medicare of private health insurance number below
-          </p> */}
         </div>
 
         <div className="bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl md:col-span-2">
@@ -112,9 +109,6 @@ function Subjects() {
           <h2 className="text-base font-semibold leading-7 text-gray-900">
             Please tick all relevant<span className="text-red-600">*</span>
           </h2>
-          {/* <p className="mt-1 text-sm leading-6 text-gray-600">
-            Please provide medicare of private health insurance number below
-          </p> */}
         </div>
 
         <div className="bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl md:col-span-2">

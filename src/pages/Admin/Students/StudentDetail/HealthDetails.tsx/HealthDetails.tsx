@@ -114,13 +114,6 @@ function HealthDetails() {
                       </div>
                     </>
                   )}
-                  <div className="flex items-center">
-                    {methods.formState.errors.medicareNumber?.message && (
-                      <span className="text-xs text-red-600">
-                        *{methods.formState.errors.medicareNumber?.message}
-                      </span>
-                    )}
-                  </div>
                 </div>
                 <div className="px-4 py-2 sm:grid sm:grid-cols-4 sm:gap-x-4 sm:px-0">
                   <dt className="text-sm font-medium leading-6 text-gray-900">
