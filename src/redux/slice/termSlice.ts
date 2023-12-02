@@ -4,30 +4,48 @@ import { createSlice } from "@reduxjs/toolkit"
 import { z } from "zod"
 export const createTermSchema = z.object({
   termName: z.string().min(4, { message: "Minimum 4 characters required" }),
-  startDate: z.string().optional(),
-  endDate: z.string().optional(),
-  subjects: z.array(
+  startDate: z.string(),
+  endDate: z.string(),
+  groupSubjects: z.array(
     z.object({
-      subject: z.string().min(4, { message: "Minimum 4 characters required" }),
-      fee: z.string({ required_error: "fee is required" }),
-      feeInterval: z.enum(["MONTHLY", "TERM"]),
-      levels: z
-        .array(z.string())
-        .min(1, { message: "Minimum 1 level required" }),
+      groupName: z
+        .string()
+        .min(4, { message: "Minimum 4 characters required" }),
+      fee: z
+        .string({ required_error: "fee is required" })
+        .regex(/^\d+$/, { message: "Please enter a valid amount" })
+        .min(1, { message: "Please enter a fee" }),
+      feeInterval: z.string().default("TERM"),
+      subjects: z.array(
+        z.object({
+          subjectName: z
+            .string()
+            .min(4, { message: "Minimum 4 characters required" }),
+          levels: z
+            .array(z.string())
+            .min(1, { message: "Minimum 4 characters required" }),
+        })
+      ),
     })
   ),
 })
+
 export type CreateTermSchema = z.infer<typeof createTermSchema>
 const initialState: CreateTermSchema = {
   termName: "",
   startDate: Date.now().toString(),
   endDate: Date.now().toString(),
-  subjects: [
+  groupSubjects: [
     {
-      subject: "",
+      groupName: "",
       fee: "",
-      feeInterval: "MONTHLY",
-      levels: [""],
+      feeInterval: "TERM",
+      subjects: [
+        {
+          subjectName: "",
+          levels: [],
+        },
+      ],
     },
   ],
 }
@@ -40,7 +58,7 @@ const termSlice = createSlice({
       state.endDate = action.payload.endDate
       state.startDate = action.payload.startDate
       state.termName = action.payload.termName
-      state.subjects = action.payload.subjects
+      state.groupSubjects = action.payload.groupSubjects
     },
   },
   extraReducers: (builder) => {

@@ -2,36 +2,50 @@ import { z } from "zod"
 import axios from "axios"
 import { route } from "../route/route"
 
-const levelSchema = z.object({
-  id: z.number().optional(),
-  name: z.string(),
+const groupSchema = z.object({
+  groupName: z.string(),
+  isActive: z.boolean(),
+  id: z.number(),
 })
-
-const feeSchema = z.object({
-  amount: z.number(),
-  paymentType: z.enum(["MONTHLY", "TERM"]),
+const levelSchema = z.object({
+  name: z.string(),
 })
 
 const subjectSchema = z.object({
   name: z.string(),
   isActive: z.boolean(),
-  id: z.number(),
 })
 
 const termSubjectSchema = z.object({
   subject: subjectSchema,
-  level: z.array(levelSchema),
-  fee: feeSchema,
+  level: levelSchema,
 })
+
+const feeSchema = z.object({
+  amount: z.number(),
+  paymentType: z.enum(["TERM", "MONTHLY"]), // Assuming these are your only two payment types
+})
+
+const subjectGroupSchema = z.object({
+  groupName: z.string(),
+})
+
+const termSubjectGroupSchema = z.object({
+  subjectGroup: subjectGroupSchema,
+  fee: feeSchema,
+  termSubject: z.array(termSubjectSchema),
+})
+
 const termSchema = z.object({
-  id: z.number().optional(),
+  id: z.number(),
   name: z.string(),
   currentTerm: z.boolean(),
-  startDate: z.string(), // or use z.date() if you want to validate actual Date objects
-  endDate: z.string(), // or use z.date()
-  createdAt: z.string(), // or use z.date()
-  updatedAt: z.string(), // or use z.date()
-  termSubject: z.array(termSubjectSchema),
+  isPublish: z.boolean(),
+  startDate: z.string(), // You might want to use z.date() if you're parsing the dates
+  endDate: z.string(), // Same here for date parsing
+  createdAt: z.string(), // Same here for date parsing
+  updatedAt: z.string(), // Same here for date parsing
+  termSubjectGroup: z.array(termSubjectGroupSchema),
 })
 export type TermSchema = z.infer<typeof termSchema>
 
@@ -39,14 +53,26 @@ export const createTermWithSubjectSchema = z.object({
   termName: z.string().min(4, { message: "Minimum 4 characters required" }),
   startDate: z.string(),
   endDate: z.string(),
-  subjects: z.array(
+  groupSubjects: z.array(
     z.object({
-      subject: z.string().min(4, { message: "Minimum 4 characters required" }),
-      fee: z.string({ required_error: "fee is required" }),
-      feeInterval: z.enum(["MONTHLY", "TERM"]),
-      levels: z
-        .array(z.string())
-        .min(1, { message: "Minimum 1 level required" }),
+      groupName: z
+        .string()
+        .min(4, { message: "Minimum 4 characters required" }),
+      fee: z
+        .string({ required_error: "fee is required" })
+        .regex(/^\d+$/, { message: "Please enter a valid amount" })
+        .min(1, { message: "Please enter a fee" }),
+      feeInterval: z.string().default("TERM"),
+      subjects: z.array(
+        z.object({
+          subjectName: z
+            .string()
+            .min(4, { message: "Minimum 4 characters required" }),
+          levels: z
+            .array(z.string())
+            .min(1, { message: "Minimum 4 characters required" }),
+        })
+      ),
     })
   ),
 })
@@ -70,6 +96,7 @@ export const term = {
         `${route.admin.changeCurrentTermName}/${id}`,
         { updatedTerm }
       )
+      console.log(response.data)
       return termSchema.parse(response.data)
     },
   },
@@ -91,24 +118,37 @@ export const term = {
     },
   },
   createTermWithSubjectsSetup: {
-    schema: termSchema,
+    schema: createTermWithSubjectSchema,
     mutation: async (termData: CreateTermWithSubjectSchema) => {
-      const response = await axios.post(
-        route.admin.createTermWithSubjectsSetup,
-        termData
-      )
-      console.log(response.data)
-      return z
-        .object({
-          id: z.number(),
-          name: z.string(),
-        })
-        .parse(response.data.createdTerm)
+      if (createTermWithSubjectSchema.safeParse(termData)) {
+        // console.log("good data")
+        const response = await axios.post(
+          route.admin.createTermWithSubjectsSetup,
+          termData
+        )
+
+        return z
+          .object({
+            id: z.number(),
+            currentTerm: z.boolean(),
+            isPublish: z.boolean(),
+            name: z.string(),
+          })
+          .parse(response.data.transactionResult)
+      } else {
+        console.log("validation error at axios")
+      }
     },
   },
   makeCurrentTerm: {
     mutation: async ({ id }: { id: number }) => {
       await axios.patch(`${route.admin.makeCurrentTerm}/${id}`)
+    },
+  },
+  makePublishTerm: {
+    mutation: async ({ id }: { id: number }) => {
+      const response = await axios.patch(`${route.admin.makePublishTerm}/${id}`)
+      console.log(response.data)
     },
   },
   deleteTerm: {
@@ -123,6 +163,7 @@ export const term = {
     query: async () => {
       try {
         const response = await axios.get(route.admin.findAllTerms)
+
         return z.array(termSchema).parse(response.data)
       } catch (error) {
         if (error instanceof z.ZodError) {
@@ -142,7 +183,6 @@ export const term = {
     query: async (id: string) => {
       try {
         const response = await axios.get(`${route.admin.findUniqueTerm}/${id}`)
-        console.log("Response Data:", response.data)
         return termSchema.parse(response.data)
       } catch (error) {
         if (error instanceof z.ZodError) {
@@ -157,6 +197,19 @@ export const term = {
     },
   },
 }
+/*Groups*/
+
+export const groups = {
+  findAllGroups: {
+    querykey: "getAllGroups",
+    schema: z.array(groupSchema),
+    query: async () => {
+      const response = await axios.get(route.admin.groups.findAllGroups)
+      return z.array(groupSchema).parse(response.data)
+    },
+  },
+}
+
 /*Subjects*/
 export const subjects = {
   findAllSubjects: {

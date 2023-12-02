@@ -5,7 +5,7 @@ import { createSlice } from "@reduxjs/toolkit"
 
 type initialStateProps = {
   isOpen: boolean
-  type: "" | "termName" | "termExtend" | "isCurrentTerm" |"deleteTerm"|"submitApplicant"
+  type: "" | "termName" | "termExtend" | "isCurrentTerm" |"deleteTerm"|"submitApplicant"|"isPublishTerm"
   data?: {
     id?: number
     value?: any

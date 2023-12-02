@@ -1,6 +1,6 @@
 import { Fragment, useRef, useState } from "react"
 import { Dialog, Transition } from "@headlessui/react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 
 import { useAppDispatch, useAppSelector } from "@/redux/store"
 import { setOpenModal } from "@/redux/slice/modalSlice"
@@ -10,18 +10,20 @@ import { api } from "@/api/api"
 import { toast } from "react-toastify"
 import { handleAxiosError } from "@/helpers/errorhandler"
 
-const IsCurrentTermModal = () => {
+const IsPublishTermModal = () => {
   const [loadingToastId, setLoadingToastId] = useState<string | null>(null)
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const { isOpen, type, data } = useAppSelector((state) => state.modal)
 
   const cancelButtonRef = useRef(null)
-  const IsModalOpen = isOpen && type === "isCurrentTerm"
+  const IsModalOpen = isOpen && type === "isPublishTerm"
   const queryClient = useQueryClient()
 
+  const params = useParams()
+
   const { mutateAsync: makeCurrent } = useMutation({
-    mutationFn: api.admin.term.makeCurrentTerm.mutation,
+    mutationFn: api.admin.term.makePublishTerm.mutation,
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [
@@ -30,11 +32,12 @@ const IsCurrentTermModal = () => {
           api.admin.term.findAllTerms.queryKey,
           api.admin.subjects.findAllSubjects.querykey,
           api.admin.term.findUniqueTerm.queryKey,
+          `termDetail${params.id}`,
         ],
       })
       // add inavlidate for getting all terms
       if (loadingToastId) toast.dismiss(loadingToastId)
-      toast.success(`Making current action is scuccessful 👌`)
+      toast.success(`Term published successfully 👌`)
       dispatch(
         setOpenModal({
           isOpen: false,
@@ -100,12 +103,15 @@ const IsCurrentTermModal = () => {
                       as="h3"
                       className="text-base font-semibold leading-6 text-gray-900"
                     >
-                      Term is now created successfully
+                      Publish the term
                     </Dialog.Title>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">
-                        Do you want to make this term cuurent now? If you wish
-                        to make it current click make current now.
+                        Do you want to publish the term and make this term
+                        cuurent now? If you wish to make it publish click
+                        publish now. If you publish this term , this action make
+                        the this newaly created term as the curent term and this
+                        will be displayed in the application page
                       </p>
                     </div>
                   </div>
@@ -122,7 +128,7 @@ const IsCurrentTermModal = () => {
                         })
                       )
                       const toastId = toast.loading(
-                        `making term a current term, please wait`
+                        `Pubslishing term, please wait`
                       )
                       setLoadingToastId(toastId.toString())
                       if (data?.id) {
@@ -130,7 +136,7 @@ const IsCurrentTermModal = () => {
                       }
                     }}
                   >
-                    Make term current
+                    Publish now
                   </button>
                   <button
                     type="button"
@@ -146,7 +152,7 @@ const IsCurrentTermModal = () => {
                     }}
                     ref={cancelButtonRef}
                   >
-                    cancel
+                    Publish later
                   </button>
                 </div>
               </Dialog.Panel>
@@ -157,4 +163,4 @@ const IsCurrentTermModal = () => {
     </Transition.Root>
   )
 }
-export default IsCurrentTermModal
+export default IsPublishTermModal

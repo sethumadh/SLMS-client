@@ -1,18 +1,18 @@
 /* trunk-ignore-all(prettier) */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useQuery } from "@tanstack/react-query"
+
 import { z } from "zod"
 import { Controller, useFieldArray, useFormContext } from "react-hook-form"
-import { useEffect, useMemo, useState } from "react"
 import ReactDatePicker from "react-datepicker"
-import Select, { MultiValue, SingleValue } from "react-select"
-import CreatableSelect from "react-select/creatable"
+import Select, { SingleValue } from "react-select"
 
-import Icons from "@/constants/icons"
 import { createTermWithSubjectSchema } from "@/types/Admin/Term/Term"
+import SubjectCreate from "./SubjectCreate"
+import { useQuery } from "@tanstack/react-query"
 import { api } from "@/api/api"
+import { useEffect, useMemo, useState } from "react"
 import { capitalizeFirstCharacter } from "@/helpers/capitalizeFirstCharacter"
-import OverlayLoadingspinner from "@/components/OverlayLoadingspinner"
+import { useAppSelector } from "@/redux/store"
 
 const options = [
   { value: "MONTHLY", label: "Monthly" },
@@ -23,21 +23,24 @@ export type CreateTermWithSubjectSchema = z.infer<
   typeof createTermWithSubjectSchema
 >
 function Create() {
+  const data = useAppSelector((state) => state.term)
+
+  // const { data: allGroupData, isLoading: allGroupLoading } = useQuery({
+  //   queryKey: [api.admin.groups.findAllGroups.querykey],
+  //   queryFn: api.admin.groups.findAllGroups.query,
+  // })
   const { data: allLevelsData, isLoading: allLevelsLoading } = useQuery({
     queryKey: [api.admin.levels.findAllLevels.querykey],
     queryFn: api.admin.levels.findAllLevels.query,
   })
-  // find all subjects and then apply creatable
   const { data: allSubjectData, isLoading: allSubjectLoading } = useQuery({
     queryKey: [api.admin.subjects.findAllSubjects.querykey],
     queryFn: api.admin.subjects.findAllSubjects.query,
   })
-
   const [newSubjects, setNewSubjects] =
     useState<{ value: string; label: string }[]>()
   const [newLevels, setNewLevels] =
     useState<{ value: string; label: string }[]>()
-
   const subjectData: { value: string; label: string }[] | undefined =
     useMemo(() => {
       return allSubjectData?.map((s) => ({
@@ -53,19 +56,60 @@ function Create() {
         label: capitalizeFirstCharacter(l.name),
       }))
     }, [allLevelsData])
+
   useEffect(() => {
     if (levelData?.length && !allLevelsLoading && levelData?.length > 0) {
-      setNewLevels(levelData)
+      const levels = data.groupSubjects
+        .flatMap((groupSubject) =>
+          groupSubject.subjects.flatMap((subject) => subject.levels)
+        )
+        .map((l) => ({
+          value: l,
+          label: capitalizeFirstCharacter(l),
+        }))
+      const uniqueLevelOptions = [...levelData, ...levels].filter(
+        (obj, index, self) =>
+          index ===
+          self.findIndex((t) => t.value === obj.value && t.label === obj.label)
+      )
+
+      setNewLevels([...uniqueLevelOptions])
     }
     if (subjectData?.length && !allSubjectLoading && subjectData?.length > 0) {
-      setNewSubjects(subjectData)
-    }
-  }, [levelData, allLevelsLoading, subjectData, allSubjectLoading])
+      const subjectNames = data.groupSubjects
+        .flatMap((groupSubject) =>
+          groupSubject.subjects.map((subject) => subject.subjectName)
+        )
+        .map((s) => ({
+          value: s,
+          label: capitalizeFirstCharacter(s),
+        }))
+        .filter((s) => s.value !== "" && s.label !== "")
+      const uniqueSubjectOptions = [...subjectData, ...subjectNames].filter(
+        (obj, index, self) =>
+          index ===
+          self.findIndex((t) => t.value === obj.value && t.label === obj.label)
+      )
 
+      setNewSubjects([...uniqueSubjectOptions])
+    }
+  }, [
+    levelData,
+    allLevelsLoading,
+    subjectData,
+    allSubjectLoading,
+    data.groupSubjects,
+  ])
+
+  // console.log(allGroupData)
   const { control, register, formState } =
     useFormContext<CreateTermWithSubjectSchema>()
-  const { fields, append, remove } = useFieldArray({
-    name: "subjects",
+  const {
+    fields: groupSubjectsFields,
+    append: appendGroup,
+    remove: removeGroup,
+  } = useFieldArray({
+    name: "groupSubjects",
     control,
   })
 
@@ -252,245 +296,196 @@ function Create() {
 
                 {/* eof term */}
 
-                {fields.map((field, index) => (
-                  <div key={field.id} className="sm:col-span-6">
-                    <div className="flex flex-col gap-4 shadow-sm px-4 py-2 rounded-lg border">
+                {groupSubjectsFields.map((field, index) => (
+                  <div
+                    key={field.id}
+                    className="sm:col-span-6 rounded-lg shadow-lg border px-4 py-2"
+                  >
+                    <div className="flex flex-col gap-4  px-4 py-2 rounded-lg">
                       <label
-                        htmlFor="name"
+                        htmlFor="group-name"
                         className="block text-sm font-medium leading-6 text-gray-900"
                       >
-                        Subject Name<span className="text-red-600">*</span>
-                        {/* <input
-                          id="name"
-                          type="text"
-                          placeholder="Maths"
-                          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                          {...register(`subjects.${index}.subject` as const)}
-                        /> */}
-                        {allLevelsLoading ? (
-                          <OverlayLoadingspinner />
-                        ) : (
-                          <Controller
-                            name={`subjects.${index}.subject` as const}
-                            control={control}
-                            render={({ field }) => (
-                              <CreatableSelect
-                                id="name"
-                                isClearable
-                                options={newSubjects}
-                                className="no-outline"
-                                {...field}
-                                value={newSubjects?.filter((subject) =>
-                                  field?.value?.includes(subject?.value)
-                                )}
-                                onChange={(
-                                  subject: SingleValue<{
-                                    value: string
-                                    label: string
-                                  }>
-                                ) =>
-                                  field.onChange(subject ? subject.value : null)
-                                }
-                                onCreateOption={(inputValue) => {
-                                  const newOption = {
-                                    value: inputValue,
-                                    label: inputValue,
-                                  }
-                                  setNewSubjects((prev) => {
-                                    const l =
-                                      prev?.length && prev?.length > 0
-                                        ? [...prev]
-                                        : []
-                                    return [...l, newOption]
-                                  })
-                                  field.onChange(inputValue)
-                                }}
-                              />
-                            )}
-                          />
-                        )}
+                        Group Name<span className="text-red-600">*</span>
+                        <input
+                          id="group-name"
+                          className="block sm:w-1/2 disabled:bg-gray-100 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                          placeholder="Group-name"
+                          {...register(
+                            `groupSubjects.${index}.groupName` as const
+                          )}
+                        />
                         <div className="">
-                          {formState.errors.subjects &&
-                            formState.errors?.subjects[index]?.subject
+                          {formState.errors?.groupSubjects?.message ===
+                            "Group names must be unique within a term" && (
+                            <span className="text-xs text-red-600">
+                              {formState.errors?.groupSubjects?.message}
+                            </span>
+                          )}
+                          {formState.errors?.groupSubjects &&
+                            formState.errors?.groupSubjects[index]?.groupName
                               ?.message && (
                               <span className="text-xs text-red-600">
                                 {
-                                  formState.errors?.subjects[index]?.subject
-                                    ?.message
-                                }
-                              </span>
-                            )}
-                          {formState.errors.subjects &&
-                            formState.errors?.subjects?.message && (
-                              <span className="text-xs text-red-600">
-                                {formState.errors?.subjects?.message}
-                              </span>
-                            )}
-                        </div>
-                      </label>
-                      <label
-                        htmlFor="fee"
-                        className="block text-sm font-medium leading-6 text-gray-900"
-                      >
-                        Fee<span className="text-red-600">*</span>
-                        <input
-                          id="fee"
-                          type="text"
-                          placeholder="200"
-                          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                          {...register(`subjects.${index}.fee` as const)}
-                        />
-                        <div className="">
-                          {formState.errors.subjects &&
-                            formState.errors?.subjects[index]?.fee?.message && (
-                              <span className="text-xs text-red-600">
-                                {
-                                  formState.errors?.subjects[index]?.fee
-                                    ?.message
+                                  formState.errors?.groupSubjects[index]
+                                    ?.groupName?.message
                                 }
                               </span>
                             )}
                         </div>
                       </label>
-
-                      <div className="sm:col-span-4">
+                      <div className="flex gap-8">
                         <label
-                          htmlFor="gender"
+                          htmlFor="fee"
                           className="block text-sm font-medium leading-6 text-gray-900"
                         >
-                          Fee Interval
-                          <span className="text-red-600">*</span>
-                        </label>
-
-                        <Controller
-                          defaultValue="MONTHLY"
-                          name={`subjects.${index}.feeInterval`}
-                          control={control}
-                          render={({ field }) => (
-                            <Select
-                              className="sm:w-1/2"
-                              isSearchable={false}
-                              {...field}
-                              options={options}
-                              value={options.find(
-                                (option) => option.value === field.value
+                          Fee<span className="text-red-600">*</span>
+                          <input
+                            id="fee"
+                            type="text"
+                            placeholder="200"
+                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            {...register(`groupSubjects.${index}.fee` as const)}
+                          />
+                          <div className="">
+                            {formState.errors.groupSubjects &&
+                              formState.errors?.groupSubjects[index]?.fee
+                                ?.message && (
+                                <span className="text-xs text-red-600">
+                                  {
+                                    formState.errors?.groupSubjects[index]?.fee
+                                      ?.message
+                                  }
+                                </span>
                               )}
-                              onChange={(
-                                option: SingleValue<{
-                                  value: string
-                                  label: string
-                                }>
-                              ) => {
-                                return field.onChange(option?.value)
-                              }}
-                            />
-                          )}
-                        />
-                      </div>
-                      <div className="">
-                        {formState.errors.subjects &&
-                          formState.errors?.subjects[index]?.feeInterval
-                            ?.message && (
-                            <span className="text-xs text-red-600">
-                              {
-                                formState.errors?.subjects[index]?.feeInterval
-                                  ?.message
-                              }
-                            </span>
-                          )}
-                      </div>
-                      <div className="sm:col-span-4">
-                        <label
-                          htmlFor="gender"
-                          className="block text-sm font-medium leading-6 text-gray-900"
-                        >
-                          Subject levels
-                          <span className="text-red-600">*</span>
+                          </div>
                         </label>
-                        {allLevelsLoading ? (
-                          <OverlayLoadingspinner />
-                        ) : (
+
+                        <div className="sm:col-span-4">
+                          <label
+                            htmlFor="gender"
+                            className="block text-sm font-medium leading-6 text-gray-900"
+                          >
+                            Fee Interval
+                            <span className="text-red-600">*</span>
+                          </label>
+
                           <Controller
-                            name={`subjects.${index}.levels` as const}
+                            defaultValue="MONTHLY"
+                            name={`groupSubjects.${index}.feeInterval` as const}
                             control={control}
                             render={({ field }) => (
-                              <CreatableSelect
-                                isClearable
-                                isMulti
-                                options={newLevels}
-                                className="no-outline"
+                              <Select
+                                className="w-40"
+                                isSearchable={false}
                                 {...field}
-                                value={newLevels?.filter((level) =>
-                                  field?.value?.includes(level?.value)
+                                options={options}
+                                value={options.find(
+                                  (option) => option.value === field.value
                                 )}
                                 onChange={(
-                                  level: MultiValue<{
+                                  option: SingleValue<{
                                     value: string
                                     label: string
                                   }>
-                                ) =>
-                                  field.onChange(
-                                    level.map((level) => level.value)
-                                  )
-                                }
-                                onCreateOption={(inputValue) => {
-                                  const newOption = {
-                                    value: inputValue,
-                                    label: inputValue,
-                                  }
-                                  setNewLevels((prev) => {
-                                    const l =
-                                      prev?.length && prev?.length > 0
-                                        ? [...prev]
-                                        : []
-                                    return [...l, newOption]
-                                  })
-                                  field.onChange([...field.value, inputValue])
+                                ) => {
+                                  return field.onChange(option?.value)
                                 }}
                               />
                             )}
                           />
-                        )}
+                        </div>
+                        <div className="">
+                          {formState.errors.groupSubjects &&
+                            formState.errors?.groupSubjects[index]?.feeInterval
+                              ?.message && (
+                              <span className="text-xs text-red-600">
+                                {
+                                  formState.errors?.groupSubjects[index]
+                                    ?.feeInterval?.message
+                                }
+                              </span>
+                            )}
+                        </div>
                       </div>
-                      <div className="">
-                        {formState.errors.subjects &&
-                          formState.errors?.subjects[index]?.levels
-                            ?.message && (
-                            <span className="text-xs text-red-600">
-                              {
-                                formState.errors?.subjects[index]?.levels
-                                  ?.message
-                              }
-                            </span>
-                          )}
-                      </div>
-
+                      {newLevels && newSubjects && (
+                        <SubjectCreate
+                          newLevels={newLevels}
+                          newSubjects={newSubjects}
+                          setNewLevels={setNewLevels}
+                          setNewSubjects={setNewSubjects}
+                          {...{ control, register }}
+                          index={index}
+                        />
+                      )}
+                    </div>
+                    <div className="">
                       {index === 0 ? (
-                        <div className="flex flex-col items-center ">
+                        <div className="flex items-center  justify-evenly mt-8 gap-8">
                           <div className=" text-slate-400 text-center bg-white  focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-lg px-2 py-2 mr-2 mt-1 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 cursor-not-allowed ">
-                            <Icons.Trash2 />
+                            Delete Group
                           </div>
-                          {/* <div className="h-4 w-4"></div> */}
+                          <div className="flex justify-center items-center mt-2 ">
+                            {" "}
+                            {/* Add items-center if vertical centering is needed */}
+                            <button
+                              className="disabled:cursor-not-allowed disabled:bg-slate-300 max-w-max text-white bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-lg px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                              type="button"
+                              onClick={() => {
+                                appendGroup({
+                                  groupName: "",
+                                  fee: "",
+                                  feeInterval: "TERM",
+                                  subjects: [
+                                    {
+                                      subjectName: "",
+                                      levels: [],
+                                    },
+                                  ],
+                                })
+                              }}
+                            >
+                              Add Group
+                            </button>
+                          </div>
                         </div>
                       ) : (
                         index > 0 && (
-                          <div className=" flex flex-col items-center justify-center ">
+                          <div className="flex items-center justify-evenly mt-8 gap-8">
                             {!formState.isSubmitting && (
                               <div
                                 onClick={() => {
-                                  remove(index)
+                                  removeGroup(index)
                                 }}
-                                className="flex flex-col items-center cursor-pointer text-red-500 text-center  disabled:bg-slate-300  bg-white hover:bg-slate-200 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-lg px-2 py-2 mr-2 mt-1 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                                className="flex flex-col items-center cursor-pointer text-red-500 text-center disabled:bg-slate-300  bg-white hover:bg-slate-200 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-lg px-2 py-2 mr-2 mt-1 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                               >
-                                <Icons.Trash2 />
+                                Delete Group
                               </div>
                             )}
 
-                            <h1 className="text-muted-foreground text-xs italic">
-                              Click <span className="font-light">delete</span>{" "}
-                              icon to delete entire subject section
-                            </h1>
-                            {/* <div className="h-4 w-4"></div> */}
+                            <div className="flex flex-col justify-center items-center mt-2 ">
+                              {" "}
+                              {/* Add items-center if vertical centering is needed */}
+                              <button
+                                className="disabled:cursor-not-allowed text-lg disabled:bg-slate-300 max-w-max text-white bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                                type="button"
+                                onClick={() => {
+                                  appendGroup({
+                                    groupName: "",
+                                    fee: "",
+                                    feeInterval: "TERM",
+                                    subjects: [
+                                      {
+                                        subjectName: "",
+                                        levels: [],
+                                      },
+                                    ],
+                                  })
+                                }}
+                              >
+                                Add Group
+                              </button>
+                            </div>
                           </div>
                         )
                       )}
@@ -499,28 +494,6 @@ function Create() {
                 ))}
               </div>
             </div>
-          </div>
-          <div className="flex flex-col justify-center items-center mt-2">
-            {" "}
-            {/* Add items-center if vertical centering is needed */}
-            <button
-              className="disabled:cursor-not-allowed disabled:bg-slate-300 max-w-max text-white bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-              type="button"
-              onClick={() => {
-                append({
-                  fee: "",
-                  subject: "",
-                  feeInterval: "MONTHLY",
-                  levels: [],
-                })
-              }}
-            >
-              <Icons.PlusIcon className="w-5 h-5" />
-            </button>
-            <h1 className="text-muted-foreground ">
-              Click <span className="font-semibold">Add</span> to add a new
-              Subject Section
-            </h1>
           </div>
 
           {/* eof */}

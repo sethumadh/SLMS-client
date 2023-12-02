@@ -61,7 +61,7 @@ export default function AllTerms() {
                       scope="col"
                       className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                     >
-                      Start Date
+                      Time Period
                     </th>
                     <th
                       scope="col"
@@ -73,7 +73,19 @@ export default function AllTerms() {
                       scope="col"
                       className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                     >
-                      Active
+                      Current term
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    >
+                      Time Expired
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    >
+                      Published
                     </th>
                     <th
                       scope="col"
@@ -108,9 +120,6 @@ export default function AllTerms() {
                         <div className="text-gray-900">
                           {term.startDate && formatDate(term.startDate)}{" "}
                         </div>
-                        {/* <div className="mt-1 text-gray-900">
-                        {term.endDate && formatDate(term.endDate)}
-                        </div> */}
                       </td>
                       <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-900">
                         {term.endDate && formatDate(term.endDate)}
@@ -121,7 +130,30 @@ export default function AllTerms() {
                             term.currentTerm ? "bg-green-50" : "bg-red-300"
                           } bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20`}
                         >
-                          {term.currentTerm ? "Active" : "Expired"}
+                          {term.currentTerm ? "Current term" : "Not Current"}
+                        </span>
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                        <span
+                          className={`inline-flex items-center rounded-md ${
+                            term.endDate && new Date(term.endDate) > new Date()
+                              ? "bg-blue-50"
+                              : "bg-red-300"
+                          } bg-green-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-600/20`}
+                        >
+                          {term.endDate && new Date(term.endDate) > new Date()
+                            ? "Active"
+                            : "Expired"}
+                        </span>
+                      </td>
+
+                      <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                        <span
+                          className={`inline-flex items-center rounded-md ${
+                            term.isPublish ? "bg-yellow-50" : "bg-red-300"
+                          } bg-green-50 px-2 py-1 text-xs font-medium text-yellow-700 ring-1 ring-inset ring-yellow-600/20`}
+                        >
+                          {term.isPublish ? "Published" : "No"}
                         </span>
                       </td>
                       <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">

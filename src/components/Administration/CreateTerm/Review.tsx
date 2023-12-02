@@ -1,3 +1,4 @@
+// import { capitalizeFirstCharacter } from "@/helpers/capitalizeFirstCharacter"
 import { capitalizeFirstCharacter } from "@/helpers/capitalizeFirstCharacter"
 import { formatDate } from "@/helpers/dateFormatter"
 import { useAppSelector } from "@/redux/store"
@@ -98,74 +99,104 @@ const Review = () => {
                   </div>
                 </div>
 
-                {termState.subjects.map((sub, index) => (
-                  <div key={`${sub.subject}${index}`} className="sm:col-span-6">
-                    <div className="flex flex-col gap-4 shadow-sm px-4 py-2 rounded-lg border">
+                {termState.groupSubjects.map((sub, index) => (
+                  <div
+                    key={index}
+                    className="sm:col-span-6 rounded-lg shadow-lg border px-4 py-2"
+                  >
+                    <div className="flex flex-col gap-4  px-4 py-2 rounded-lg">
                       <label
-                        htmlFor={`subjectName-${index}`}
+                        htmlFor="group-name"
                         className="block text-sm font-medium leading-6 text-gray-900"
                       >
-                        Subject Name<span className="text-red-600">*</span>
+                        Group Name<span className="text-red-600">*</span>
                         <input
-                          id={`subjectName-${index}`}
-                          type="text"
-                          value={sub.subject}
+                          id="group-name"
                           disabled
-                          className="disabled:bg-gray-100 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                          value={sub.groupName}
+                          className="block sm:w-1/2 disabled:bg-gray-100 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                          placeholder="Group-name"
                         />
                       </label>
-                      <label
-                        htmlFor={`fee-${index}`}
-                        className="block text-sm font-medium leading-6 text-gray-900"
-                      >
-                        Fee<span className="text-red-600">*</span>
-                        <input
-                          id={`fee-${index}`}
-                          type="text"
-                          value={sub.fee}
-                          disabled
-                          className="block w-full disabled:bg-gray-100 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                        />
-                      </label>
+                      <div className="flex gap-8">
+                        <label
+                          htmlFor="fee"
+                          className="block text-sm font-medium leading-6 text-gray-900"
+                        >
+                          Fee<span className="text-red-600">*</span>
+                          <input
+                            id="fee"
+                            disabled
+                            value={sub.fee}
+                            type="text"
+                            placeholder="200"
+                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 disabled:bg-gray-100 "
+                          />
+                        </label>
 
-                      <div className="sm:col-span-4">
-                        <label
-                          htmlFor={`feeInterval-${index}`}
-                          className="block text-sm font-medium leading-6 text-gray-900"
-                        >
-                          Fee Interval
-                          <span className="text-red-600">*</span>
-                        </label>
-                        <Select
-                          id={`feeInterval-${index}`}
-                          className="sm:w-1/2"
-                          isSearchable={false}
-                          isDisabled={true}
-                          value={{
-                            value: sub.feeInterval,
-                            label: sub.feeInterval,
-                          }}
-                        />
+                        <div className="sm:col-span-4">
+                          <label
+                            htmlFor="fee-interval"
+                            className="block text-sm font-medium leading-6 text-gray-900"
+                          >
+                            Fee Interval
+                            <span className="text-red-600">*</span>
+                          </label>
+
+                          <Select
+                            id={`feeInterval-${index}`}
+                            className=""
+                            isSearchable={false}
+                            isDisabled={true}
+                            value={{
+                              value: sub.feeInterval,
+                              label: sub.feeInterval,
+                            }}
+                          />
+                        </div>
                       </div>
-                      <div className="sm:col-span-4">
-                        <label
-                          htmlFor={`level-${index}`}
-                          className="block text-sm font-medium leading-6 text-gray-900"
-                        >
-                          Subject Levels
-                          <span className="text-red-600">*</span>
-                        </label>
-                        <Select
-                          id={`level-${index}`}
-                          isMulti
-                          className="sm:w-full"
-                          isDisabled={true}
-                          defaultValue={sub.levels.map((l) => ({
-                            value: l,
-                            label: capitalizeFirstCharacter(l),
-                          }))}
-                        />
-                      </div>
+
+                      {sub.subjects.map((s, i) => (
+                        <div key={`${i}- ${s.subjectName}`}>
+                          <div className="sm:col-span-4">
+                            <label
+                              htmlFor="subject"
+                              className="block text-sm font-medium leading-6 text-gray-900"
+                            >
+                              Subject
+                              <span className="text-red-600">*</span>
+                            </label>
+                            <input
+                              disabled
+                              value={s.subjectName}
+                              type="text"
+                              placeholder="200"
+                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 disabled:bg-gray-100 "
+                            />
+                          </div>
+                          <div className="sm:col-span-4">
+                            <label
+                              htmlFor="levels"
+                              className="block text-sm font-medium leading-6 text-gray-900"
+                            >
+                              Subject Levels
+                              <span className="text-red-600">*</span>
+                            </label>
+                            <Select
+                              id={`${i}${index}${
+                                s.levels.map((level) => level)[0]
+                              }`}
+                              isMulti
+                              className="sm:w-full"
+                              isDisabled={true}
+                              defaultValue={s.levels.map((l) => ({
+                                value: l,
+                                label: capitalizeFirstCharacter(l),
+                              }))}
+                            />
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 ))}

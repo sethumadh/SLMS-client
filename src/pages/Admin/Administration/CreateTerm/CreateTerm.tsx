@@ -43,10 +43,10 @@ function CreateTerm() {
         dispatch(
           setOpenModal({
             isOpen: true,
-            type: "isCurrentTerm",
+            type: "isPublishTerm",
             data: {
-              id: data.id,
-              value: data.name,
+              id: data?.id,
+              value: data?.name,
             },
           })
         )
@@ -67,18 +67,24 @@ function CreateTerm() {
     [data]
   )
 
+
   const createTermWithSubjectMethods = useForm<CreateTermWithSubjectSchema>({
     resolver: zodResolver(createTermWithSubjectSchema),
     defaultValues: {
       termName: "",
       startDate: new Date(),
       endDate: new Date(),
-      subjects: [
+      groupSubjects: [
         {
-          subject: "",
+          groupName: "",
           fee: "",
-          feeInterval: "MONTHLY",
-          levels: [""],
+          feeInterval: "TERM",
+          subjects: [
+            {
+              subjectName: "",
+              levels: [],
+            },
+          ],
         },
       ],
     },
@@ -101,30 +107,31 @@ function CreateTerm() {
     if (step == 0) {
       setNextPage(false)
       const validateStep = await trigger(
-        ["endDate", "startDate", "subjects", "termName"],
+        ["endDate", "startDate", "groupSubjects", "termName"],
         {
           shouldFocus: true,
         }
       )
+
       if (validateStep) {
         dispatch(setTermData(formattedData))
         setStep(1)
       }
     } else if (step == 1) {
       const validateStep = await trigger(
-        ["endDate", "startDate", "subjects", "termName"],
+        ["endDate", "startDate", "groupSubjects", "termName"],
         {
           shouldFocus: true,
         }
       )
       if (validateStep) {
-        // api post req
         setNextPage(true)
       }
     }
   }
 
   const onSubmit = async (termData: CreateTermWithSubjectSchema) => {
+    console.log(termData)
     const toastId = toast.loading(
       `Creating a new term in database, please wait`
     )
@@ -135,8 +142,6 @@ function CreateTerm() {
     }
     setLoadingToastId(toastId.toString())
     await createTermSetup(modifiedTermData)
-    // navigate("/application-submit", { replace: true })
-    // post request * Modal * navigate
   }
   return (
     <div>
@@ -146,7 +151,7 @@ function CreateTerm() {
           noValidate
           className="bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl md:col-span-2"
         >
-          <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8 mb-16">
+          <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 py-4  mb-16">
             {step == 0 && <Create />}
             {step == 1 && <Review />}
             <div className="border border-red-400">
@@ -163,20 +168,30 @@ function CreateTerm() {
                       ? new Date(termState?.startDate?.toString())
                       : new Date(),
                     termName: termState?.termName,
-                    subjects:
-                      termState.subjects.length > 0
-                        ? termState.subjects.map((sub) => ({
-                            subject: sub.subject,
+                    groupSubjects:
+                      termState.groupSubjects.length > 0
+                        ? termState.groupSubjects.map((sub) => ({
+                            groupName: sub.groupName,
                             fee: sub.fee,
                             feeInterval: sub.feeInterval,
-                            levels: sub.levels,
+                            subjects: sub.subjects.map((s) => {
+                              return {
+                                subjectName: s.subjectName,
+                                levels: s.levels,
+                              }
+                            }),
                           }))
                         : [
                             {
-                              subject: "",
+                              groupName: "",
                               fee: "",
-                              feeInterval: "MONTHLY",
-                              levels: [""],
+                              feeInterval: "TERM",
+                              subjects: [
+                                {
+                                  subjectName: "",
+                                  levels: [],
+                                },
+                              ],
                             },
                           ],
                   })

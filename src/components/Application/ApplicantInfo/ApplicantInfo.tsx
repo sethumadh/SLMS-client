@@ -205,7 +205,7 @@ function ApplicantInfo() {
                   htmlFor="email"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Contact number<span className="text-red-600">*</span>-
+                  Father's Contact number<span className="text-red-600">*</span>-
                   <span className="italic text-xs bg-slate-200 text-gray-500">
                     ਇਸ ਮੋਬਾਇਲ ਨੰਬਰ ਤੇ ਆਪ ਜੀ ਨੂੰ ਵਿਦਿਆਰਥੀ ਨਾਲ ਸੰਬੰਧਿਤ ਤਸਵੀਰਾਂ,
                     ਵੀਡੀਉ ਅਤੇ ਸੰਦੇਸ਼ ਭੇਜੇ ਜਾਣਗੇ । You will be receiving videos ,
@@ -234,7 +234,7 @@ function ApplicantInfo() {
                   htmlFor="email"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Email address<span className="text-red-600">*</span>
+                  Father's Email address<span className="text-red-600">*</span>
                 </label>
                 <div className="mt-2">
                   <input

@@ -3,39 +3,41 @@ import axios from "axios"
 import { route } from "../route/route"
 
 /* Get Current Active Term*/
-const levelSchema = z.object({
-  name: z.string(),
-})
-
-const feeSchema = z.object({
-  amount: z.number(),
-  paymentType: z.enum(["MONTHLY", "TERM"]),
-})
-
-const subjectSchema = z.object({
-  name: z.string(),
-  isActive: z.boolean(),
-  id: z.number(),
-})
-
 const termSubjectSchema = z.object({
-  subject: subjectSchema,
-  level: z.array(levelSchema),
-  fee: feeSchema,
+  subject: z.object({
+    name: z.string(),
+    isActive: z.boolean(),
+  }),
+  level: z.object({
+    name: z.string(),
+  }),
 })
 
-export const getCurentTermSchema = z.object({
+const termSubjectGroupSchema = z.object({
+  subjectGroup: z.object({
+    groupName: z.string(),
+  }),
+  fee: z.object({
+    amount: z.number(),
+    paymentType: z.enum(["MONTHLY", "TERM"]), // Assuming paymentType is either "MONTHLY" or "TERM"
+  }),
+  termSubject: z.array(termSubjectSchema),
+})
+
+const getCurentTermSchema = z.object({
   id: z.number(),
   name: z.string(),
   isPublish: z.boolean(),
   currentTerm: z.boolean(),
-  startDate: z.string(), // or use z.date() if you want to validate actual Date objects
-  endDate: z.string(), // or use z.date()
-  createdAt: z.string(), // or use z.date()
-  updatedAt: z.string(),
-  termSubject: z.array(termSubjectSchema),
+  startDate: z.string(), // or z.date() if you want to use Date objects
+  endDate: z.string(), // same as above
+  createdAt: z.string(), // same as above
+  updatedAt: z.string(), // same as above
+  termSubjectGroup: z.array(termSubjectGroupSchema),
 })
 
+// Example type derived from the schema
+export type GetCurentTermSchema = z.infer<typeof getCurentTermSchema>
 export const currentTerm = {
   getTermSubjects: {
     queryKey: "getTermSubjects",
@@ -43,6 +45,20 @@ export const currentTerm = {
     query: async () => {
       const response = await axios.get(`${route.application.getCurrentTerm}`)
       return getCurentTermSchema.parse(response.data)
+    },
+  },
+}
+export const getPublishedTermSchema = getCurentTermSchema
+export type GetPublishedTermSchema = z.infer<typeof getPublishedTermSchema>
+
+export const publishedTerm = {
+  getPublishedTerm: {
+    queryKey: "getPublishedterm",
+    schema: getPublishedTermSchema,
+    query: async () => {
+      const response = await axios.get(`${route.application.getPublishedTerm}`)
+      console.log(response.data)
+      return getPublishedTermSchema.parse(response.data)
     },
   },
 }
@@ -164,10 +180,7 @@ export const create = {
   createApplicant: {
     schema: newApplicantSchema,
     query: async ({ applicantData }: { applicantData: NewApplicantSchema }) => {
-      await axios.post(
-        route.admin.applicant.createApplicant,
-        applicantData
-      )
+      await axios.post(route.admin.applicant.createApplicant, applicantData)
     },
   },
 }

@@ -4,9 +4,8 @@ import { capitalizeFirstCharacter } from "@/helpers/capitalizeFirstCharacter"
 import { formatDate } from "@/helpers/dateFormatter"
 import { setOpenModal } from "@/redux/slice/modalSlice"
 import { useAppDispatch } from "@/redux/store"
-import {  useQuery } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import { Link, useParams } from "react-router-dom"
-
 
 export default function TermDetails() {
   const params = useParams()
@@ -16,7 +15,10 @@ export default function TermDetails() {
     isLoading: termDataLoading,
     isError: termDataError,
   } = useQuery({
-    queryKey: [api.admin.term.findUniqueTerm.queryKey, params.id],
+    queryKey: [
+      api.admin.term.findUniqueTerm.queryKey,
+      `termDetail${params.id}`,
+    ],
     queryFn: () => {
       if (params.id) {
         return api.admin.term.findUniqueTerm.query(params.id)
@@ -24,9 +26,7 @@ export default function TermDetails() {
       throw new Error("No term ID provided")
     },
     enabled: !!params.id,
-    staleTime: 1000 * 60 * 5,
   })
-
 
   return (
     <div className="px-4 sm:px-6 lg:px-8 mt-4">
@@ -115,13 +115,126 @@ export default function TermDetails() {
               </div>
               <div className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                 <dt className="text-sm font-medium leading-6 text-gray-900">
+                  Publish Term
+                </dt>
+                <dd className="mt-1 flex text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                  <span className="flex-shrink-0">
+                    <button
+                      disabled={
+                        (termData?.endDate
+                          ? new Date(termData.endDate) < new Date()
+                          : false) || termData?.isPublish
+                      }
+                      type="button"
+                      className="disabled:bg-slate-200 disabled:text-gray-400  px-2 border border-indigo-300 rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500"
+                      onClick={() => {
+                        dispatch(
+                          setOpenModal({
+                            isOpen: true,
+                            type: "isPublishTerm",
+                            data: {
+                              id: termData?.id,
+                              value: termData?.name,
+                            },
+                          })
+                        )
+                      }}
+                    >
+                      Publish
+                    </button>
+                    {termData?.endDate &&
+                      new Date(termData.endDate) < new Date() && (
+                        <p className="text-xs">
+                          {" "}
+                          Please make the expiry date of the term greater than
+                          today's date to publish the term
+                        </p>
+                      )}
+                    {termData?.isPublish && (
+                      <p className="text-xs"> Already Pusbished term</p>
+                    )}
+                  </span>
+                </dd>
+              </div>
+              <div className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt className="text-sm font-medium leading-6 text-gray-900">
+                  Activate Term
+                </dt>
+                <dd className="mt-1 flex text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                  <span className="flex-shrink-0">
+                    <button
+                      disabled={
+                        (termData?.endDate
+                          ? new Date(termData.endDate) < new Date()
+                          : false) || termData?.currentTerm
+                      }
+                      type="button"
+                      className="disabled:bg-slate-200 disabled:text-gray-400  px-2 border border-indigo-300 rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500"
+                      onClick={() => {
+                        dispatch(
+                          setOpenModal({
+                            isOpen: true,
+                            type: "isCurrentTerm",
+                            data: {
+                              id: termData?.id,
+                              value: termData?.name,
+                            },
+                          })
+                        )
+                      }}
+                    >
+                      Activate
+                    </button>
+                    {termData?.endDate &&
+                      new Date(termData.endDate) < new Date() && (
+                        <p className="text-xs">
+                          {" "}
+                          Please make the expiry date of the term greater than
+                          today's date to activate the term
+                        </p>
+                      )}
+                    {termData?.currentTerm && (
+                      <p className="text-xs"> The term is already active</p>
+                    )}
+                  </span>
+                </dd>
+              </div>
+              <div className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt className="text-sm font-medium leading-6 text-gray-900">
+                Extend term
+                </dt>
+                <dd className="mt-1 flex text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                  <span className="flex-shrink-0">
+                    <button
+                      type="button"
+                      className="disabled:bg-slate-200 disabled:text-gray-400  px-2 border border-indigo-300 rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500"
+                      onClick={() => {
+                        dispatch(
+                          setOpenModal({
+                            isOpen: true,
+                            type: "termExtend",
+                            data: {
+                              id: termData?.id,
+                              value: termData?.name,
+                            },
+                          })
+                        )
+                      }}
+                    >
+                      Extend term
+                    </button>
+                  </span>
+                </dd>
+              </div>
+              <div className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt className="text-sm font-medium leading-6 text-gray-900">
                   Delete term
                 </dt>
                 <dd className="mt-1 flex text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                   <span className="flex-shrink-0">
                     <button
                       type="button"
-                      className="rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500"
+                      className="rounded-md bg-red-600 px-2 font-medium text-white hover:text-red-50"
                       onClick={() => {
                         dispatch(
                           setOpenModal({
@@ -138,81 +251,6 @@ export default function TermDetails() {
                       Delete
                     </button>
                   </span>
-                </dd>
-              </div>
-              <div className="px-4 py-2 sm:grid sm:grid-cols-4 sm:gap-x-4 sm:px-0">
-                <dt className="text-sm font-medium leading-6 text-gray-900">
-                  Subjects Details
-                </dt>
-                <dd className="mt-1 flex text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                  <div className="flex-grow">
-                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                      {!termDataLoading ? (
-                        termData?.termSubject.map((term) => (
-                          <div
-                            key={term.subject.id}
-                            className="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400"
-                          >
-                            <div className="min-w-0 flex-1">
-                              <div className="focus:outline-none ">
-                                <span
-                                  className="absolute inset-0"
-                                  aria-hidden="true"
-                                />
-                                <div className="flex gap-1">
-                                  <p className="text-sm  text-gray-900 w-1/3">
-                                    Name
-                                  </p>
-                                  <p className="text-sm font-medium text-gray-900 w-full">
-                                    {term.subject.name &&
-                                      capitalizeFirstCharacter(
-                                        term.subject.name
-                                      )}
-                                  </p>
-                                </div>
-                                <div className="flex gap-1">
-                                  <p className="text-sm  text-gray-900 w-1/3">
-                                    Fee
-                                  </p>
-                                  <p className="text-sm font-medium text-gray-900 w-full">
-                                    {term.fee.amount}
-                                  </p>
-                                </div>
-
-                                <div className="flex gap-1">
-                                  <p className="text-sm text-gray-900 w-1/3">
-                                    Fee Interval
-                                  </p>
-                                  <p className="text-sm font-medium text-gray-900 w-full">
-                                    {capitalizeFirstCharacter(
-                                      term.fee.paymentType.toLowerCase()
-                                    )}
-                                  </p>
-                                </div>
-                                <div className="flex gap-1">
-                                  <p className="text-sm text-gray-900 w-1/3">
-                                    Levels
-                                  </p>
-                                  <p className="text-sm font-medium text-gray-900 w-full">
-                                    {term.level
-                                      .map((l) =>
-                                        capitalizeFirstCharacter(l.name)
-                                      )
-                                      .join(", ")}
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        ))
-                      ) : (
-                        <>
-                          {/* {currentTerm?.termSubject.length > 0 ?"":""} */}
-                          <div>There are no subjects to show</div>
-                        </>
-                      )}
-                    </div>
-                  </div>
                 </dd>
               </div>
             </dl>

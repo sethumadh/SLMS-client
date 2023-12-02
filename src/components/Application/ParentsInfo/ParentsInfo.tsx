@@ -1,5 +1,5 @@
 import { useFormContext } from "react-hook-form"
-import { ApplicantSchema} from "@/pages/Application/Application"
+import { ApplicantSchema } from "@/pages/Application/Application"
 
 function ParentsInfo() {
   const { formState, register } = useFormContext<ApplicantSchema>()
@@ -74,7 +74,7 @@ function ParentsInfo() {
                   htmlFor="parent-mobile"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Parent's Mobile<span className="text-red-600">*</span>
+                  Mother's Mobile<span className="text-red-600">*</span>
                 </label>
                 <div className="mt-2">
                   <input
@@ -99,7 +99,7 @@ function ParentsInfo() {
                   htmlFor="parent-email"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Parents' Email<span className="text-red-600">*</span>
+                  Mother's Email<span className="text-red-600">*</span>
                 </label>
                 <div className="mt-2">
                   <input

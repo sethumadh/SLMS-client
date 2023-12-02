@@ -3,6 +3,7 @@ import { useAppSelector } from "@/redux/store"
 import { Outlet } from "react-router-dom"
 import IsCurrentTermModal from "@/components/Modal/IsCurrentTermModal"
 import DeleteTermModal from "@/components/Modal/DeleteTermModal"
+import IsPublishTermModal from "@/components/Modal/IsPublishTermModal"
 
 function AdminDashboardLayout() {
   const isModalOpen = useAppSelector((state) => state.modal.isOpen)
@@ -15,6 +16,7 @@ function AdminDashboardLayout() {
         <Outlet />
       </main>
       <IsCurrentTermModal />
+      <IsPublishTermModal/>
       <DeleteTermModal />
     </div>
   )
