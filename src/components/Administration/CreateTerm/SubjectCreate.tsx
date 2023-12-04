@@ -25,29 +25,43 @@ type SubjectCreateProps = {
   newSubjects: {
     value: string
     label: string
-  }[], 
-  setNewLevels:React.Dispatch<React.SetStateAction<{
-    value: string;
-    label: string;
-}[] | undefined>>, 
-setNewSubjects: React.Dispatch<React.SetStateAction<{
-  value: string;
-  label: string;
-}[] | undefined>>
+  }[]
+  setNewLevels: React.Dispatch<
+    React.SetStateAction<
+      | {
+          value: string
+          label: string
+        }[]
+      | undefined
+    >
+  >
+  setNewSubjects: React.Dispatch<
+    React.SetStateAction<
+      | {
+          value: string
+          label: string
+        }[]
+      | undefined
+    >
+  >
 }
 
-function SubjectCreate({ index = 0, control, newLevels,newSubjects, setNewLevels,setNewSubjects }: SubjectCreateProps) {
-  const {isLoading: allLevelsLoading } = useQuery({
+function SubjectCreate({
+  index = 0,
+  control,
+  newLevels,
+  newSubjects,
+  setNewLevels,
+  setNewSubjects,
+}: SubjectCreateProps) {
+  const { isLoading: allLevelsLoading } = useQuery({
     queryKey: [api.admin.levels.findAllLevels.querykey],
     queryFn: api.admin.levels.findAllLevels.query,
   })
-  const {  isLoading: allSubjectLoading } = useQuery({
+  const { isLoading: allSubjectLoading } = useQuery({
     queryKey: [api.admin.subjects.findAllSubjects.querykey],
     queryFn: api.admin.subjects.findAllSubjects.query,
   })
-  
-
-
 
   const { formState } = useFormContext<CreateTermWithSubjectSchema>()
   const {
@@ -157,9 +171,9 @@ function SubjectCreate({ index = 0, control, newLevels,newSubjects, setNewLevels
                 control={control}
                 render={({ field: subjectField }) => (
                   <CreatableSelect
-                  id={`${index}${subjectIndex}${
-                    subject.levels.map((level) => level)[0]
-                  }`}
+                    id={`${index}${subjectIndex}${
+                      subject.levels.map((level) => level)[0]
+                    }`}
                     isMulti
                     isClearable
                     isSearchable

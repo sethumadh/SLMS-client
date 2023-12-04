@@ -67,7 +67,6 @@ function CreateTerm() {
     [data]
   )
 
-
   const createTermWithSubjectMethods = useForm<CreateTermWithSubjectSchema>({
     resolver: zodResolver(createTermWithSubjectSchema),
     defaultValues: {
@@ -131,7 +130,6 @@ function CreateTerm() {
   }
 
   const onSubmit = async (termData: CreateTermWithSubjectSchema) => {
-    console.log(termData)
     const toastId = toast.loading(
       `Creating a new term in database, please wait`
     )

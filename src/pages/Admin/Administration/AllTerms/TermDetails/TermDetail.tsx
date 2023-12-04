@@ -158,7 +158,7 @@ export default function TermDetails() {
               </div>
               <div className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                 <dt className="text-sm font-medium leading-6 text-gray-900">
-                  Activate Term
+                  Make term current
                 </dt>
                 <dd className="mt-1 flex text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                   <span className="flex-shrink-0">
@@ -183,7 +183,7 @@ export default function TermDetails() {
                         )
                       }}
                     >
-                      Activate
+                      Make term current
                     </button>
                     {termData?.endDate &&
                       new Date(termData.endDate) < new Date() && (
@@ -201,7 +201,7 @@ export default function TermDetails() {
               </div>
               <div className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                 <dt className="text-sm font-medium leading-6 text-gray-900">
-                Extend term
+                  Extend term
                 </dt>
                 <dd className="mt-1 flex text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                   <span className="flex-shrink-0">

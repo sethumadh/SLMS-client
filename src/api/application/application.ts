@@ -1,41 +1,11 @@
 import { z } from "zod"
 import axios from "axios"
 import { route } from "../route/route"
+import { termSchema } from "../admin/admin"
 
 /* Get Current Active Term*/
-const termSubjectSchema = z.object({
-  subject: z.object({
-    name: z.string(),
-    isActive: z.boolean(),
-  }),
-  level: z.object({
-    name: z.string(),
-  }),
-})
 
-const termSubjectGroupSchema = z.object({
-  subjectGroup: z.object({
-    groupName: z.string(),
-  }),
-  fee: z.object({
-    amount: z.number(),
-    paymentType: z.enum(["MONTHLY", "TERM"]), // Assuming paymentType is either "MONTHLY" or "TERM"
-  }),
-  termSubject: z.array(termSubjectSchema),
-})
-
-const getCurentTermSchema = z.object({
-  id: z.number(),
-  name: z.string(),
-  isPublish: z.boolean(),
-  currentTerm: z.boolean(),
-  startDate: z.string(), // or z.date() if you want to use Date objects
-  endDate: z.string(), // same as above
-  createdAt: z.string(), // same as above
-  updatedAt: z.string(), // same as above
-  termSubjectGroup: z.array(termSubjectGroupSchema),
-})
-
+const getCurentTermSchema = termSchema
 // Example type derived from the schema
 export type GetCurentTermSchema = z.infer<typeof getCurentTermSchema>
 export const currentTerm = {
@@ -44,6 +14,7 @@ export const currentTerm = {
     schema: getCurentTermSchema,
     query: async () => {
       const response = await axios.get(`${route.application.getCurrentTerm}`)
+
       return getCurentTermSchema.parse(response.data)
     },
   },
@@ -57,7 +28,7 @@ export const publishedTerm = {
     schema: getPublishedTermSchema,
     query: async () => {
       const response = await axios.get(`${route.application.getPublishedTerm}`)
-      console.log(response.data)
+
       return getPublishedTermSchema.parse(response.data)
     },
   },

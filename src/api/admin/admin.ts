@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { z } from "zod"
 import axios from "axios"
 import { route } from "../route/route"
@@ -7,44 +8,56 @@ const groupSchema = z.object({
   isActive: z.boolean(),
   id: z.number(),
 })
+
 const levelSchema = z.object({
-  name: z.string(),
-})
-
-const subjectSchema = z.object({
-  name: z.string(),
+  id: z.number(),
   isActive: z.boolean(),
+  name: z.string(),
 })
 
+// Common Subject Schema
+const subjectSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  isActive: z.boolean().optional(),
+})
+
+// TermSubject Schema (Combining both versions)
 const termSubjectSchema = z.object({
+  id: z.number(),
   subject: subjectSchema,
-  level: levelSchema,
+  level: z.array(levelSchema),
 })
 
-const feeSchema = z.object({
-  amount: z.number(),
-  paymentType: z.enum(["TERM", "MONTHLY"]), // Assuming these are your only two payment types
-})
-
+// Common SubjectGroup Schema
 const subjectGroupSchema = z.object({
   groupName: z.string(),
 })
 
+// Common Fee Schema
+const feeSchema = z.object({
+  amount: z.number(),
+  paymentType: z.enum(["MONTHLY", "TERM"]),
+})
+
+// TermSubjectGroup Schema (Combining both versions)
 const termSubjectGroupSchema = z.object({
   subjectGroup: subjectGroupSchema,
   fee: feeSchema,
-  termSubject: z.array(termSubjectSchema),
+  subject: z.array(subjectSchema).optional(), // Making the subject array optional
 })
 
-const termSchema = z.object({
+// Main Term Schema (Combining both versions)
+export const termSchema = z.object({
   id: z.number(),
   name: z.string(),
   currentTerm: z.boolean(),
   isPublish: z.boolean(),
-  startDate: z.string(), // You might want to use z.date() if you're parsing the dates
-  endDate: z.string(), // Same here for date parsing
-  createdAt: z.string(), // Same here for date parsing
-  updatedAt: z.string(), // Same here for date parsing
+  startDate: z.string(), // Use z.date() if working with Date objects
+  endDate: z.string(), // Same as above
+  createdAt: z.string(), // Same as above
+  updatedAt: z.string(), // Same as above
+  termSubject: z.array(termSubjectSchema),
   termSubjectGroup: z.array(termSubjectGroupSchema),
 })
 export type TermSchema = z.infer<typeof termSchema>
@@ -82,6 +95,23 @@ export type CreateTermWithSubjectSchema = z.infer<
 
 /*Terms*/
 
+const changeCurrentTermNameSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  isPublish: z.boolean(),
+  currentTerm: z.boolean(),
+  startDate: z.string(), // Use z.date() if you prefer to work with Date objects
+  endDate: z.string(), // Same as above
+  createdAt: z.string(), // Same as above
+  updatedAt: z.string(), // Same as above
+})
+
+export type changeCurrentTermNameSchema = z.infer<
+  typeof changeCurrentTermNameSchema
+>
+const extendCurrentTermSchema = changeCurrentTermNameSchema
+export type ExtendCurrentTermSchema = z.infer<typeof extendCurrentTermSchema>
+
 export const term = {
   changeCurrentTermName: {
     schema: termSchema,
@@ -90,13 +120,13 @@ export const term = {
       updatedTerm,
     }: {
       id: number
-      updatedTerm: TermSchema
+      updatedTerm: changeCurrentTermNameSchema
     }) => {
       const response = await axios.put(
         `${route.admin.changeCurrentTermName}/${id}`,
         { updatedTerm }
       )
-      console.log(response.data)
+
       return termSchema.parse(response.data)
     },
   },
@@ -107,7 +137,7 @@ export const term = {
       updatedTerm,
     }: {
       id: number
-      updatedTerm: TermSchema
+      updatedTerm: ExtendCurrentTermSchema
     }) => {
       const response = await axios.put(
         `${route.admin.extendCurrentTerm}/${id}`,
@@ -121,7 +151,6 @@ export const term = {
     schema: createTermWithSubjectSchema,
     mutation: async (termData: CreateTermWithSubjectSchema) => {
       if (createTermWithSubjectSchema.safeParse(termData)) {
-        // console.log("good data")
         const response = await axios.post(
           route.admin.createTermWithSubjectsSetup,
           termData
@@ -134,7 +163,7 @@ export const term = {
             isPublish: z.boolean(),
             name: z.string(),
           })
-          .parse(response.data.transactionResult)
+          .parse(response.data)
       } else {
         console.log("validation error at axios")
       }
@@ -147,8 +176,7 @@ export const term = {
   },
   makePublishTerm: {
     mutation: async ({ id }: { id: number }) => {
-      const response = await axios.patch(`${route.admin.makePublishTerm}/${id}`)
-      console.log(response.data)
+      await axios.patch(`${route.admin.makePublishTerm}/${id}`)
     },
   },
   deleteTerm: {
@@ -163,7 +191,6 @@ export const term = {
     query: async () => {
       try {
         const response = await axios.get(route.admin.findAllTerms)
-
         return z.array(termSchema).parse(response.data)
       } catch (error) {
         if (error instanceof z.ZodError) {

@@ -13,6 +13,7 @@ import { api } from "@/api/api"
 import { useEffect, useMemo, useState } from "react"
 import { capitalizeFirstCharacter } from "@/helpers/capitalizeFirstCharacter"
 import { useAppSelector } from "@/redux/store"
+import { removeDuplicates } from "@/helpers/removeDuplicates"
 
 const options = [
   { value: "MONTHLY", label: "Monthly" },
@@ -37,6 +38,7 @@ function Create() {
     queryKey: [api.admin.subjects.findAllSubjects.querykey],
     queryFn: api.admin.subjects.findAllSubjects.query,
   })
+
   const [newSubjects, setNewSubjects] =
     useState<{ value: string; label: string }[]>()
   const [newLevels, setNewLevels] =
@@ -58,7 +60,7 @@ function Create() {
     }, [allLevelsData])
 
   useEffect(() => {
-    if (levelData?.length && !allLevelsLoading && levelData?.length > 0) {
+    if (!allLevelsLoading) {
       const levels = data.groupSubjects
         .flatMap((groupSubject) =>
           groupSubject.subjects.flatMap((subject) => subject.levels)
@@ -67,15 +69,15 @@ function Create() {
           value: l,
           label: capitalizeFirstCharacter(l),
         }))
-      const uniqueLevelOptions = [...levelData, ...levels].filter(
+      const uniqueLevelOptions = [...(levelData ?? []), ...levels].filter(
         (obj, index, self) =>
           index ===
           self.findIndex((t) => t.value === obj.value && t.label === obj.label)
       )
-
-      setNewLevels([...uniqueLevelOptions])
+      const uniqueList = removeDuplicates(uniqueLevelOptions)
+      setNewLevels([...uniqueList])
     }
-    if (subjectData?.length && !allSubjectLoading && subjectData?.length > 0) {
+    if (!allSubjectLoading) {
       const subjectNames = data.groupSubjects
         .flatMap((groupSubject) =>
           groupSubject.subjects.map((subject) => subject.subjectName)
@@ -85,16 +87,21 @@ function Create() {
           label: capitalizeFirstCharacter(s),
         }))
         .filter((s) => s.value !== "" && s.label !== "")
-      const uniqueSubjectOptions = [...subjectData, ...subjectNames].filter(
+      const uniqueSubjectOptions = [
+        ...(subjectData ?? []),
+        ...subjectNames,
+      ].filter(
         (obj, index, self) =>
           index ===
           self.findIndex((t) => t.value === obj.value && t.label === obj.label)
       )
+      const uniqueList = removeDuplicates(uniqueSubjectOptions)
 
-      setNewSubjects([...uniqueSubjectOptions])
+      setNewSubjects([...uniqueList])
     }
   }, [
     levelData,
+    levelData?.length,
     allLevelsLoading,
     subjectData,
     allSubjectLoading,
