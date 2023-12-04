@@ -10,6 +10,7 @@ import { useQuery } from "@tanstack/react-query"
 import { api } from "@/api/api"
 import { capitalizeFirstCharacter } from "@/helpers/capitalizeFirstCharacter"
 import LoadingSpinner from "@/components/Loadingspinner"
+import { formatDate } from "@/helpers/dateFormatter"
 
 export type PersonalDetailsSchema = z.infer<
   typeof applicantPersonalDetailsSchema
@@ -28,7 +29,7 @@ const people = {
 
 function NewApplicantPersonalDetails() {
   const params = useParams()
-  console.log(params)
+
   const saveRef = useRef<HTMLButtonElement | null>(null)
   const [isEdit, setIsEdit] = useState(false)
   const [item, setItem] = useState("")
@@ -50,7 +51,7 @@ function NewApplicantPersonalDetails() {
   const {
     firstName,
     lastName,
-    // DOB,
+    DOB,
     address,
     contact,
     country,
@@ -223,7 +224,7 @@ function NewApplicantPersonalDetails() {
                           Date of Birth
                         </dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700  sm:mt-0">
-                          01/01/2008
+                          {DOB && formatDate(DOB)}
                         </dd>
                       </div>
 

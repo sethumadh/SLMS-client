@@ -96,10 +96,10 @@ function CreateTerm() {
     const formattedData = {
       ...formData,
       startDate: formData?.startDate
-        ? formData?.startDate.toString()
+        ? formData?.startDate.toISOString()
         : new Date().toString(),
       endDate: formData?.endDate
-        ? formData?.endDate.toString()
+        ? formData?.endDate.toISOString()
         : new Date().toString(),
     }
 
@@ -135,8 +135,8 @@ function CreateTerm() {
     )
     const modifiedTermData = {
       ...termData,
-      endDate: termData?.endDate.toString(),
-      startDate: termData?.startDate.toString(),
+      endDate: termData?.endDate.toISOString(),
+      startDate: termData?.startDate.toISOString(),
     }
     setLoadingToastId(toastId.toString())
     await createTermSetup(modifiedTermData)

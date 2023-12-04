@@ -27,7 +27,7 @@ function Subjects() {
     queryKey: [api.application.publishedTerm.getPublishedTerm.queryKey],
     queryFn: api.application.publishedTerm.getPublishedTerm.query,
   })
-  console.log(currentTerm?.data)
+
 
   return (
     <div className="space-y-10 divide-y divide-gray-900/10 container">

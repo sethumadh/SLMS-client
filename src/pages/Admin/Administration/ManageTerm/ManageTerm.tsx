@@ -96,7 +96,7 @@ function Term() {
     if (currentTerm?.id) {
       const toastId = toast.loading(`Extending term , please wait`)
       setLoadingToastId(toastId.toString())
-      const updatedTerm = { ...currentTerm, endDate: values.date.toString() }
+      const updatedTerm = { ...currentTerm, endDate: values.date.toISOString() }
       await termExtendMutation({
         id: currentTerm?.id,
         updatedTerm,

@@ -160,9 +160,10 @@ function Application() {
         ...values,
         personalDetails: {
           ...values.personalDetails,
-          DOB: values.personalDetails.DOB.toString(),
+          DOB: values.personalDetails.DOB.toISOString(),
         },
       }
+      console.log(formattedValues)
       dispatch(
         setOpenModal({
           isOpen: true,

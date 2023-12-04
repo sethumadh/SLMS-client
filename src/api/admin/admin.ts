@@ -139,6 +139,7 @@ export const term = {
       id: number
       updatedTerm: ExtendCurrentTermSchema
     }) => {
+      console.log(updatedTerm)
       const response = await axios.put(
         `${route.admin.extendCurrentTerm}/${id}`,
         { updatedTerm }
@@ -151,6 +152,7 @@ export const term = {
     schema: createTermWithSubjectSchema,
     mutation: async (termData: CreateTermWithSubjectSchema) => {
       if (createTermWithSubjectSchema.safeParse(termData)) {
+        console.log(termData)
         const response = await axios.post(
           route.admin.createTermWithSubjectsSetup,
           termData
@@ -374,6 +376,7 @@ export const enrollment = {
       const response = await axios.get(
         `${route.admin.enrollment.findApplicantById}/${id}`
       )
+
 
       return ApplicantSchema.parse(response.data)
     },
