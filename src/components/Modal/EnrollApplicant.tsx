@@ -1,6 +1,6 @@
 import { Fragment, useRef, useState } from "react"
 import { Dialog, Transition } from "@headlessui/react"
-import { useNavigate } from "react-router-dom"
+// import { useNavigate } from "react-router-dom"
 
 import { useAppDispatch, useAppSelector } from "@/redux/store"
 import { setOpenModal } from "@/redux/slice/modalSlice"
@@ -11,31 +11,33 @@ import { toast } from "react-toastify"
 import { handleAxiosError } from "@/helpers/errorhandler"
 import LoadingIcon from "../LoadingIcon"
 
-const SubmitApplicantModal = () => {
+const EnrollApplicantModal = () => {
   const [loadingToastId, setLoadingToastId] = useState<string | null>(null)
-  const navigate = useNavigate()
+  //   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const { isOpen, type, data } = useAppSelector((state) => state.modal)
   const cancelButtonRef = useRef(null)
-  const IsModalOpen = isOpen && type === "submitApplicant"
+  const IsModalOpen = isOpen && type === "enrollApplicant"
   const queryClient = useQueryClient()
 
-  const { mutateAsync: createApplicant, isPending: createApplicantPending } =
+  const { mutateAsync: enrollApplicant, isPending: enrollApplicantPending } =
     useMutation({
-      mutationFn: api.application.create.createApplicant.query,
+      mutationFn: api.enrollment.enrollment.enrollApplicant.query,
       onSuccess: () => {
         queryClient.invalidateQueries({
-          queryKey: [api.admin.students.findAllStudents.querykey,api.enrollment.enrollment.findApplicantById.querykey],
+          queryKey: [
+            api.enrollment.enrollment.getApplicantEnrolledSubjects.queryKey,
+          ],
         })
         if (loadingToastId) toast.dismiss(loadingToastId)
-        toast.success(`Application successfully submitted 👌`)
+        toast.success(`Applicant enrolled successfully 👌`)
         dispatch(
           setOpenModal({
             isOpen: false,
             type: "",
           })
         )
-        navigate("/application-submit")
+        // navigate("/application-submit")
       },
       onError: (error: unknown) => {
         if (loadingToastId) toast.dismiss(loadingToastId)
@@ -94,7 +96,7 @@ const SubmitApplicantModal = () => {
                       as="h3"
                       className="text-base font-semibold leading-6 text-gray-900"
                     >
-                      Do you want to submit the application?
+                      Confirm enrollment.
                     </Dialog.Title>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">
@@ -115,23 +117,23 @@ const SubmitApplicantModal = () => {
                         })
                       )
                       const toastId = toast.loading(
-                        `Submitting your application, please wait`
+                        `Enrolling student, please wait...`
                       )
                       setLoadingToastId(toastId.toString())
 
-                      await createApplicant({ applicantData: data?.value })
+                      await enrollApplicant(data?.value)
                     }}
                   >
-                    {createApplicantPending ? (
+                    {enrollApplicantPending ? (
                       <>
                         <LoadingIcon />
                       </>
                     ) : (
-                      <p>Submit now</p>
+                      <p>Enroll now</p>
                     )}
                   </button>
                   <button
-                    disabled={createApplicantPending}
+                    disabled={enrollApplicantPending}
                     type="button"
                     className="disabled:bg-slate-300 mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
                     onClick={() => {
@@ -155,4 +157,4 @@ const SubmitApplicantModal = () => {
     </Transition.Root>
   )
 }
-export default SubmitApplicantModal
+export default EnrollApplicantModal

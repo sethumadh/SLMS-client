@@ -3,6 +3,7 @@ export const route = {
   application: {
     getCurrentTerm: `${baseURL}/api/v1/application/find-current-term`,
     getPublishedTerm: `${baseURL}/api/v1/application/find-published-term`,
+    createApplicant: `${baseURL}/api/v1/application/create-applicant`,
   },
   admin: {
     changeCurrentTermName: `${baseURL}/api/v1/admin/administration/update/term-name`,
@@ -22,16 +23,17 @@ export const route = {
     level: {
       findAllLevels: `${baseURL}/api/v1/admin/administration/get-all-levels`,
     },
-    applicant: {
-      createApplicant: `${baseURL}/api/v1/application/create-applicant`,
-    },
     student: {
       getAllStudents: `${baseURL}/api/v1/admin/administration/get-all-students`,
     },
-    enrollment: {
-      getAllApplicants: `${baseURL}/api/v1/admin/applicant/get-all-applicants`,
-      searchApplicants: `${baseURL}/api/v1/admin/applicant/search-applicants`,
-      findApplicantById: `${baseURL}/api/v1/admin/applicant/applicant-detail`,
-    },
+  },
+  enrollment: {
+    getAllApplicants: `${baseURL}/api/v1/admin/applicant/get-all-applicants`,
+    searchApplicants: `${baseURL}/api/v1/admin/applicant/search-applicants`,
+    findApplicantById: `${baseURL}/api/v1/admin/applicant/applicant-detail`,
+    findTermToEnroll: `${baseURL}/api/v1/admin/applicant/term-to-enroll`,
+    enrollApplicant: `${baseURL}/api/v1/admin/applicant/enroll-applicant`,
+    findApplicantEnrolledSubjects: `${baseURL}/api/v1/admin/applicant/find-enrolled-subjects-applicant`,
+    enrollApplicantToStudent: `${baseURL}/api/v1/admin/applicant/enroll-applicant-to-student`,
   },
 }

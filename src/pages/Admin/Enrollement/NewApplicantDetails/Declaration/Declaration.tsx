@@ -1,11 +1,14 @@
 import { api } from "@/api/api"
 import LoadingSpinner from "@/components/Loadingspinner"
+import EnrollApplicantToStudentModal from "@/components/Modal/EnrollApplicantToStudent"
 import Icons from "@/constants/icons"
+import { setOpenModal } from "@/redux/slice/modalSlice"
+import { useAppDispatch } from "@/redux/store"
 import { useQuery } from "@tanstack/react-query"
 import { Link, useParams } from "react-router-dom"
 
-
 export default function NewApplicantDeclaration() {
+  const dispatch = useAppDispatch()
   const params = useParams()
   const {
     data: applicantData,
@@ -13,10 +16,10 @@ export default function NewApplicantDeclaration() {
     isError: applicantDataIsError,
     // error: applicantDataError,
   } = useQuery({
-    queryKey: [api.admin.enrollment.findApplicantById.querykey, params.id],
+    queryKey: [api.enrollment.enrollment.findApplicantById.querykey, params.id],
     queryFn: () => {
       if (params.id) {
-        return api.admin.enrollment.findApplicantById.query(params.id)
+        return api.enrollment.enrollment.findApplicantById.query(params.id)
       }
     },
     enabled: !!params.id,
@@ -31,7 +34,7 @@ export default function NewApplicantDeclaration() {
     )
   }
   return (
-    <>
+    <div>
       {applicantDataIsLoading ? (
         <>
           <div className="h-[600px] w-full flex justify-center items-center">
@@ -87,6 +90,19 @@ export default function NewApplicantDeclaration() {
             <div className="flex justify-center">
               <span className="isolate inline-flex rounded-md shadow-sm  mt-4">
                 <button
+                  onClick={() => {
+                    if (params.id) {
+                      dispatch(
+                        setOpenModal({
+                          isOpen: true,
+                          type: "enrollApllicantToStudent",
+                          data: {
+                            id: parseInt(params.id),
+                          },
+                        })
+                      )
+                    }
+                  }}
                   type="button"
                   className="relative inline-flex items-center rounded-l-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
                 >
@@ -115,6 +131,7 @@ export default function NewApplicantDeclaration() {
           </div>
         </>
       )}
-    </>
+      <EnrollApplicantToStudentModal />
+    </div>
   )
 }

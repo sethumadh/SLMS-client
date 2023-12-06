@@ -25,10 +25,10 @@ function NewApplicantParentDetails() {
     isError: applicantDataIsError,
     // error: applicantDataError,
   } = useQuery({
-    queryKey: [api.admin.enrollment.findApplicantById.querykey, params.id],
+    queryKey: [api.enrollment.enrollment.findApplicantById.querykey, params.id],
     queryFn: () => {
       if (params.id) {
-        return api.admin.enrollment.findApplicantById.query(params.id)
+        return api.enrollment.enrollment.findApplicantById.query(params.id)
       }
     },
     enabled: !!params.id,

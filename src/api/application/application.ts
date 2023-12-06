@@ -151,7 +151,7 @@ export const create = {
   createApplicant: {
     schema: newApplicantSchema,
     query: async ({ applicantData }: { applicantData: NewApplicantSchema }) => {
-      await axios.post(route.admin.applicant.createApplicant, applicantData)
+      await axios.post(route.application.createApplicant, applicantData)
     },
   },
 }

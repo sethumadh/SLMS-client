@@ -1,4 +1,5 @@
 import { api } from "@/api/api"
+import TermDateModal from "@/components/Modal/TermDateModal"
 import Icons from "@/constants/icons"
 import { capitalizeFirstCharacter } from "@/helpers/capitalizeFirstCharacter"
 import { formatDate } from "@/helpers/dateFormatter"
@@ -257,6 +258,7 @@ export default function TermDetails() {
           </div>
         </>
       )}
+        <TermDateModal/>
     </div>
   )
 }

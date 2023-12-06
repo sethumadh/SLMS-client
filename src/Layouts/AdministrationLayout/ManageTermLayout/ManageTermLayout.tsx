@@ -25,7 +25,7 @@ export default function TermLayout() {
   const activeLink = location.pathname
 
   return (
-    <div className="container">
+    <div className="">
       <div className="sm:block">
         <nav
           className="isolate flex divide-x divide-gray-200 rounded-lg shadow "

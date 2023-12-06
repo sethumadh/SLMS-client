@@ -53,7 +53,7 @@ export default function AllTerms() {
                   <tr>
                     <th
                       scope="col"
-                      className="py-3.5 first:pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                      className="py-3.5 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
                     >
                       Name
                     </th>
@@ -106,7 +106,7 @@ export default function AllTerms() {
                     <tr key={term.name}>
                       <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                         <div className="flex items-center">
-                          <div className="ml-4">
+                          <div className="">
                             <div className="font-medium text-gray-900">
                               {term.name}
                             </div>

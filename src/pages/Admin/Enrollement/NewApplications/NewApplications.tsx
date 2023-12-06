@@ -21,15 +21,18 @@ function NewStudentApplications() {
     error: _allApplicantDataError,
   } = useQuery({
     queryKey: [
-      api.admin.enrollment.findAllApplicants.querykey,
+      api.enrollment.enrollment.findAllApplicants.querykey,
       currentPage,
       query,
     ],
     queryFn: () => {
       if (query) {
-        return api.admin.enrollment.searchApplicants.query(query, currentPage)
+        return api.enrollment.enrollment.searchApplicants.query(
+          query,
+          currentPage
+        )
       } else {
-        return api.admin.enrollment.findAllApplicants.query(currentPage)
+        return api.enrollment.enrollment.findAllApplicants.query(currentPage)
       }
     },
   })

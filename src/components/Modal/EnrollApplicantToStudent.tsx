@@ -11,37 +11,42 @@ import { toast } from "react-toastify"
 import { handleAxiosError } from "@/helpers/errorhandler"
 import LoadingIcon from "../LoadingIcon"
 
-const SubmitApplicantModal = () => {
+const EnrollApplicantToStudentModal = () => {
   const [loadingToastId, setLoadingToastId] = useState<string | null>(null)
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const { isOpen, type, data } = useAppSelector((state) => state.modal)
   const cancelButtonRef = useRef(null)
-  const IsModalOpen = isOpen && type === "submitApplicant"
+  const IsModalOpen = isOpen && type === "enrollApllicantToStudent"
   const queryClient = useQueryClient()
 
-  const { mutateAsync: createApplicant, isPending: createApplicantPending } =
-    useMutation({
-      mutationFn: api.application.create.createApplicant.query,
-      onSuccess: () => {
-        queryClient.invalidateQueries({
-          queryKey: [api.admin.students.findAllStudents.querykey,api.enrollment.enrollment.findApplicantById.querykey],
+  const {
+    mutateAsync: enrollApplicantToStudent,
+    isPending: enrollApplicantToStudentPending,
+  } = useMutation({
+    mutationFn: api.enrollment.enrollment.enrollApplicantToStudent.query,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [
+          api.admin.students.findAllStudents.querykey,
+          api.enrollment.enrollment.findApplicantById.querykey,
+        ],
+      })
+      if (loadingToastId) toast.dismiss(loadingToastId)
+      toast.success(`Applicant enrolled student successfully 👌`)
+      dispatch(
+        setOpenModal({
+          isOpen: false,
+          type: "",
         })
-        if (loadingToastId) toast.dismiss(loadingToastId)
-        toast.success(`Application successfully submitted 👌`)
-        dispatch(
-          setOpenModal({
-            isOpen: false,
-            type: "",
-          })
-        )
-        navigate("/application-submit")
-      },
-      onError: (error: unknown) => {
-        if (loadingToastId) toast.dismiss(loadingToastId)
-        handleAxiosError(error)
-      },
-    })
+      )
+      navigate("/admin/enrollment")
+    },
+    onError: (error: unknown) => {
+      if (loadingToastId) toast.dismiss(loadingToastId)
+      handleAxiosError(error)
+    },
+  })
 
   return (
     <Transition.Root show={IsModalOpen} as={Fragment}>
@@ -94,7 +99,7 @@ const SubmitApplicantModal = () => {
                       as="h3"
                       className="text-base font-semibold leading-6 text-gray-900"
                     >
-                      Do you want to submit the application?
+                      Confirm Enrollment of the applicant to student
                     </Dialog.Title>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">
@@ -118,11 +123,12 @@ const SubmitApplicantModal = () => {
                         `Submitting your application, please wait`
                       )
                       setLoadingToastId(toastId.toString())
-
-                      await createApplicant({ applicantData: data?.value })
+                      if (data?.id) {
+                        await enrollApplicantToStudent(data?.id.toString())
+                      }
                     }}
                   >
-                    {createApplicantPending ? (
+                    {enrollApplicantToStudentPending ? (
                       <>
                         <LoadingIcon />
                       </>
@@ -131,7 +137,7 @@ const SubmitApplicantModal = () => {
                     )}
                   </button>
                   <button
-                    disabled={createApplicantPending}
+                    disabled={enrollApplicantToStudentPending}
                     type="button"
                     className="disabled:bg-slate-300 mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
                     onClick={() => {
@@ -155,4 +161,4 @@ const SubmitApplicantModal = () => {
     </Transition.Root>
   )
 }
-export default SubmitApplicantModal
+export default EnrollApplicantToStudentModal

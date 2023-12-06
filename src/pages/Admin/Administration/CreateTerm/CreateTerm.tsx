@@ -1,4 +1,4 @@
-/* trunk-ignore-all(prettier) */
+
 
 import { api } from "@/api/api"
 import Create from "@/components/Administration/CreateTerm/Create"
@@ -152,7 +152,7 @@ function CreateTerm() {
           <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 py-4  mb-16">
             {step == 0 && <Create />}
             {step == 1 && <Review />}
-            <div className="border border-red-400">
+            <div className="">
               <StepperSection
                 isSubmitting={createTermPending}
                 showPrevBtn={step == 0 ? false : true}
