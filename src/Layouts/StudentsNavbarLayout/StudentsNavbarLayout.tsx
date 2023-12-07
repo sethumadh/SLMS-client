@@ -49,7 +49,7 @@ export default function StudentsNavbarLayout() {
           ))}
         </nav>
       </div>
-      <div className="max-w-7xl mx-auto">
+      <div className="">
         <Outlet />
       </div>
     </div>

@@ -23,9 +23,6 @@ export const route = {
     level: {
       findAllLevels: `${baseURL}/api/v1/admin/administration/get-all-levels`,
     },
-    student: {
-      getAllStudents: `${baseURL}/api/v1/admin/administration/get-all-students`,
-    },
   },
   enrollment: {
     getAllApplicants: `${baseURL}/api/v1/admin/applicant/get-all-applicants`,
@@ -35,5 +32,9 @@ export const route = {
     enrollApplicant: `${baseURL}/api/v1/admin/applicant/enroll-applicant`,
     findApplicantEnrolledSubjects: `${baseURL}/api/v1/admin/applicant/find-enrolled-subjects-applicant`,
     enrollApplicantToStudent: `${baseURL}/api/v1/admin/applicant/enroll-applicant-to-student`,
+  },
+  students: {
+    getAllEnrolledStudents: `${baseURL}/api/v1/admin/student/get-all-enrolled-students`,
+    searchEnrolledStudents: `${baseURL}/api/v1/admin/student/search-enrolled-students`,
   },
 }

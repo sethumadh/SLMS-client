@@ -1,6 +1,6 @@
 import { api } from "@/api/api"
 import LoadingSpinner from "@/components/Loadingspinner"
-import EnrollApplicantToStudentModal from "@/components/Modal/EnrollApplicantToStudent"
+import EnrollApplicantToStudentModal from "@/components/Modal/EnrollApplicantToStudentModal"
 import Icons from "@/constants/icons"
 import { setOpenModal } from "@/redux/slice/modalSlice"
 import { useAppDispatch } from "@/redux/store"

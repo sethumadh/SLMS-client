@@ -25,7 +25,10 @@ const SubmitApplicantModal = () => {
       mutationFn: api.application.create.createApplicant.query,
       onSuccess: () => {
         queryClient.invalidateQueries({
-          queryKey: [api.admin.students.findAllStudents.querykey,api.enrollment.enrollment.findApplicantById.querykey],
+          queryKey: [
+            api.students.enrolledStudents.findAllEnrolledStudents.querykey,
+            api.enrollment.enrollment.findApplicantById.querykey,
+          ],
         })
         if (loadingToastId) toast.dismiss(loadingToastId)
         toast.success(`Application successfully submitted 👌`)

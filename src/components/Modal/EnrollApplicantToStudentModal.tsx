@@ -28,7 +28,7 @@ const EnrollApplicantToStudentModal = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [
-          api.admin.students.findAllStudents.querykey,
+          api.students.enrolledStudents.findAllEnrolledStudents.querykey,
           api.enrollment.enrollment.findApplicantById.querykey,
         ],
       })

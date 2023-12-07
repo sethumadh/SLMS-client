@@ -53,6 +53,7 @@ const OtherInformationSchema = z.object({
 const ApplicantSchema = z.object({
   id: z.number(),
   role: z.literal("APPLICANT"),
+  createdAt: z.string(),
   personalDetails: PersonalDetailsSchema,
   parentsDetails: ParentsDetailsSchema,
   emergencyContact: EmergencyContactSchema,
@@ -60,7 +61,6 @@ const ApplicantSchema = z.object({
   subjectRelated: z.array(z.string()),
   subjectsChosen: z.array(z.string()),
   otherInformation: OtherInformationSchema,
-  createdAt: z.string(),
 })
 
 const applicantsDataSchema = z.object({
@@ -137,11 +137,23 @@ export const enrollment = {
     querykey: "getAllApplicants",
     schema: applicantsDataSchema,
     query: async (page = 0) => {
-      const response = await axios.get(route.enrollment.getAllApplicants, {
-        params: { page },
-      })
+      try {
+        const response = await axios.get(route.enrollment.getAllApplicants, {
+          params: { page },
+        })
+        console.log(response.data)
 
-      return applicantsDataSchema.parse(response.data)
+        return applicantsDataSchema.parse(response.data)
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          // Handle Zod validation error
+          console.error("Zod validation error:", error.issues)
+        } else {
+          // Handle other types of errors (e.g., network errors)
+          console.error("Error:", error)
+        }
+        throw error // Re-throw the error if you want to propagate it
+      }
     },
   },
   searchApplicants: {
@@ -239,7 +251,7 @@ export const enrollment = {
         )
         // return termToEnrollSchema.parse(response.data)
 
-        return  response.data
+        return response.data
       } catch (error) {
         if (error instanceof z.ZodError) {
           // Handle Zod validation error

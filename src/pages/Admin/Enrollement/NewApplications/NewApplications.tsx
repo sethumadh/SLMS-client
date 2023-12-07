@@ -40,7 +40,7 @@ function NewStudentApplications() {
   const nPages = Math.ceil(
     (allApplicantData?.count._count?.id ?? 0) / recordsPerPage
   )
-
+  console.log(allApplicantData)
   const handleSearch = useCallback(
     (term: string) => {
       setCurrentPage(0)
