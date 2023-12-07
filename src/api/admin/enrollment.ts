@@ -216,7 +216,7 @@ export const enrollment = {
         const response = await axios.get(
           `${route.enrollment.findApplicantEnrolledSubjects}/${id}`
         )
-        console.log(response.data)
+
         return enrolledSubjectsSchema.parse(response.data)
       } catch (error) {
         if (error instanceof z.ZodError) {
@@ -238,7 +238,7 @@ export const enrollment = {
           `${route.enrollment.enrollApplicantToStudent}/${id}`
         )
         // return termToEnrollSchema.parse(response.data)
-        console.log(response.data)
+
         return  response.data
       } catch (error) {
         if (error instanceof z.ZodError) {

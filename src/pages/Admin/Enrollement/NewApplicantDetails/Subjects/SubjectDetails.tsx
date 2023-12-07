@@ -143,9 +143,9 @@ function NewApplicantSubjectDetails() {
       applicantEnrolledDataIsLoading ? (
         <>
           <div className="h-[600px] font-medium text-lg flex justify-center items-center">
-            <p>
+            <div>
               <OverlayLoadingspinner />
-            </p>
+            </div>
           </div>
         </>
       ) : !applicantDataIsError ||
@@ -211,8 +211,17 @@ function NewApplicantSubjectDetails() {
                   <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                     {applicantEnrolledData &&
                       applicantEnrolledData
-                        .map((sub) => capitalizeFirstCharacter(sub.subjectName))
+                        .map((sub) => {
+                          return capitalizeFirstCharacter(sub.subjectName)
+                        })
                         .join(", ")}
+                    {applicantEnrolledData?.length === 0 && (
+                      <>
+                        <div className="font-medium  text-base">
+                          No subjects Enrolled yet
+                        </div>
+                      </>
+                    )}
                   </dd>
                 </div>
               </dl>
