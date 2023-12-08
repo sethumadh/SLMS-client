@@ -23,7 +23,7 @@ const classOptions = [
   { value: "class2", label: "Class2" },
   { value: "class3", label: "Class3" },
 ]
-function Students() {
+function EnrolledStudentList() {
   const [query, setQuery] = useState("")
   const [_isLoading, setIsLoading] = useState(false)
   const [currentPage, setCurrentPage] = useState(0)
@@ -53,7 +53,7 @@ function Students() {
       }
     },
   })
-  console.log(allStudentData)
+
   const nPages = Math.ceil(
     (allStudentData?.count._count?.id ?? 0) / recordsPerPage
   )
@@ -279,4 +279,4 @@ function Students() {
   )
 }
 
-export default Students
+export default EnrolledStudentList

@@ -13,6 +13,7 @@ function NewStudentApplications() {
   const [query, setQuery] = useState("")
   const [_isLoading, setIsLoading] = useState(false)
   const [currentPage, setCurrentPage] = useState(0)
+  console.log(currentPage)
   const [recordsPerPage, _setRecordPerPage] = useState(10)
   const {
     data: allApplicantData,
@@ -40,7 +41,7 @@ function NewStudentApplications() {
   const nPages = Math.ceil(
     (allApplicantData?.count._count?.id ?? 0) / recordsPerPage
   )
-  console.log(allApplicantData)
+
   const handleSearch = useCallback(
     (term: string) => {
       setCurrentPage(0)
@@ -192,29 +193,31 @@ function NewStudentApplications() {
                 </div>
               </div>
             </div>
-            <div className="flex justify-center text-xs mt-4">
-              <ReactPaginate
-                breakLabel={<span className="mr-4">...</span>}
-                previousLabel={
-                  <span className="text-andisor-blue">
-                    <Icons.ChevronLeft style={{ width: "30px" }} />
-                  </span>
-                }
-                nextLabel={
-                  <span className="text-andisor-blue">
-                    <Icons.ChevronRight style={{ width: "30px" }} />
-                  </span>
-                }
-                pageCount={nPages}
-                marginPagesDisplayed={3}
-                pageRangeDisplayed={3}
-                activeClassName="bg-slate-300 "
-                containerClassName="flex items-center justify-center"
-                pageClassName="border border-[1px] mr-3 rounded-full text-xl px-4 py-1 text-sm bg-blue-600 hover:bg-[#2E8CFF] text-white  cursor-pointer"
-                onPageChange={handlePageChange}
-              />
-              {/* <div>{JSON.stringify(pageNumber, null, 2)}</div> */}
-            </div>
+            {allApplicantData && !allApplicantDataLoading && (
+              <div className="flex justify-center text-xs mt-4">
+                <ReactPaginate
+                  breakLabel={<span className="mr-4">...</span>}
+                  previousLabel={
+                    <span className="text-andisor-blue">
+                      <Icons.ChevronLeft style={{ width: "30px" }} />
+                    </span>
+                  }
+                  nextLabel={
+                    <span className="text-andisor-blue">
+                      <Icons.ChevronRight style={{ width: "30px" }} />
+                    </span>
+                  }
+                  pageCount={nPages}
+                  marginPagesDisplayed={3}
+                  pageRangeDisplayed={3}
+                  activeClassName="bg-slate-300 "
+                  containerClassName="flex items-center justify-center"
+                  pageClassName="border border-[1px] mr-3 rounded-full text-xl px-4 py-1 text-sm bg-blue-600 hover:bg-[#2E8CFF] text-white  cursor-pointer"
+                  onPageChange={handlePageChange}
+                />
+                {/* <div>{JSON.stringify(pageNumber, null, 2)}</div> */}
+              </div>
+            )}
           </>
         ) : allApplicantDataIsError ? (
           <div className="flex flex-row h-[650px] w-full justify-center items-center ">

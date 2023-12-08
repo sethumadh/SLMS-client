@@ -18,7 +18,7 @@ import SubmitPage from "@/pages/SubmitPage/SubmitPage"
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout/AdminDashboardLayout"
 import Dashboard from "@/pages/Admin/Dashboard/Dashboard"
 import LoadingSpinner from "@/components/Loadingspinner"
-import Students from "./pages/Admin/Students/StudentList/StudentList"
+import EnrolledStudentList from "./pages/Admin/Students/EnrolledStudentList/EnrolledStudentList"
 import Finance from "./pages/Admin/Finance/Finance"
 import Attendance from "./pages/Admin/Attendance/Attendance"
 import Timetable from "./pages/Admin/Timetable/Timetable"
@@ -27,11 +27,11 @@ import Administration from "./pages/Admin/Administration/Administration"
 import PageNotFound from "./pages/PageNotFound/PageNotFound"
 import ClassesAndEvents from "./pages/ClassesAndEvents/ClassesAndEvents"
 import StudentDetailLayout from "./Layouts/StudentDetailLayout/StudentDetailLayout"
-import PersonalDetails from "./pages/Admin/Students/StudentDetail/PersonalDetails/PersonalDetails"
-import ParentDetails from "./pages/Admin/Students/StudentDetail/ParentDetails/ParentDetails"
-import HealthDetails from "./pages/Admin/Students/StudentDetail/HealthDetails.tsx/HealthDetails"
-import Declaration from "./pages/Admin/Students/StudentDetail/Declaration/Declaration"
-import SubjectDetails from "./pages/Admin/Students/StudentDetail/Subjects/SubjectDetails"
+import PersonalDetails from "./pages/Admin/Students/EnrolledStudentDetail/PersonalDetails/PersonalDetails"
+import ParentDetails from "./pages/Admin/Students/EnrolledStudentDetail/ParentDetails/ParentDetails"
+import HealthDetails from "./pages/Admin/Students/EnrolledStudentDetail/HealthDetails.tsx/HealthDetails"
+import Declaration from "./pages/Admin/Students/EnrolledStudentDetail/Declaration/Declaration"
+import SubjectDetails from "./pages/Admin/Students/EnrolledStudentDetail/Subjects/SubjectDetails"
 import Alumni from "./pages/Admin/Students/Alumni/Alumni"
 import EnrollmentNavbarLayout from "./Layouts/EnrollmentNavbarLayout/EnrollmentNavbarLayout"
 import NewStudentApplications from "./pages/Admin/Enrollement/NewApplications/NewApplications"
@@ -48,7 +48,6 @@ import ManageTerm from "./pages/Admin/Administration/ManageTerm/ManageTerm"
 import CreateTerm from "./pages/Admin/Administration/CreateTerm/CreateTerm"
 import AllTerms from "./pages/Admin/Administration/AllTerms/AllTerms"
 import TermDetails from "./pages/Admin/Administration/AllTerms/TermDetails/TermDetail"
-// import IsCurrentTermModal from "./components/Modal/IsCurrentTermModal"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -66,7 +65,7 @@ const router = createBrowserRouter(
         <Route index element={<Dashboard />} />
         {/* student */}
         <Route path="students" element={<StudentsNavbarLayout />}>
-          <Route index element={<Students />} />
+          <Route index element={<EnrolledStudentList />} />
           <Route path="student-detail/:id" element={<StudentDetailLayout />}>
             <Route index element={<PersonalDetails />} />
             <Route
