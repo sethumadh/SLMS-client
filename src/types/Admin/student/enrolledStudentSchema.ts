@@ -1,11 +1,11 @@
 // *********Admin************
 /* 
-applicant Detail Page
+enrolledStudent Detail Page
 */
 
 import { z } from "zod"
 
-export const applicantPersonalDetailsSchema = z.object({
+export const enrolledStudentPersonalDetailSchema = z.object({
   email: z
     .string({ required_error: "Email is required" })
     .email({ message: "Invalid email address" }),
@@ -25,10 +25,10 @@ export const applicantPersonalDetailsSchema = z.object({
     .max(4, { message: "Invalid Post code" }),
 })
 
-/* applicant Detail Page */
+/* enrolledStudent Detail Page */
 
 /* Parents Detail Page */
-export const applicantParentDetailsSchema = z.object({
+export const enrolledStudentParentDetailSchema = z.object({
   parentEmail: z
     .string({ required_error: "Parent's Email is required" })
     .email({ message: "Invalid email address" }),
@@ -39,7 +39,7 @@ export const applicantParentDetailsSchema = z.object({
 /* Parents Detail Page */
 
 /* Emergency/health Detail Page */
-export const applicantHealthDetailsSchema = z.object({
+export const enrolledStudentHealthDetailSchema = z.object({
   medicareNumber: z.string().optional(),
   medicalCondition: z
     .string({ required_error: "Please give a valid answer" })
@@ -60,17 +60,27 @@ export const applicantHealthDetailsSchema = z.object({
 /* Emergency/health Detail Page */
 
 /*Subject Details*/
-export const applicantSubjectDetailsSchema = z.object({
-  subjects: z.array(z.string()).refine((subjects) => subjects.length > 0, {
-    message: "Please select at least one subject",
-  }),
-  subjectRelated: z
-    .array(z.string())
-    .refine((subjectRelated) => subjectRelated.length > 0, {
-      message: "Please select at least one option",
-    }),
-})
+// export const enrolledStudentSubjectDetailSchema = z.object({
+//   subjects: z.array(z.string()).refine((subjects) => subjects.length > 0, {
+//     message: "Please select at least one subject",
+//   }),
+//   subjectRelated: z
+//     .array(z.string())
+//     .refine((subjectRelated) => subjectRelated.length > 0, {
+//       message: "Please select at least one option",
+//     }),
+// })
 
-/*Subject Details*/
+
+
+export const enrolledStudentSubjectDetailSchema =z.object({
+    enrolledSubjects: z
+      .array(
+        z
+          .string()
+          .min(1, { message: "Please choose at least one subject to enroll" })
+      )
+      .min(1, { message: "Please choose at least one subject to enroll" }),
+  })
 
 // *********Admin************

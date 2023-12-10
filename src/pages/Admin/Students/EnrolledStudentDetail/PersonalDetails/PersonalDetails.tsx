@@ -5,15 +5,15 @@ import { FormProvider, useForm } from "react-hook-form"
 import { z } from "zod"
 
 import Icons from "@/constants/icons"
-import { applicantPersonalDetailsSchema } from "@/types/Application/applicantSchema"
 import { useQuery } from "@tanstack/react-query"
 import { api } from "@/api/api"
-import { capitalizeFirstCharacter } from "@/helpers/capitalizeFirstCharacter"
+import { enrolledStudentPersonalDetailSchema } from "@/types/Admin/student/enrolledStudentSchema"
 import LoadingSpinner from "@/components/Loadingspinner"
+import { capitalizeFirstCharacter } from "@/helpers/capitalizeFirstCharacter"
 import { formatDate } from "@/helpers/dateFormatter"
 
-export type PersonalDetailsSchema = z.infer<
-  typeof applicantPersonalDetailsSchema
+export type enrolledStudentPersonalDetailsSchema = z.infer<
+  typeof enrolledStudentPersonalDetailSchema
 >
 
 const people = {
@@ -27,21 +27,25 @@ const people = {
 }
 // More people...
 
-function NewApplicantPersonalDetails() {
+function PersonalDetails() {
   const params = useParams()
   const saveRef = useRef<HTMLButtonElement | null>(null)
   const [isEdit, setIsEdit] = useState(false)
   const [item, setItem] = useState("")
   const {
-    data: applicantData,
-    isLoading: applicantDataIsLoading,
-    isError: applicantDataIsError,
-    // error: applicantDataError,
+    data: enrolledStudentData,
+    isLoading: enrolledStudentDataIsLoading,
+    isError: enrolledStudentDataIsError,
   } = useQuery({
-    queryKey: [api.enrollment.enrollment.findApplicantById.querykey, params.id],
+    queryKey: [
+      api.students.enrolledStudents.findEnrolledStudentById.querykey,
+      params.id,
+    ],
     queryFn: () => {
       if (params.id) {
-        return api.enrollment.enrollment.findApplicantById.query(params.id)
+        return api.students.enrolledStudents.findEnrolledStudentById.query(
+          params.id
+        )
       }
     },
     enabled: !!params.id,
@@ -60,9 +64,9 @@ function NewApplicantPersonalDetails() {
     postcode,
     state,
     suburb,
-  } = applicantData?.personalDetails ?? {}
-  const methods = useForm<PersonalDetailsSchema>({
-    resolver: zodResolver(applicantPersonalDetailsSchema),
+  } = enrolledStudentData?.personalDetails ?? {}
+  const methods = useForm<enrolledStudentPersonalDetailsSchema>({
+    resolver: zodResolver(enrolledStudentPersonalDetailSchema),
 
     defaultValues: {
       email: "karansingh@example.com",
@@ -72,8 +76,8 @@ function NewApplicantPersonalDetails() {
       postcode: "4222",
     },
   })
-  const onSubmit = (values: PersonalDetailsSchema) => {
-    console.log(values)
+  const onSubmit = (values: enrolledStudentPersonalDetailsSchema) => {
+    console.log({ personalDetails: values })
     setIsEdit(false)
   }
   useEffect(() => {
@@ -85,7 +89,7 @@ function NewApplicantPersonalDetails() {
       postcode: postcode,
     })
   }, [email, contact, address, suburb, postcode, methods])
-  if (applicantDataIsError) {
+  if (enrolledStudentDataIsError) {
     return (
       <>
         <div className="h-[600px] w-full flex justify-center items-center">
@@ -96,13 +100,13 @@ function NewApplicantPersonalDetails() {
   }
   return (
     <>
-      {applicantDataIsLoading ? (
+      {enrolledStudentDataIsLoading ? (
         <>
           <div className="h-[600px] w-full flex justify-center items-center">
             <LoadingSpinner className="w-20 h-20" />
           </div>
         </>
-      ) : applicantData?.personalDetails ? (
+      ) : enrolledStudentData?.personalDetails ? (
         <>
           <div>
             <div className="px-4 sm:px-0 flex justify-between gap-x-4 lg:mt-4">
@@ -146,13 +150,13 @@ function NewApplicantPersonalDetails() {
                       <dl className="mt-1 flex flex-grow flex-col justify-between">
                         <dt className="sr-only">Title</dt>
                         <dd className="text-sm text-gray-500">
-                          {applicantData?.role &&
-                            capitalizeFirstCharacter(applicantData?.role)}
+                          {enrolledStudentData?.role &&
+                            capitalizeFirstCharacter(enrolledStudentData?.role)}
                         </dd>
                         <dt className="sr-only">Role</dt>
                         <dd className="mt-3">
                           <span className="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                            {applicantData?.role == "APPLICANT"
+                            {enrolledStudentData?.role == "APPLICANT"
                               ? "Applied"
                               : ""}
                           </span>
@@ -614,4 +618,4 @@ function NewApplicantPersonalDetails() {
   )
 }
 
-export default NewApplicantPersonalDetails
+export default PersonalDetails

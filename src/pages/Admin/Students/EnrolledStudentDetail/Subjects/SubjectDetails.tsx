@@ -1,22 +1,27 @@
+import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 import { zodResolver } from "@hookform/resolvers/zod"
-import Select, { MultiValue } from "react-select"
 import { Controller, FormProvider, useForm } from "react-hook-form"
+import { z } from "zod"
+import Select, { MultiValue } from "react-select"
 
 import Icons from "@/constants/icons"
+import { enrolledStudentSubjectDetailSchema } from "@/types/Admin/student/enrolledStudentSchema"
+import { useAppDispatch } from "@/redux/store"
 import { useQuery } from "@tanstack/react-query"
 import { api } from "@/api/api"
+import { setOpenModal } from "@/redux/slice/modalSlice"
+import OverlayLoadingspinner from "@/components/OverlayLoadingspinner"
 import { capitalizeFirstCharacter } from "@/helpers/capitalizeFirstCharacter"
 import { formatDate } from "@/helpers/dateFormatter"
-import { z } from "zod"
-import { enrollStudentToTermSchema } from "@/types/Enrollment/enrollment"
-import { useEffect, useState } from "react"
 import EnrollApplicantModal from "@/components/Modal/EnrollApplicantModal"
-import { setOpenModal } from "@/redux/slice/modalSlice"
-import { useAppDispatch } from "@/redux/store"
-import OverlayLoadingspinner from "@/components/OverlayLoadingspinner"
 
-type applicantEnrollData = {
+export type EnrolledStudentSubjectDetailSchema = z.infer<
+  typeof enrolledStudentSubjectDetailSchema
+>
+
+
+type studentEnrollData = {
   applicantId: number
   enrollData: {
     subject: string
@@ -27,58 +32,66 @@ type applicantEnrollData = {
     termSubjectId: number
   }[]
 }
-export type EnrollStudentToTermSchema = z.infer<
-  typeof enrollStudentToTermSchema
->
-function NewApplicantSubjectDetails() {
+function SubjectDetails() {
+  const params = useParams()
   const dispatch = useAppDispatch()
   const [subjectOptions, setSubjectOptions] = useState<
     { label: string; value: string }[]
   >([])
 
-  const params = useParams()
-  const methods = useForm<EnrollStudentToTermSchema>({
-    resolver: zodResolver(enrollStudentToTermSchema),
+
+  const methods = useForm<EnrolledStudentSubjectDetailSchema>({
+    resolver: zodResolver(enrolledStudentSubjectDetailSchema),
+
     defaultValues: {
       enrolledSubjects: [""],
     },
   })
   const { control, formState } = methods
-
   const {
-    data: applicantData,
+    data: enrolledStudentData,
 
-    isLoading: applicantDataIsLoading,
-    isError: applicantDataIsError,
+    isLoading: enrolledStudentDataIsLoading,
+    isError: enrolledStudentDataIsError,
   } = useQuery({
-    queryKey: [api.enrollment.enrollment.findApplicantById.querykey, params.id],
+    queryKey: [
+      api.students.enrolledStudents.findEnrolledStudentById.querykey,
+      params.id,
+    ],
     queryFn: () => {
       if (params.id) {
-        return api.enrollment.enrollment.findApplicantById.query(params.id)
+        return api.students.enrolledStudents.findEnrolledStudentById.query(
+          params.id
+        )
       }
     },
     enabled: !!params.id,
   })
-
   const {
     data: termToEnrollData,
     isLoading: termToEnrollDataIsLoading,
     isError: termToEnrollDataIsError,
   } = useQuery({
-    queryKey: [api.enrollment.enrollment.getTermToEnroll.queryKey],
-    queryFn: api.enrollment.enrollment.getTermToEnroll.query,
+    queryKey: [
+      api.students.enrolledStudents.findTermToEnrollEnrolledStudent.queryKey,
+    ],
+    queryFn:
+      api.students.enrolledStudents.findTermToEnrollEnrolledStudent.query,
 
     enabled: !!params.id,
   })
   const {
-    data: applicantEnrolledData,
-    isLoading: applicantEnrolledDataIsLoading,
-    isError: applicantEnrolledDataIsError,
+    data: enrolledStudentEnrolledData,
+    isLoading: enrolledStudentEnrolledDataIsLoading,
+    isError: enrolledStudentEnrolledDataIsError,
   } = useQuery({
-    queryKey: [api.enrollment.enrollment.getApplicantEnrolledSubjects.queryKey],
+    queryKey: [
+      api.students.enrolledStudents.findEnrolledStudentEnrolledSubjects
+        .queryKey,
+    ],
     queryFn: () => {
       if (params.id) {
-        return api.enrollment.enrollment.getApplicantEnrolledSubjects.query(
+        return api.students.enrolledStudents.findEnrolledStudentEnrolledSubjects.query(
           params.id
         )
       }
@@ -102,12 +115,11 @@ function NewApplicantSubjectDetails() {
     }
   }, [termToEnrollData])
 
-  const subjectRelated = applicantData?.subjectRelated
-  const subjectsChosen = applicantData?.subjectsChosen
-
-  const onSubmit = (values: EnrollStudentToTermSchema) => {
-    if (termToEnrollData?.termSubject && applicantData?.id) {
-      const enrollData: applicantEnrollData["enrollData"] =
+  const subjectRelated = enrolledStudentData?.subjectRelated
+  const subjectsChosen = enrolledStudentData?.subjectsChosen
+  const onSubmit = (values: EnrolledStudentSubjectDetailSchema) => {
+    if (termToEnrollData?.termSubject && enrolledStudentData?.id) {
+      const enrollData: studentEnrollData["enrollData"] =
         termToEnrollData?.termSubject
           .filter((item) => values.enrolledSubjects.includes(item.subject.name))
           .map((item) => {
@@ -121,8 +133,8 @@ function NewApplicantSubjectDetails() {
             }
           })
 
-      const applicantEnrollData: applicantEnrollData = {
-        applicantId: applicantData?.id,
+      const studentEnrollData: studentEnrollData = {
+        applicantId: enrolledStudentData?.id,
         enrollData,
       }
       dispatch(
@@ -130,18 +142,18 @@ function NewApplicantSubjectDetails() {
           isOpen: true,
           type: "enrollApplicant",
           data: {
-            value: applicantEnrollData,
+            value: studentEnrollData,
           },
         })
       )
     }
   }
-
+  console.log(termToEnrollData)
   return (
     <div className="">
-      {applicantDataIsLoading ||
+      {enrolledStudentDataIsLoading ||
       termToEnrollDataIsLoading ||
-      applicantEnrolledDataIsLoading ? (
+      enrolledStudentEnrolledDataIsLoading ? (
         <>
           <div className="h-[600px] font-medium text-lg flex justify-center items-center">
             <div>
@@ -149,9 +161,9 @@ function NewApplicantSubjectDetails() {
             </div>
           </div>
         </>
-      ) : !applicantDataIsError ||
+      ) : !enrolledStudentDataIsError ||
         !termToEnrollDataIsError ||
-        !applicantEnrolledDataIsError ? (
+        !enrolledStudentEnrolledDataIsError ? (
         <>
           <div className="px-4 sm:px-0 flex justify-between gap-x-4 lg:mt-4 ">
             <div className="flex flex-col sm:flex sm:flex-row gap-x-4">
@@ -210,13 +222,13 @@ function NewApplicantSubjectDetails() {
                   </dt>
 
                   <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                    {applicantEnrolledData &&
-                      applicantEnrolledData
+                    {enrolledStudentEnrolledData &&
+                      enrolledStudentEnrolledData
                         .map((sub) => {
                           return capitalizeFirstCharacter(sub.subjectName)
                         })
                         .join(", ")}
-                    {applicantEnrolledData?.length === 0 && (
+                    {enrolledStudentEnrolledData?.length === 0 && (
                       <>
                         <div className="font-medium  text-base">
                           No subjects Enrolled yet
@@ -393,4 +405,4 @@ function NewApplicantSubjectDetails() {
   )
 }
 
-export default NewApplicantSubjectDetails
+export default SubjectDetails

@@ -36,5 +36,9 @@ export const route = {
   students: {
     getAllEnrolledStudents: `${baseURL}/api/v1/admin/student/get-all-enrolled-students`,
     searchEnrolledStudents: `${baseURL}/api/v1/admin/student/search-enrolled-students`,
+    findEnrolledStudentById: `${baseURL}/api/v1/admin/student/enrolled-student-detail`,
+    findTermToEnrollEnrolledStudent: `${baseURL}/api/v1/admin/student/term-to-enroll-student-enrolled`,
+    findEnrolledStudentEnrolledSubjects: `${baseURL}/api/v1/admin/student/find-enrolled-subjects-for-enrolled-student`,
+    enrollEnrolledStudent: `${baseURL}/api/v1/admin/student/enroll-enrolled-student`,
   },
 }

@@ -9,7 +9,7 @@ const actionPanels = [
     href: "manage-term",
     buttonLabel: "Manage Terms",
     description:
-      "Create a new term with subject and level details or manage and update term information",
+      "Create a new term or manage an existing one",
   },
   {
     id: 2,
@@ -17,7 +17,7 @@ const actionPanels = [
     href: "#",
     buttonLabel: "Manage Subjects",
     description:
-      "Manage subjects and level details and fee details in the current term",
+      "Create a new subject or manage an existing one",
   },
   {
     id: 3,
@@ -25,21 +25,35 @@ const actionPanels = [
     href: "#",
     buttonLabel: "Manage Teacher info",
     description:
-      "Create a new teacher inforation or manage an existing teacher",
+      "Create a new teacher or manage an existing one",
   },
   {
     id: 4,
     title: "Manage Levels",
     href: "#",
     buttonLabel: "Manage levels",
-    description: "Create a new Level inforation or manage an existing level",
+    description: "Create a new Level or manage an existing one",
   },
   {
     id: 5,
     title: "Manage Fee",
     href: "#",
     buttonLabel: "Manage Fee",
-    description: "Create a new Fee inforation or manage an existing fee",
+    description: "Create a new Fee or manage an existing one",
+  },
+  {
+    id: 6,
+    title: "Manage Sections",
+    href: "#",
+    buttonLabel: "Manage Fee",
+    description: "Create a new Section or manage an existing one",
+  },
+  {
+    id: 7,
+    title: "Manage Class",
+    href: "manage-class",
+    buttonLabel: "Manage Class",
+    description: "Create a new Class or manage an existing one",
   },
   // More actionPanels...
 ]

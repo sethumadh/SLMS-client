@@ -141,7 +141,6 @@ export const enrollment = {
         const response = await axios.get(route.enrollment.getAllApplicants, {
           params: { page },
         })
-        console.log(response.data)
 
         return applicantsDataSchema.parse(response.data)
       } catch (error) {
