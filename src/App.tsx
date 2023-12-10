@@ -44,10 +44,13 @@ import NewApplicantSubjectDetails from "./pages/Admin/Enrollement/NewApplicantDe
 import StudentsNavbarLayout from "./Layouts/StudentsNavbarLayout/StudentsNavbarLayout"
 import AdministrationLayout from "./Layouts/AdministrationLayout/AdministrationLayout"
 import ManageTermLayout from "./Layouts/AdministrationLayout/ManageTermLayout/ManageTermLayout"
-import ManageTerm from "./pages/Admin/Administration/ManageTerm/ManageTerm"
-import CreateTerm from "./pages/Admin/Administration/CreateTerm/CreateTerm"
-import AllTerms from "./pages/Admin/Administration/AllTerms/AllTerms"
-import TermDetails from "./pages/Admin/Administration/AllTerms/TermDetails/TermDetail"
+import CurrentTerm from "./pages/Admin/Administration/ManageTerm/CurrentTerm/CurrentTerm"
+import CreateTerm from "./pages/Admin/Administration/ManageTerm/CreateTerm/CreateTerm"
+import AllTerms from "./pages/Admin/Administration/ManageTerm/AllTerms/AllTerms"
+import TermDetails from "./pages/Admin/Administration/ManageTerm/AllTerms/TermDetails/TermDetail"
+import ManageClassLayout from "./Layouts/AdministrationLayout/ManageClassLayout/ManageClassLayout"
+import AllClass from "./pages/Admin/Administration/ManageClass/AllClasses/AllClasses"
+import CreateClass from "./pages/Admin/Administration/ManageClass/CreateClass/CreateClass"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -125,11 +128,18 @@ const router = createBrowserRouter(
         <Route path="administration" element={<AdministrationLayout />}>
           <Route index element={<Administration />} />
           <Route path="manage-term" element={<ManageTermLayout />}>
-            <Route index element={<ManageTerm />} />
+            <Route index element={<CurrentTerm />} />
             <Route path="create-term" element={<CreateTerm />} />
             <Route path="all-terms">
               <Route index element={<AllTerms />} />
               <Route path="term-details/:id" element={<TermDetails />} />
+            </Route>
+          </Route>
+          <Route path="manage-class" element={<ManageClassLayout />}>
+            <Route index element={<CreateClass />} />
+            <Route path="all-classes">
+              <Route index element={<AllClass />} />
+              <Route path="class-details/:id" element={<TermDetails />} />
             </Route>
           </Route>
         </Route>

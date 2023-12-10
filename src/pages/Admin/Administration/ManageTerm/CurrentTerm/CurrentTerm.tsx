@@ -30,7 +30,7 @@ export type ChangeCurrentTermNameSchema = z.infer<
   typeof changeCurrentTermNameSchema
 >
 export type ExtendCurrentTermSchema = z.infer<typeof extendCurrentTermSchema>
-function Term() {
+function CurrentTerm() {
   const dispatch = useAppDispatch()
   const saveTermNameRef = useRef<HTMLButtonElement | null>(null)
   const saveTermDateRef = useRef<HTMLButtonElement | null>(null)
@@ -465,4 +465,4 @@ function Term() {
   )
 }
 
-export default Term
+export default CurrentTerm

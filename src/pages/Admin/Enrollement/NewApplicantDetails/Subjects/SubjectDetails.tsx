@@ -59,6 +59,7 @@ function NewApplicantSubjectDetails() {
     },
     enabled: !!params.id,
   })
+
   const {
     data: termToEnrollData,
     isLoading: termToEnrollDataIsLoading,

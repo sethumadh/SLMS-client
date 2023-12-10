@@ -29,7 +29,6 @@ const people = {
 
 function NewApplicantPersonalDetails() {
   const params = useParams()
-
   const saveRef = useRef<HTMLButtonElement | null>(null)
   const [isEdit, setIsEdit] = useState(false)
   const [item, setItem] = useState("")
