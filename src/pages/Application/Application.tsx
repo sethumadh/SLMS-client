@@ -10,8 +10,6 @@ import EmergencyContact from "@/components/Application/EmergencyContact/Emergenc
 import HealthInformation from "@/components/Application/HealthInformation/HealthInformation"
 import Subjects from "@/components/Application/Subjects/Subjects"
 import OtherInfo from "@/components/Application/OtherInfo/OtherInfo"
-import { useQuery } from "@tanstack/react-query"
-import { api } from "@/api/api"
 import { applicantSchema } from "@/types/Application/applicantSchema"
 import { useAppDispatch } from "@/redux/store"
 import { setOpenModal } from "@/redux/slice/modalSlice"
@@ -24,11 +22,6 @@ function Application() {
   const dispatch = useAppDispatch()
   const [nextPage, setNextPage] = useState(false)
   const [step, setStep] = useState(0)
-  const currentTerm = useQuery({
-    queryKey: [api.application.currentTerm.getTermSubjects.queryKey],
-    queryFn: api.application.currentTerm.getTermSubjects.query,
-  })
-  console.log()
   const methods = useForm<ApplicantSchema>({
     resolver: zodResolver(applicantSchema),
     // defaultValues: {
@@ -155,7 +148,7 @@ function Application() {
   }
 
   const onSubmit = async (values: ApplicantSchema) => {
-    if (currentTerm.data?.name) {
+
       const formattedValues: NewApplicantSchema = {
         ...values,
         personalDetails: {
@@ -173,7 +166,7 @@ function Application() {
           },
         })
       )
-    }
+
   }
   return (
     <div>

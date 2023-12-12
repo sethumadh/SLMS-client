@@ -6,7 +6,7 @@ import { Controller, useFieldArray, useFormContext } from "react-hook-form"
 import ReactDatePicker from "react-datepicker"
 import Select, { SingleValue } from "react-select"
 
-import { createTermWithSubjectSchema } from "@/types/Admin/Term/Term"
+import { createTermWithSubjectSchema } from "@/types/Admin/term/term"
 import SubjectCreate from "./SubjectCreate"
 import { useQuery } from "@tanstack/react-query"
 import { api } from "@/api/api"
@@ -56,6 +56,7 @@ function Create() {
       return allLevelsData?.map((l) => ({
         value: l.name,
         label: capitalizeFirstCharacter(l.name),
+        isDisabled:l.isActive
       }))
     }, [allLevelsData])
 

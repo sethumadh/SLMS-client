@@ -2,6 +2,7 @@
 import { z } from "zod"
 import axios from "axios"
 import { route } from "../route/route"
+import { CreateClassData } from "@/pages/Admin/Administration/ManageClass/CreateClass/CreateClass"
 
 const groupSchema = z.object({
   groupName: z.string(),
@@ -259,6 +260,102 @@ export const levels = {
     query: async () => {
       const response = await axios.get(route.admin.level.findAllLevels)
       return z.array(levelSchema).parse(response.data)
+    },
+  },
+}
+
+/*class*/
+const subjectForManageClassSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  isActive: z.boolean(),
+})
+
+const termSubjectGroupForManageClassSchema = z.object({
+  id: z.number(),
+  termId: z.number(),
+  feeId: z.number(),
+  subjectGroupId: z.number(),
+})
+
+const termSubjectForManageClassSchema = z.array(
+  z.object({
+    id: z.number(),
+    subject: subjectForManageClassSchema,
+    level: z.array(
+      z.object({
+        id: z.number(),
+        isActive: z.boolean(),
+        name: z.string(),
+      })
+    ),
+    termSubjectGroup: termSubjectGroupForManageClassSchema,
+  })
+)
+
+const termToEnrollSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  isPublish: z.boolean(),
+  currentTerm: z.boolean(),
+  startDate: z.string(),
+  endDate: z.string(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
+  termSubject: termSubjectForManageClassSchema,
+})
+const sectionsToManageClass = z.array(
+  z.object({
+    id: z.number(),
+    name: z.string(),
+  })
+)
+export const classes = {
+  findCurrentTermForManageClass: {
+    querykey: "findCurrentTermForManageClass",
+    schema: termToEnrollSchema,
+    query: async () => {
+      const response = await axios.get(
+        route.admin.class.findCurrentTermForManageClass
+      )
+      return termToEnrollSchema.parse(response.data)
+    },
+  },
+  findPublishTermForManageClass: {
+    querykey: "findPublishTermForManageClass",
+    schema: termToEnrollSchema,
+    query: async () => {
+      const response = await axios.get(
+        route.admin.class.findPublishTermForManageClass
+      )
+      return termToEnrollSchema.parse(response.data)
+    },
+  },
+
+  findSectionsForManageClass: {
+    querykey: "findSectionsForManageClass",
+    schema: sectionsToManageClass,
+    query: async () => {
+      const response = await axios.get(
+        route.admin.class.findSectionsForManageClass
+      )
+      console.log(response.data)
+      return sectionsToManageClass.parse(response.data)
+    },
+  },
+  createClass: {
+    querykey: "createClass",
+    query: async (creatClassData: { createClassData: CreateClassData }) => {
+      const response = await axios.post(
+        route.admin.class.createClass,
+        creatClassData
+      )
+      console.log(response.data)
+      return z
+        .object({
+          message: z.string(),
+        })
+        .parse(response.data)
     },
   },
 }

@@ -15,6 +15,7 @@ type initialStateProps = {
     | "isPublishTerm"
     | "enrollApplicant"
     | "enrollApllicantToStudent"
+    | "createClass"
   data?: {
     id?: number
     value?: any

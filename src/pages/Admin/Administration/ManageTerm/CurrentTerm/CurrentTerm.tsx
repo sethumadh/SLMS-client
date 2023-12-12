@@ -20,7 +20,7 @@ import { handleAxiosError } from "@/helpers/errorhandler"
 import {
   changeCurrentTermNameSchema,
   extendCurrentTermSchema,
-} from "@/types/Admin/Term/Term"
+} from "@/types/Admin/term/term"
 import { useAppDispatch } from "@/redux/store"
 import { setOpenModal } from "@/redux/slice/modalSlice"
 import TermNameModal from "@/components/Modal/TermNameModal"
@@ -42,7 +42,6 @@ function CurrentTerm() {
     queryKey: [api.application.currentTerm.getTermSubjects.queryKey],
     queryFn: api.application.currentTerm.getTermSubjects.query,
   })
-
 
   const { mutateAsync: termExtendMutation, isPending: termExtendIsPending } =
     useMutation({
@@ -148,7 +147,7 @@ function CurrentTerm() {
     )
   }
   return (
-    <div>
+    <div className="container">
       <div className="px-4 sm:px-0 flex justify-between gap-x-4 lg:mt-4">
         <div className="flex flex-col sm:flex sm:flex-row gap-x-4">
           <h3 className="text-base font-semibold leading-7 text-gray-900 ">
@@ -189,7 +188,8 @@ function CurrentTerm() {
                     {item != "termName" && (
                       <>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                          {currentTerm?.name && capitalizeFirstCharacter(currentTerm?.name)}
+                          {currentTerm?.name &&
+                            capitalizeFirstCharacter(currentTerm?.name)}
                         </dd>
                         <button
                           onClick={() => {

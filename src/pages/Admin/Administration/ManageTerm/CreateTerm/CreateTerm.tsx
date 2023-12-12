@@ -1,5 +1,3 @@
-
-
 import { api } from "@/api/api"
 import Create from "@/components/Administration/CreateTerm/Create"
 import Review from "@/components/Administration/CreateTerm/Review"
@@ -9,7 +7,7 @@ import { setTermData } from "@/redux/slice/termSlice"
 import { setOpenModal } from "@/redux/slice/modalSlice"
 import { useAppDispatch, useAppSelector } from "@/redux/store"
 
-import { createTermWithSubjectSchema } from "@/types/Admin/Term/Term"
+import { createTermWithSubjectSchema } from "@/types/Admin/term/term"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useMemo, useState } from "react"

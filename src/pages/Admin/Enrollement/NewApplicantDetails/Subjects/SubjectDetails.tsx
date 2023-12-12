@@ -237,7 +237,7 @@ function NewApplicantSubjectDetails() {
             <FormProvider {...methods}>
               <form onSubmit={methods.handleSubmit(onSubmit)} noValidate>
                 <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 py-4  mb-16">
-                  {/* {step == 0 && <Create />} */}
+
 
                   <div className="space-y-12">
                     <div className="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">

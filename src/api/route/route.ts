@@ -23,6 +23,12 @@ export const route = {
     level: {
       findAllLevels: `${baseURL}/api/v1/admin/administration/get-all-levels`,
     },
+    class: {
+      findCurrentTermForManageClass: `${baseURL}/api/v1/admin/administration/class/find-current-term-manage-class`,
+      findPublishTermForManageClass: `${baseURL}/api/v1/admin/administration/class/find-publish-term-manage-class`,
+      findSectionsForManageClass: `${baseURL}/api/v1/admin/administration/class/find-sections-manage-class`,
+      createClass: `${baseURL}/api/v1/admin/administration/class/create-class`,
+    },
   },
   enrollment: {
     getAllApplicants: `${baseURL}/api/v1/admin/applicant/get-all-applicants`,
