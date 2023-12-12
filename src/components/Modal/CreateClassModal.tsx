@@ -18,7 +18,7 @@ const CreateClassModal = () => {
   const dispatch = useAppDispatch()
   const { isOpen, type, data } = useAppSelector((state) => state.modal)
   const createClassData: CreateClassData = data?.value ?? {}
-  console.log(createClassData)
+
   const cancelButtonRef = useRef(null)
   const IsModalOpen = isOpen && type === "createClass"
   const queryClient = useQueryClient()
@@ -29,9 +29,7 @@ const CreateClassModal = () => {
       onSuccess: () => {
         //invalidate qury of all classes
         queryClient.invalidateQueries({
-          queryKey: [
-            api.enrollment.enrollment.getApplicantEnrolledSubjects.queryKey,
-          ],
+          queryKey: [api.admin.classes.findCurrentTermAllClass.query],
         })
         if (loadingToastId) toast.dismiss(loadingToastId)
         toast.success(`Classes created successfully 👌`)

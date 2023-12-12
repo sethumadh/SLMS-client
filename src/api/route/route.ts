@@ -25,6 +25,7 @@ export const route = {
     },
     class: {
       findCurrentTermForManageClass: `${baseURL}/api/v1/admin/administration/class/find-current-term-manage-class`,
+      findCurrentTermClass: `${baseURL}/api/v1/admin/administration/class/find-current-term-class`,
       findPublishTermForManageClass: `${baseURL}/api/v1/admin/administration/class/find-publish-term-manage-class`,
       findSectionsForManageClass: `${baseURL}/api/v1/admin/administration/class/find-sections-manage-class`,
       createClass: `${baseURL}/api/v1/admin/administration/class/create-class`,

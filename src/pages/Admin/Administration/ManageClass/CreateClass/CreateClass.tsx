@@ -101,7 +101,6 @@ function CreateClass() {
     },
   })
   const { control, formState } = methods
-  console.log(sectionData)
   const onSubmit = (values: CreateClassWithSectionsSchema) => {
     if (currentTermData?.id && optionSubject?.value && currentLevel?.value) {
       const createClassData: CreateClassData = {

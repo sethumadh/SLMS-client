@@ -304,6 +304,45 @@ const termToEnrollSchema = z.object({
   updatedAt: z.string(),
   termSubject: termSubjectForManageClassSchema,
 })
+
+/* classes */
+
+const sectionAllClassSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+})
+
+const levelAllClassSchema = z.object({
+  id: z.number(),
+  isActive: z.boolean(),
+  name: z.string(),
+})
+
+const subjectAllClassSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  isActive: z.boolean(),
+})
+
+const termSubjectLevelAllClassSchema = z.object({
+  id: z.number(),
+  subject: subjectAllClassSchema,
+  level: levelAllClassSchema,
+  sections: z.array(sectionAllClassSchema),
+})
+
+const termAllClassDataSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  isPublish: z.boolean(),
+  currentTerm: z.boolean(),
+  startDate: z.string(), // or use z.date() if you want to parse it as a Date object
+  endDate: z.string(), // or use z.date()
+  createdAt: z.string(), // or use z.date()
+  updatedAt: z.string(), // or use z.date()
+  termSubjectLevel: z.array(termSubjectLevelAllClassSchema),
+})
+
 const sectionsToManageClass = z.array(
   z.object({
     id: z.number(),
@@ -319,6 +358,14 @@ export const classes = {
         route.admin.class.findCurrentTermForManageClass
       )
       return termToEnrollSchema.parse(response.data)
+    },
+  },
+  findCurrentTermAllClass: {
+    querykey: "findCurrentTermAllClass",
+    schema: termAllClassDataSchema,
+    query: async () => {
+      const response = await axios.get(route.admin.class.findCurrentTermClass)
+      return termAllClassDataSchema.parse(response.data)
     },
   },
   findPublishTermForManageClass: {
@@ -339,7 +386,7 @@ export const classes = {
       const response = await axios.get(
         route.admin.class.findSectionsForManageClass
       )
-      console.log(response.data)
+
       return sectionsToManageClass.parse(response.data)
     },
   },
