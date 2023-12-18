@@ -3,27 +3,29 @@ import { NavLink, Outlet, useLocation } from "react-router-dom"
 import { cn } from "@/lib/utils"
 
 const tabs = [
-  { name: "Current Term", smName: "Current", href: ".", current: true },
+
   {
-    name: "Create New Term",
-    smName: "Create",
-    href: "create-term",
-    current: false,
+    name: "Timetable",
+    smName: "Current",
+    href: ".",
+    current: true,
   },
   {
-    name: "All Terms",
+    name: "Create Timetable",
     smName: "All Terms",
-    href: "all-terms",
+    href: "create-timetable",
     current: false,
   },
+ 
+
 ]
 
-export default function TermLayout() {
+export default function TimetableLayout() {
   const location = useLocation()
   const activeLink = location.pathname
 
   return (
-    <div className="">
+    <div className="mt-1">
       <div className="sm:block">
         <nav
           className="isolate flex divide-x divide-gray-200 rounded-lg shadow "
@@ -45,8 +47,8 @@ export default function TermLayout() {
               }
               aria-current={tab.current ? "page" : undefined}
             >
-              <span className="hidden sm:block ">{tab.name}</span>
-              <span className="text-xs sm:hidden ">{tab.smName}</span>
+              <span className="hidden sm:block text-lg">{tab.name}</span>
+              <span className="text-lg sm:hidden ">{tab.smName}</span>
             </NavLink>
           ))}
         </nav>

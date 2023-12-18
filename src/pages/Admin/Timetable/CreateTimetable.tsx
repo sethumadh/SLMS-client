@@ -13,10 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import LoadingSpinner from "@/components/Loadingspinner"
 import { formatString } from "@/helpers/formatStringTimetable"
 import { setOpenModal } from "@/redux/slice/modalSlice"
-
-import { formatDate } from "@/helpers/dateFormatter"
-import UpdateTimetableModal from "@/components/Modal/UpdatetimetableModal"
-import { capitalizeFirstCharacter } from "@/helpers/capitalizeFirstCharacter"
+import CreateTimetableModal from "@/components/Modal/CreatetimetableModal"
 
 const teacherOptions = [
   { label: "Ms. Davis", value: "Ms. Davis" },
@@ -31,7 +28,7 @@ const teacherOptions = [
 
 const NUM_ROOMS = 6
 
-export default function TimeTable() {
+export default function CreateTimeTable() {
   const dispatch = useAppDispatch()
   const [isEditMode, setEditMode] = useState(false)
   const { data: timetableData, isLoading: timetableDataLoading } = useQuery({
@@ -94,9 +91,8 @@ export default function TimeTable() {
     dispatch(
       setOpenModal({
         isOpen: true,
-        type: "updateTimetable",
+        type: "createTimetable",
         data: {
-          id: timetableData?.id,
           value: data,
         },
       })
@@ -116,18 +112,12 @@ export default function TimeTable() {
           <div className="px-4 sm:px-6 lg:px-20 lg:py-12">
             <div className="border-b-2 border-gray-200 pb-5 ">
               <h3 className="text-2xl font-semibold leading-6 text-gray-900">
-                Timetable for {timetableData?.name && capitalizeFirstCharacter(timetableData?.name)}
+                Create a New Timetable.
               </h3>
               <div className="flex flex-col gap-1 mt-4">
                 <p className="mt-2 max-w-4xl text-sm text-gray-500">
-                  Created on -{" "}
-                  {timetableData?.createdAt &&
-                    formatDate(timetableData?.createdAt)}
-                </p>
-                <p className="mt-2 max-w-4xl text-sm text-gray-500">
-                  Last updated on -{" "}
-                  {timetableData?.updatedAt &&
-                    formatDate(timetableData?.updatedAt)}
+                  Data is loaded from the existing time table. This action will
+                  replace the current timetable
                 </p>
               </div>
             </div>
@@ -142,7 +132,7 @@ export default function TimeTable() {
                       : "bg-slate-200 text-black hover:bg-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                   }  px-3 py-2 text-center text-sm font-semibold shadow-sm `}
                 >
-                  {isEditMode ? "Cancel" : "Edit Timetable"}
+                  {isEditMode ? "Cancel" : "Edit Data"}
                 </button>
               </div>
               <div className=" sm:flex-none">
@@ -150,7 +140,7 @@ export default function TimeTable() {
                   disabled={!isEditMode}
                   className={`disabled:cursor-not-allowed disabled:bg-slate-300 block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
                 >
-                  submit
+                  Create Timetable
                 </button>
               </div>
             </div>
@@ -361,7 +351,7 @@ export default function TimeTable() {
           </div>
         </form>
       )}
-      <UpdateTimetableModal />
+      <CreateTimetableModal />
     </div>
   )
 }

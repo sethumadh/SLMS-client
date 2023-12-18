@@ -53,8 +53,17 @@ export const timetable = {
         `${route.admin.timetable.updateTimetable}/${id}`,
         timetable
       )
-
-      //   console.log(timetable, id)
+    },
+  },
+  createActiveTimetable: {
+    querykey: "createActiveTimetable",
+    schema: fullTimetableSchema,
+    mutation: async ({
+      timetable,
+    }: {
+      timetable: FullTimetableSchema["data"]
+    }) => {
+      await axios.post(`${route.admin.timetable.createTimetable}`, timetable)
     },
   },
 }

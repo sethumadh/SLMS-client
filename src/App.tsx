@@ -51,6 +51,8 @@ import TermDetails from "./pages/Admin/Administration/ManageTerm/AllTerms/TermDe
 import ManageClassLayout from "./Layouts/AdministrationLayout/ManageClassLayout/ManageClassLayout"
 import AllClass from "./pages/Admin/Administration/ManageClass/AllClasses/AllClasses"
 import CreateClass from "./pages/Admin/Administration/ManageClass/CreateClass/CreateClass"
+import TimetableLayout from "./Layouts/TimetableLayout/TimetableLayout"
+import CreateTimeTable from "./pages/Admin/Timetable/CreateTimetable"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -143,7 +145,10 @@ const router = createBrowserRouter(
             </Route>
           </Route>
         </Route>
-        <Route path="timetable" element={<Timetable />} />
+        <Route path="timetable" element={<TimetableLayout/>}>
+          <Route index element={<Timetable />} />
+          <Route path="create-timetable" element={<CreateTimeTable />} />
+        </Route>
       </Route>
       {/* Role = teacher */}
       <Route path="/*" element={<PageNotFound />} />

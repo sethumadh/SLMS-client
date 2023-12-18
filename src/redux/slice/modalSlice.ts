@@ -16,7 +16,7 @@ type initialStateProps = {
     | "enrollApplicant"
     | "enrollApllicantToStudent"
     | "createClass"
-    | "updateTimetable"
+    | "updateTimetable"|"createTimetable"
   data?: {
     id?: number
     value?: any
