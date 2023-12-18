@@ -1,6 +1,6 @@
 import { Fragment, useRef, useState } from "react"
 import { Dialog, Transition } from "@headlessui/react"
-// import { useNavigate } from "react-router-dom"
+
 
 import { useAppDispatch, useAppSelector } from "@/redux/store"
 import { setOpenModal } from "@/redux/slice/modalSlice"
@@ -10,29 +10,30 @@ import { api } from "@/api/api"
 import { toast } from "react-toastify"
 import { handleAxiosError } from "@/helpers/errorhandler"
 import LoadingIcon from "../LoadingIcon"
-import { CreateClassData } from "@/pages/Admin/Administration/ManageClass/CreateClass/CreateClass"
+import { TimetableSchema } from "@/types/Admin/timetable/timetable"
 
-const CreateClassModal = () => {
+const UpdateTimetableModal = () => {
   const [loadingToastId, setLoadingToastId] = useState<string | null>(null)
-  //   const navigate = useNavigate()
+
   const dispatch = useAppDispatch()
   const { isOpen, type, data } = useAppSelector((state) => state.modal)
-  const createClassData: CreateClassData = data?.value ?? {}
+  const timetable: TimetableSchema["data"] = data?.value ?? {}
+
 
   const cancelButtonRef = useRef(null)
-  const IsModalOpen = isOpen && type === "createClass"
+  const IsModalOpen = isOpen && type === "updateTimetable"
   const queryClient = useQueryClient()
 
-  const { mutateAsync: createClass, isPending: createClassPending } =
+  const { mutateAsync: updateTimetable, isPending: updateTimetablePending } =
     useMutation({
-      mutationFn: api.admin.classes.createClass.mutation,
+      mutationFn: api.timetable.timetable.updateActiveTimetable.mutation,
       onSuccess: () => {
         //invalidate qury of all classes
         queryClient.invalidateQueries({
-          queryKey: [api.admin.classes.findCurrentTermAllClass.query],
+          queryKey: [api.timetable.timetable.findActiveTimetable.querykey],
         })
         if (loadingToastId) toast.dismiss(loadingToastId)
-        toast.success(`Classes created successfully 👌`)
+        toast.success(`updated timetable successfully 👌`)
         dispatch(
           setOpenModal({
             isOpen: false,
@@ -101,19 +102,7 @@ const CreateClassModal = () => {
                       Confirm Creation of class.
                     </Dialog.Title>
                     <div className="mt-2">
-                      {createClassData?.sections?.length > 0 && (
-                        <p className="text-sm text-gray-500">
-                          Please check all details are correct before
-                          submitting. You are about to create{" "}
-                          {`sections for ${createClassData.sections.join(
-                            ","
-                          )} for the level ${
-                            createClassData.levelName
-                          } and subject ${
-                            createClassData.subjectName
-                          } for the current term`}
-                        </p>
-                      )}
+                      you are about to makw chnages to the existing timetable.
                     </div>
                   </div>
                 </div>
@@ -129,23 +118,27 @@ const CreateClassModal = () => {
                         })
                       )
                       const toastId = toast.loading(
-                        `Enrolling student, please wait...`
+                        `Updating timetable, please wait...`
                       )
                       setLoadingToastId(toastId.toString())
-
-                      await createClass({ createClassData })
+                      if (data?.id) {
+                        await updateTimetable({
+                          id: data.id.toString(),
+                          timetable: timetable,
+                        })
+                      }
                     }}
                   >
-                    {createClassPending ? (
+                    {updateTimetablePending ? (
                       <>
                         <LoadingIcon />
                       </>
                     ) : (
-                      <p>Create now</p>
+                      <p>Update now</p>
                     )}
                   </button>
                   <button
-                    disabled={createClassPending}
+                    disabled={updateTimetablePending}
                     type="button"
                     className="disabled:bg-slate-300 mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
                     onClick={() => {
@@ -169,4 +162,4 @@ const CreateClassModal = () => {
     </Transition.Root>
   )
 }
-export default CreateClassModal
+export default UpdateTimetableModal

@@ -109,7 +109,6 @@ function CreateClass() {
         levelName: currentLevel?.value,
         sections: values.sectionName,
       }
-      console.log(createClassData)
       dispatch(
         setOpenModal({
           isOpen: true,

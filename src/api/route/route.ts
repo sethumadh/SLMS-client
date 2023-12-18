@@ -1,4 +1,4 @@
-const baseURL = import.meta.env.VITE_BASE_URL
+const baseURL = import.meta.env.VITE_BASE_URL;
 export const route = {
   application: {
     getCurrentTerm: `${baseURL}/api/v1/application/find-current-term`,
@@ -30,6 +30,11 @@ export const route = {
       findSectionsForManageClass: `${baseURL}/api/v1/admin/administration/class/find-sections-manage-class`,
       createClass: `${baseURL}/api/v1/admin/administration/class/create-class`,
     },
+    timetable: {
+      createTimetable: `${baseURL}/api/v1/admin/timetable/create-new-timetable`,
+      updateTimetable: `${baseURL}/api/v1/admin/timetable/update-timetable`,
+      findActiveTimetable: `${baseURL}/api/v1/admin/timetable/find-active-timetable`,
+    },
   },
   enrollment: {
     getAllApplicants: `${baseURL}/api/v1/admin/applicant/get-all-applicants`,
@@ -48,4 +53,4 @@ export const route = {
     findEnrolledStudentEnrolledSubjects: `${baseURL}/api/v1/admin/student/find-enrolled-subjects-for-enrolled-student`,
     enrollEnrolledStudent: `${baseURL}/api/v1/admin/student/enroll-enrolled-student`,
   },
-}
+};

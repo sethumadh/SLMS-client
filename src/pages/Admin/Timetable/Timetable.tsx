@@ -1,8 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useQuery } from "@tanstack/react-query"
 import { useState, useMemo, useEffect } from "react"
 import { Controller, useForm } from "react-hook-form"
 import Select, { SingleValue } from "react-select"
+import { useAppDispatch } from "@/redux/store"
 
 import { api } from "@/api/api"
 import {
@@ -12,214 +12,10 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod"
 import LoadingSpinner from "@/components/Loadingspinner"
 import { formatString } from "@/helpers/formatStringTimetable"
+import { setOpenModal } from "@/redux/slice/modalSlice"
 
-const initialAssignments: TimetableSchema = {
-  timetable: [
-    {
-      name: "10AM - 11AM",
-      rooms: [
-        {
-          teacherName: "Mr. Smith",
-          subjectName: "english.L1.S1",
-        },
-        {
-          teacherName: "Ms. Johnson",
-          subjectName: "english.L1.S2",
-        },
-        {
-          teacherName: "Mr. Lee",
-          subjectName: "french.L1.S3",
-        },
-        {
-          teacherName: "Mr. doe",
-          subjectName: "french.L2.S1",
-        },
-        {
-          teacherName: "Mr. will",
-          subjectName: "french.L2.S1",
-        },
-        {
-          teacherName: "Mr. sam",
-          subjectName: "french.L2.S1",
-        },
-      ],
-    },
-    {
-      name: "11AM - 12PM",
-      rooms: [
-        {
-          teacherName: "Ms. Davis",
-          subjectName: "french.L2.S2",
-        },
-        {
-          teacherName: "Mr. Miller",
-          subjectName: "music.L1.S4",
-        },
-        {
-          teacherName: "Ms. Brown",
-          subjectName: "painting.L1.S1",
-        },
-        {
-          teacherName: "Mr. doe",
-          subjectName: "french.L2.S1",
-        },
-        {
-          teacherName: "Mr. will",
-          subjectName: "french.L2.S1",
-        },
-        {
-          teacherName: "Mr. sam",
-          subjectName: "french.L2.S1",
-        },
-      ],
-    },
-    {
-      name: "1PM - 2PM",
-      rooms: [
-        {
-          teacherName: "Ms. Davis",
-          subjectName: "french.L2.S2",
-        },
-        {
-          teacherName: "Mr. Miller",
-          subjectName: "music.L1.S4",
-        },
-        {
-          teacherName: "Ms. Brown",
-          subjectName: "painting.L1.S1",
-        },
-        {
-          teacherName: "Mr. doe",
-          subjectName: "french.L2.S1",
-        },
-        {
-          teacherName: "Mr. will",
-          subjectName: "french.L2.S1",
-        },
-        {
-          teacherName: "Mr. sam",
-          subjectName: "french.L2.S1",
-        },
-      ],
-    },
-    {
-      name: "2PM - 3PM",
-      rooms: [
-        {
-          teacherName: "Ms. Davis",
-          subjectName: "french.L2.S2",
-        },
-        {
-          teacherName: "Mr. Miller",
-          subjectName: "music.L1.S4",
-        },
-        {
-          teacherName: "Ms. Brown",
-          subjectName: "painting.L1.S1",
-        },
-        {
-          teacherName: "Mr. doe",
-          subjectName: "french.L2.S1",
-        },
-        {
-          teacherName: "Mr. will",
-          subjectName: "french.L2.S1",
-        },
-        {
-          teacherName: "Mr. sam",
-          subjectName: "french.L2.S1",
-        },
-      ],
-    },
-    {
-      name: "3PM - 4PM",
-      rooms: [
-        {
-          teacherName: "Ms. Davis",
-          subjectName: "french.L2.S2",
-        },
-        {
-          teacherName: "Mr. Miller",
-          subjectName: "music.L1.S4",
-        },
-        {
-          teacherName: "Ms. Brown",
-          subjectName: "painting.L1.S1",
-        },
-        {
-          teacherName: "Mr. doe",
-          subjectName: "french.L2.S1",
-        },
-        {
-          teacherName: "Mr. will",
-          subjectName: "french.L2.S1",
-        },
-        {
-          teacherName: "Mr. sam",
-          subjectName: "french.L2.S1",
-        },
-      ],
-    },
-    {
-      name: "4PM - 5PM",
-      rooms: [
-        {
-          teacherName: "Ms. Davis",
-          subjectName: "french.L2.S2",
-        },
-        {
-          teacherName: "Mr. Miller",
-          subjectName: "music.L1.S4",
-        },
-        {
-          teacherName: "Ms. Brown",
-          subjectName: "painting.L1.S1",
-        },
-        {
-          teacherName: "",
-          subjectName: "",
-        },
-        {
-          teacherName: "Mr. will",
-          subjectName: "french.L2.S1",
-        },
-        {
-          teacherName: "Mr. sam",
-          subjectName: "french.L2.S1",
-        },
-      ],
-    },
-    {
-      name: "12PM - 1PM",
-      rooms: [
-        {
-          teacherName: "Ms. Davis",
-          subjectName: "french.L2.S2",
-        },
-        {
-          teacherName: "Mr. Miller",
-          subjectName: "music.L1.S4",
-        },
-        {
-          teacherName: "",
-          subjectName: "",
-        },
-        {
-          teacherName: "",
-          subjectName: "",
-        },
-        {
-          teacherName: "",
-          subjectName: "",
-        },
-        {
-          teacherName: "",
-          subjectName: "",
-        },
-      ],
-    },
-  ],
-}
+import { formatDate } from "@/helpers/dateFormatter"
+import UpdateTimetableModal from "@/components/Modal/UpdatetimetableModal"
 
 const teacherOptions = [
   { label: "Ms. Davis", value: "Ms. Davis" },
@@ -235,8 +31,12 @@ const teacherOptions = [
 const NUM_ROOMS = 6
 
 export default function TimeTable() {
-  const [assignments, setAssignments] = useState(initialAssignments)
+  const dispatch = useAppDispatch()
   const [isEditMode, setEditMode] = useState(false)
+  const { data: timetableData, isLoading: timetableDataLoading } = useQuery({
+    queryKey: [api.timetable.timetable.findActiveTimetable.querykey],
+    queryFn: api.timetable.timetable.findActiveTimetable.query,
+  })
 
   const {
     register,
@@ -246,7 +46,7 @@ export default function TimeTable() {
     formState: { errors },
   } = useForm<TimetableSchema>({
     defaultValues: {
-      timetable: assignments.timetable.map((timeslot) => ({
+      data: timetableData?.data.map((timeslot) => ({
         ...timeslot,
         rooms: timeslot.rooms.map((room) => ({
           teacherName: room.teacherName || "",
@@ -257,8 +57,8 @@ export default function TimeTable() {
     resolver: zodResolver(timetableSchema),
   })
   useEffect(() => {
-    reset({ timetable: assignments.timetable })
-  }, [assignments.timetable, reset])
+    reset({ data: timetableData?.data })
+  }, [timetableData?.data, reset])
 
   const { data: currentTermClassesData, isLoading: currentTermClassesLoading } =
     useQuery({
@@ -286,16 +86,25 @@ export default function TimeTable() {
     return data
   }, [currentTermClassesData])
 
-  const onSubmit = (data: any) => {
-    setAssignments(data)
+  const onSubmit = (data: TimetableSchema) => {
+    // settimetableData(data)
     setEditMode(false)
-    console.log({ data })
+
+    dispatch(
+      setOpenModal({
+        isOpen: true,
+        type: "updateTimetable",
+        data: {
+          id: timetableData?.id,
+          value: data,
+        },
+      })
+    )
   }
-  console.log({ assignments })
 
   return (
-    <>
-      {currentTermClassesLoading ? (
+    <div>
+      {currentTermClassesLoading || timetableDataLoading ? (
         <>
           <div className="h-600 flex justify-center items-center">
             <LoadingSpinner />
@@ -304,10 +113,22 @@ export default function TimeTable() {
       ) : (
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="px-4 sm:px-6 lg:px-20 lg:py-20">
-            <div className="border-b-2 border-gray-200 pb-5">
+            <div className="border-b-2 border-gray-200 pb-5 ">
               <h3 className="text-4xl font-semibold leading-6 text-gray-900">
-                Timetable
+                {timetableData?.name}
               </h3>
+              <div className="flex flex-col gap-1 mt-4">
+                <p className="mt-2 max-w-4xl text-sm text-gray-500">
+                  Created on -{" "}
+                  {timetableData?.createdAt &&
+                    formatDate(timetableData?.createdAt)}
+                </p>
+                <p className="mt-2 max-w-4xl text-sm text-gray-500">
+                  Last updated on -{" "}
+                  {timetableData?.updatedAt &&
+                    formatDate(timetableData?.updatedAt)}
+                </p>
+              </div>
             </div>
             <div className="sm:flex sm:items-center mt-8 gap-20">
               <div className="sm:flex-none">
@@ -352,7 +173,7 @@ export default function TimeTable() {
                   </tr>
                 </thead>
                 <tbody>
-                  {assignments.timetable.map((timeslot, index) => {
+                  {timetableData?.data.map((timeslot, index) => {
                     return (
                       <tr
                         key={index}
@@ -360,20 +181,23 @@ export default function TimeTable() {
                       >
                         <td className="relative py-4 pl-4 pr-3 text-sm sm:pl-6 bg-blue-300 w-32 h-20 border-4">
                           {isEditMode ? (
-                            <div className="max-w-32 h-20">
+                            <div className="">
                               <input
                                 type="text"
                                 defaultValue={timeslot.name}
-                                {...register(`timetable[${index}].name` as any)}
-                                className="rounded-md border-gray-300 shadow-s"
+                                {...register(`data.${index}.name` as const)}
+                                className="text-center rounded-md border-gray-300 shadow-s"
                               />
                               <div className="h-4">
-                                {errors?.timetable &&
-                                  errors?.timetable[index]?.rooms?.message && (
-                                    <p className="text-red-500 font-bold py-4">
-                                      {errors?.timetable[index]?.rooms?.message}
-                                    </p>
-                                  )}
+                                {errors?.data?.[index]?.rooms?.[0]?.root
+                                  ?.message && (
+                                  <p className="text-red-500 font-bold py-4">
+                                    {
+                                      errors?.data?.[index]?.rooms?.[0]?.root
+                                        ?.message
+                                    }
+                                  </p>
+                                )}
                               </div>
                             </div>
                           ) : (
@@ -385,7 +209,7 @@ export default function TimeTable() {
                         {timeslot.rooms.map((room, roomIndex) => {
                           return (
                             <td
-                              key={roomIndex}
+                              key={`${roomIndex}-${index}`}
                               className={`px-3 py-3.5 text-sm text-gray-500 border-4 shadow-sm w-32 h-20 ${
                                 !room.teacherName &&
                                 !room.subjectName &&
@@ -403,9 +227,7 @@ export default function TimeTable() {
                               {isEditMode ? (
                                 <div>
                                   <Controller
-                                    name={
-                                      `timetable[${index}].rooms[${roomIndex}].teacherName` as any
-                                    }
+                                    name={`data.${index}.rooms.${roomIndex}.teacherName`}
                                     control={control}
                                     defaultValue={room.teacherName}
                                     render={({ field }) => (
@@ -458,9 +280,7 @@ export default function TimeTable() {
                                   />
 
                                   <Controller
-                                    name={
-                                      `timetable[${index}].rooms[${roomIndex}].subjectName` as any
-                                    }
+                                    name={`data.${index}.rooms.${roomIndex}.subjectName`}
                                     control={control}
                                     defaultValue={room.subjectName}
                                     render={({ field }) => (
@@ -488,14 +308,12 @@ export default function TimeTable() {
                                     )}
                                   />
                                   <div>
-                                    {errors.timetable?.[index]?.rooms?.[
-                                      roomIndex
-                                    ]?.message && (
+                                    {errors.data?.[index]?.rooms?.root
+                                      ?.message && (
                                       <p className="text-red-500 text-xs">
                                         {
-                                          errors.timetable?.[index]?.rooms?.[
-                                            roomIndex
-                                          ]?.message
+                                          errors.data?.[index]?.rooms?.root
+                                            ?.message
                                         }
                                       </p>
                                     )}
@@ -540,6 +358,7 @@ export default function TimeTable() {
           </div>
         </form>
       )}
-    </>
+      <UpdateTimetableModal />
+    </div>
   )
 }

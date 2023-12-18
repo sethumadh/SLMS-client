@@ -153,7 +153,6 @@ export const term = {
     schema: createTermWithSubjectSchema,
     mutation: async (termData: CreateTermWithSubjectSchema) => {
       if (createTermWithSubjectSchema.safeParse(termData)) {
-        console.log(termData)
         const response = await axios.post(
           route.admin.createTermWithSubjectsSetup,
           termData
@@ -343,7 +342,7 @@ const termAllClassDataSchema = z.object({
   termSubjectLevel: z.array(termSubjectLevelAllClassSchema),
 })
 
-const sectionsToManageClass = z.array(
+const sectionsToManageClassSchema = z.array(
   z.object({
     id: z.number(),
     name: z.string(),
@@ -381,18 +380,18 @@ export const classes = {
 
   findSectionsForManageClass: {
     querykey: "findSectionsForManageClass",
-    schema: sectionsToManageClass,
+    schema: sectionsToManageClassSchema,
     query: async () => {
       const response = await axios.get(
         route.admin.class.findSectionsForManageClass
       )
 
-      return sectionsToManageClass.parse(response.data)
+      return sectionsToManageClassSchema.parse(response.data)
     },
   },
   createClass: {
     querykey: "createClass",
-    query: async (creatClassData: { createClassData: CreateClassData }) => {
+    mutation: async (creatClassData: { createClassData: CreateClassData }) => {
       const response = await axios.post(
         route.admin.class.createClass,
         creatClassData

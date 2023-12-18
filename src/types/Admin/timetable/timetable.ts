@@ -24,6 +24,6 @@ const TimeslotSchema = z.object({
 });
 
 export const timetableSchema = z.object({
-  timetable: z.array(TimeslotSchema),
+  data: z.array(TimeslotSchema),
 });
 export type TimetableSchema = z.infer<typeof timetableSchema>;
