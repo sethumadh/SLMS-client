@@ -15,7 +15,7 @@ import { formatString } from "@/helpers/formatStringTimetable"
 import { setOpenModal } from "@/redux/slice/modalSlice"
 
 import { formatDate } from "@/helpers/dateFormatter"
-import UpdateTimetableModal from "@/components/Modal/UpdatetimetableModal"
+import UpdateTimetableModal from "@/components/Modal/UpdateTimetableModal"
 import { capitalizeFirstCharacter } from "@/helpers/capitalizeFirstCharacter"
 
 const teacherOptions = [
@@ -116,7 +116,9 @@ export default function TimeTable() {
           <div className="px-4 sm:px-6 lg:px-20 lg:py-12">
             <div className="border-b-2 border-gray-200 pb-5 ">
               <h3 className="text-2xl font-semibold leading-6 text-gray-900">
-                Timetable for {timetableData?.name && capitalizeFirstCharacter(timetableData?.name)}
+                Timetable for{" "}
+                {timetableData?.name &&
+                  capitalizeFirstCharacter(timetableData?.name)}
               </h3>
               <div className="flex flex-col gap-1 mt-4">
                 <p className="mt-2 max-w-4xl text-sm text-gray-500">

@@ -13,7 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import LoadingSpinner from "@/components/Loadingspinner"
 import { formatString } from "@/helpers/formatStringTimetable"
 import { setOpenModal } from "@/redux/slice/modalSlice"
-import CreateTimetableModal from "@/components/Modal/CreatetimetableModal"
+import CreateTimetableModal from "@/components/Modal/CreateTimetableModal"
 
 const teacherOptions = [
   { label: "Ms. Davis", value: "Ms. Davis" },
