@@ -22,11 +22,11 @@ const EnrollApplicantModal = () => {
 
   const { mutateAsync: enrollApplicant, isPending: enrollApplicantPending } =
     useMutation({
-      mutationFn: api.enrollment.enrollment.enrollApplicant.query,
+      mutationFn: api.enrollment.applicantEnrollment.enrollApplicant.mutation,
       onSuccess: () => {
         queryClient.invalidateQueries({
           queryKey: [
-            api.enrollment.enrollment.getApplicantEnrolledSubjects.queryKey,
+            api.enrollment.applicantEnrollment.getApplicantEnrolledSubjects.queryKey,
           ],
         })
         if (loadingToastId) toast.dismiss(loadingToastId)
@@ -117,7 +117,7 @@ const EnrollApplicantModal = () => {
                         })
                       )
                       const toastId = toast.loading(
-                        `Enrolling student, please wait...`
+                        `Enrolling applicant, please wait...`
                       )
                       setLoadingToastId(toastId.toString())
 

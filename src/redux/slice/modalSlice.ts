@@ -12,11 +12,12 @@ type initialStateProps = {
     | "isCurrentTerm"
     | "deleteTerm"
     | "submitApplicant"
-    | "isPublishTerm"
-    | "enrollApplicant"
+    | "isPublishTerm"|"enrollStudent"
+    | "enrollApplicant"|"deEnrollApplicant"
     | "enrollApllicantToStudent"
     | "createClass"
-    | "updateTimetable"|"createTimetable"
+    | "updateTimetable"
+    | "createTimetable"
   data?: {
     id?: number
     value?: any

@@ -1,6 +1,6 @@
 import { Fragment, useRef, useState } from "react"
 import { Dialog, Transition } from "@headlessui/react"
-import { useNavigate } from "react-router-dom"
+// import { useNavigate } from "react-router-dom"
 
 import { useAppDispatch, useAppSelector } from "@/redux/store"
 import { setOpenModal } from "@/redux/slice/modalSlice"
@@ -11,42 +11,41 @@ import { toast } from "react-toastify"
 import { handleAxiosError } from "@/helpers/errorhandler"
 import LoadingIcon from "../LoadingIcon"
 
-const EnrollApplicantToStudentModal = () => {
+const EnrollStudentModal = () => {
   const [loadingToastId, setLoadingToastId] = useState<string | null>(null)
-  const navigate = useNavigate()
+  //   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const { isOpen, type, data } = useAppSelector((state) => state.modal)
   const cancelButtonRef = useRef(null)
-  const IsModalOpen = isOpen && type === "enrollApllicantToStudent"
+  const IsModalOpen = isOpen && type === "enrollStudent"
   const queryClient = useQueryClient()
+  console.log(data)
 
-  const {
-    mutateAsync: enrollApplicantToStudent,
-    isPending: enrollApplicantToStudentPending,
-  } = useMutation({
-    mutationFn: api.enrollment.applicantEnrollment.enrollApplicantToStudent.query,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [
-          api.students.enrolledStudent.findAllEnrolledStudents.querykey,
-          api.enrollment.applicantEnrollment.findApplicantById.querykey,
-        ],
-      })
-      if (loadingToastId) toast.dismiss(loadingToastId)
-      toast.success(`Applicant enrolled student successfully 👌`)
-      dispatch(
-        setOpenModal({
-          isOpen: false,
-          type: "",
+  const { mutateAsync: enrollStudent, isPending: enrollStudentPending } =
+    useMutation({
+      mutationFn: api.students.enrolledStudent.enrollEnrolledStudent.mutation,
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: [
+            api.students.enrolledStudent.findEnrolledStudentEnrolledSubjects
+              .queryKey,
+          ],
         })
-      )
-      navigate("/admin/enrollment")
-    },
-    onError: (error: unknown) => {
-      if (loadingToastId) toast.dismiss(loadingToastId)
-      handleAxiosError(error)
-    },
-  })
+        if (loadingToastId) toast.dismiss(loadingToastId)
+        toast.success(`Student enrolled successfully 👌`)
+        dispatch(
+          setOpenModal({
+            isOpen: false,
+            type: "",
+          })
+        )
+        // navigate("/application-submit")
+      },
+      onError: (error: unknown) => {
+        if (loadingToastId) toast.dismiss(loadingToastId)
+        handleAxiosError(error)
+      },
+    })
 
   return (
     <Transition.Root show={IsModalOpen} as={Fragment}>
@@ -99,7 +98,7 @@ const EnrollApplicantToStudentModal = () => {
                       as="h3"
                       className="text-base font-semibold leading-6 text-gray-900"
                     >
-                      Confirm Enrollment of the applicant to student
+                      Confirm enrollment.
                     </Dialog.Title>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">
@@ -120,24 +119,23 @@ const EnrollApplicantToStudentModal = () => {
                         })
                       )
                       const toastId = toast.loading(
-                        `Submitting your application, please wait`
+                        `Enrolling applicant, please wait...`
                       )
                       setLoadingToastId(toastId.toString())
-                      if (data?.id) {
-                        await enrollApplicantToStudent(data?.id.toString())
-                      }
+
+                      await enrollStudent(data?.value)
                     }}
                   >
-                    {enrollApplicantToStudentPending ? (
+                    {enrollStudentPending ? (
                       <>
                         <LoadingIcon />
                       </>
                     ) : (
-                      <p>Submit now</p>
+                      <p>Enroll now</p>
                     )}
                   </button>
                   <button
-                    disabled={enrollApplicantToStudentPending}
+                    disabled={enrollStudentPending}
                     type="button"
                     className="disabled:bg-slate-300 mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
                     onClick={() => {
@@ -161,4 +159,4 @@ const EnrollApplicantToStudentModal = () => {
     </Transition.Root>
   )
 }
-export default EnrollApplicantToStudentModal
+export default EnrollStudentModal

@@ -38,12 +38,12 @@ function PersonalDetails() {
     isError: enrolledStudentDataIsError,
   } = useQuery({
     queryKey: [
-      api.students.enrolledStudents.findEnrolledStudentById.querykey,
+      api.students.enrolledStudent.findEnrolledStudentById.querykey,
       params.id,
     ],
     queryFn: () => {
       if (params.id) {
-        return api.students.enrolledStudents.findEnrolledStudentById.query(
+        return api.students.enrolledStudent.findEnrolledStudentById.query(
           params.id
         )
       }

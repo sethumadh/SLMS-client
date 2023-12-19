@@ -36,18 +36,18 @@ function EnrolledStudentList() {
     error: _allStudentDataError,
   } = useQuery({
     queryKey: [
-      api.students.enrolledStudents.findAllEnrolledStudents.querykey,
+      api.students.enrolledStudent.findAllEnrolledStudents.querykey,
       currentPage,
       query,
     ],
     queryFn: () => {
       if (query) {
-        return api.students.enrolledStudents.searchEnrolledStudents.query(
+        return api.students.enrolledStudent.searchEnrolledStudents.query(
           query,
           currentPage
         )
       } else {
-        return api.students.enrolledStudents.findAllEnrolledStudents.query(
+        return api.students.enrolledStudent.findAllEnrolledStudents.query(
           currentPage
         )
       }

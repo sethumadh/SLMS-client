@@ -1,7 +1,7 @@
 import { currentTerm, create, publishedTerm } from "./application/application"
 import { term, levels, subjects, groups, classes } from "./admin/admin"
-import { enrollment } from "./admin/enrollment"
-import { enrolledStudents } from "./admin/student"
+import { applicantEnrollment } from "./admin/enrollment"
+import { enrolledStudent } from "./admin/student"
 import { timetable } from "./admin/timetable"
 
 export const api = {
@@ -18,12 +18,12 @@ export const api = {
     classes,
   },
   enrollment: {
-    enrollment,
+    applicantEnrollment,
   },
   students: {
-    enrolledStudents,
+    enrolledStudent,
   },
-  timetable:{
-    timetable
-  }
+  timetable: {
+    timetable,
+  },
 }

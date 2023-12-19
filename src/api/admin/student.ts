@@ -111,7 +111,7 @@ const enrolledStudentsDataSchema = z.object({
   }),
 })
 const enrollDataSchema = z.object({
-  applicantId: z.number(),
+  enrolledStudentId: z.number(),
   enrollData: z.array(
     z.object({
       subject: z.string(),
@@ -124,18 +124,20 @@ const enrollDataSchema = z.object({
   ),
 })
 export type EnrollDataSchema = z.infer<typeof enrollDataSchema>
-export const enrolledStudents = {
+
+export const enrolledStudent = {
   findAllEnrolledStudents: {
     querykey: "getAllEnrolledStudents",
     schema: enrolledStudentsDataSchema,
     query: async (page = 0) => {
       try {
         const response = await axios.get(
-          route.students.getAllEnrolledStudents,
+          route.enrolledStudents.getAllEnrolledStudents,
           {
             params: { page },
           }
         )
+        console.log(response.data)
         return enrolledStudentsDataSchema.parse(response.data)
       } catch (error) {
         if (error instanceof z.ZodError) {
@@ -155,7 +157,7 @@ export const enrolledStudents = {
     query: async (search = "", page = 0) => {
       try {
         const response = await axios.get(
-          route.students.searchEnrolledStudents,
+          route.enrolledStudents.searchEnrolledStudents,
           {
             params: { search, page },
           }
@@ -179,7 +181,7 @@ export const enrolledStudents = {
     schema: enrolledStudentSchema,
     query: async (id: string) => {
       try {
-        const response = await axios.get(`${route.students.findEnrolledStudentById}/${id}`)
+        const response = await axios.get(`${route.enrolledStudents.findEnrolledStudentById}/${id}`)
 
         return enrolledStudentSchema.parse(response.data)
       } catch (error) {
@@ -199,7 +201,7 @@ export const enrolledStudents = {
     schema: termToEnrollSchema,
     query: async () => {
       try {
-        const response = await axios.get(`${route.students.findTermToEnrollEnrolledStudent}`)
+        const response = await axios.get(`${route.enrolledStudents.findTermToEnrollEnrolledStudent}`)
         return termToEnrollSchema.parse(response.data)
       } catch (error) {
         if (error instanceof z.ZodError) {
@@ -218,7 +220,7 @@ export const enrolledStudents = {
     query: async (id: string) => {
       try {
         const response = await axios.get(
-          `${route.students.findEnrolledStudentEnrolledSubjects}/${id}`
+          `${route.enrolledStudents.findEnrolledStudentEnrolledSubjects}/${id}`
         )
 
         return enrolledSubjectsSchema.parse(response.data)
@@ -237,10 +239,34 @@ export const enrolledStudents = {
   enrollEnrolledStudent: {
     queryKey: "enrollEnrolledStudent",
     schema: enrollDataSchema,
-    query: async (enrollData: EnrollDataSchema) => {
+    mutation: async (enrollData: EnrollDataSchema) => {
       try {
         const response = await axios.post(
-          `${route.students.enrollEnrolledStudent}`,
+          `${route.enrolledStudents.enrollEnrolledStudent}`,
+          enrollData
+        )
+        // return termToEnrollSchema.parse(response.data)
+        console.log(response.data)
+        return response.data
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          // Handle Zod validation error
+          console.error("Zod validation error:", error.issues)
+        } else {
+          // Handle other types of errors (e.g., network errors)
+          console.error("Error:", error)
+        }
+        throw error // Re-throw the error if you want to propagate it
+      }
+    },
+  },
+  deEnrollEnrolledStudent: {
+    queryKey: "deEnrollEnrolledStudent",
+    schema: enrollDataSchema,
+    mutation: async (enrollData: EnrollDataSchema) => {
+      try {
+        const response = await axios.post(
+          `${route.enrolledStudents.deEnrollEnrolledStudent}`,
           enrollData
         )
         // return termToEnrollSchema.parse(response.data)

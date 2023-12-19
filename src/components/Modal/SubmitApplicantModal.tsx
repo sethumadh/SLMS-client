@@ -26,8 +26,8 @@ const SubmitApplicantModal = () => {
       onSuccess: () => {
         queryClient.invalidateQueries({
           queryKey: [
-            api.students.enrolledStudents.findAllEnrolledStudents.querykey,
-            api.enrollment.enrollment.findApplicantById.querykey,
+            api.students.enrolledStudent.findAllEnrolledStudents.querykey,
+            api.enrollment.applicantEnrollment.findApplicantById.querykey,
           ],
         })
         if (loadingToastId) toast.dismiss(loadingToastId)

@@ -14,7 +14,7 @@ import { setOpenModal } from "@/redux/slice/modalSlice"
 import OverlayLoadingspinner from "@/components/OverlayLoadingspinner"
 import { capitalizeFirstCharacter } from "@/helpers/capitalizeFirstCharacter"
 import { formatDate } from "@/helpers/dateFormatter"
-import EnrollApplicantModal from "@/components/Modal/EnrollApplicantModal"
+import EnrollStudentModal from "@/components/Modal/EnrollStudentModal"
 
 export type EnrolledStudentSubjectDetailSchema = z.infer<
   typeof enrolledStudentSubjectDetailSchema
@@ -22,7 +22,7 @@ export type EnrolledStudentSubjectDetailSchema = z.infer<
 
 
 type studentEnrollData = {
-  applicantId: number
+  enrolledStudentId: number
   enrollData: {
     subject: string
     termSubjectGroupId: number
@@ -55,12 +55,12 @@ function SubjectDetails() {
     isError: enrolledStudentDataIsError,
   } = useQuery({
     queryKey: [
-      api.students.enrolledStudents.findEnrolledStudentById.querykey,
+      api.students.enrolledStudent.findEnrolledStudentById.querykey,
       params.id,
     ],
     queryFn: () => {
       if (params.id) {
-        return api.students.enrolledStudents.findEnrolledStudentById.query(
+        return api.students.enrolledStudent.findEnrolledStudentById.query(
           params.id
         )
       }
@@ -73,10 +73,10 @@ function SubjectDetails() {
     isError: termToEnrollDataIsError,
   } = useQuery({
     queryKey: [
-      api.students.enrolledStudents.findTermToEnrollEnrolledStudent.queryKey,
+      api.students.enrolledStudent.findTermToEnrollEnrolledStudent.queryKey,
     ],
     queryFn:
-      api.students.enrolledStudents.findTermToEnrollEnrolledStudent.query,
+      api.students.enrolledStudent.findTermToEnrollEnrolledStudent.query,
 
     enabled: !!params.id,
   })
@@ -86,12 +86,12 @@ function SubjectDetails() {
     isError: enrolledStudentEnrolledDataIsError,
   } = useQuery({
     queryKey: [
-      api.students.enrolledStudents.findEnrolledStudentEnrolledSubjects
+      api.students.enrolledStudent.findEnrolledStudentEnrolledSubjects
         .queryKey,
     ],
     queryFn: () => {
       if (params.id) {
-        return api.students.enrolledStudents.findEnrolledStudentEnrolledSubjects.query(
+        return api.students.enrolledStudent.findEnrolledStudentEnrolledSubjects.query(
           params.id
         )
       }
@@ -134,13 +134,13 @@ function SubjectDetails() {
           })
 
       const studentEnrollData: studentEnrollData = {
-        applicantId: enrolledStudentData?.id,
+        enrolledStudentId: enrolledStudentData?.id,
         enrollData,
       }
       dispatch(
         setOpenModal({
           isOpen: true,
-          type: "enrollApplicant",
+          type: "enrollStudent",
           data: {
             value: studentEnrollData,
           },
@@ -400,7 +400,7 @@ function SubjectDetails() {
         </>
       )}
 
-      <EnrollApplicantModal />
+      <EnrollStudentModal />
     </div>
   )
 }
