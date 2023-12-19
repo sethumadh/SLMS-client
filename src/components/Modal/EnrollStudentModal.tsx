@@ -19,7 +19,7 @@ const EnrollStudentModal = () => {
   const cancelButtonRef = useRef(null)
   const IsModalOpen = isOpen && type === "enrollStudent"
   const queryClient = useQueryClient()
-  console.log(data)
+
 
   const { mutateAsync: enrollStudent, isPending: enrollStudentPending } =
     useMutation({

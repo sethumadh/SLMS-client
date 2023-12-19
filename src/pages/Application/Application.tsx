@@ -156,7 +156,6 @@ function Application() {
           DOB: values.personalDetails.DOB.toISOString(),
         },
       }
-      console.log(formattedValues)
       dispatch(
         setOpenModal({
           isOpen: true,

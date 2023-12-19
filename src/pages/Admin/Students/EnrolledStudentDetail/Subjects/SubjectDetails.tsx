@@ -276,7 +276,7 @@ function SubjectDetails() {
               </dl>
             </div>
           </ul>
-          <div>
+          <div className="px-8 py-4 shadow-md rounded-lg">
             <div className="border-b border-gray-200 pb-5 mt-8">
               <h3 className="text-lg font-semibold leading-6 text-gray-900">
                 Enroll Student
@@ -284,8 +284,8 @@ function SubjectDetails() {
             </div>
             <FormProvider {...methods}>
               <form onSubmit={methods.handleSubmit(onSubmit)} noValidate>
-                <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 py-4  mb-16">
-                  {/* {step == 0 && <Create />} */}
+                <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 py-4  mb-1">
+
 
                   <div className="space-y-12">
                     <div className="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">
@@ -428,7 +428,7 @@ function SubjectDetails() {
             {/* <IsCurrentTermModal /> */}
           </div>
           <div className="mt-4" />
-          <div>
+          <div className="px-8 py-4 border shadow-md rounded-lg mb-16">
             <div className="border-b border-gray-200 pb-5 mt-8">
               <h3 className="text-lg font-semibold leading-6 text-gray-900">
                 De-Enroll Student

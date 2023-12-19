@@ -140,7 +140,7 @@ export const term = {
       id: number
       updatedTerm: ExtendCurrentTermSchema
     }) => {
-      console.log(updatedTerm)
+
       const response = await axios.put(
         `${route.admin.extendCurrentTerm}/${id}`,
         { updatedTerm }

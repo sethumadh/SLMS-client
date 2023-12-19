@@ -12,7 +12,7 @@ function AllClass() {
       queryKey: [api.admin.classes.findCurrentTermAllClass.querykey],
       queryFn: api.admin.classes.findCurrentTermAllClass.query,
     })
-  console.log(currentTermClassesData)
+
   return (
     <>
       {currentTermClassesLoading ? (

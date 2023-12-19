@@ -137,7 +137,7 @@ export const enrolledStudent = {
             params: { page },
           }
         )
-        console.log(response.data)
+
         return enrolledStudentsDataSchema.parse(response.data)
       } catch (error) {
         if (error instanceof z.ZodError) {
@@ -246,7 +246,7 @@ export const enrolledStudent = {
           enrollData
         )
         // return termToEnrollSchema.parse(response.data)
-        console.log(response.data)
+
         return response.data
       } catch (error) {
         if (error instanceof z.ZodError) {
@@ -270,7 +270,7 @@ export const enrolledStudent = {
           enrollData
         )
         // return termToEnrollSchema.parse(response.data)
-        console.log(response.data)
+
         return response.data
       } catch (error) {
         if (error instanceof z.ZodError) {
