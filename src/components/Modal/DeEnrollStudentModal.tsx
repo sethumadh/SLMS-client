@@ -11,26 +11,27 @@ import { toast } from "react-toastify"
 import { handleAxiosError } from "@/helpers/errorhandler"
 import LoadingIcon from "../LoadingIcon"
 
-const DeEnrollApplicantModal = () => {
+const DeEnrollStudentModal = () => {
   const [loadingToastId, setLoadingToastId] = useState<string | null>(null)
   //   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const { isOpen, type, data } = useAppSelector((state) => state.modal)
   const cancelButtonRef = useRef(null)
-  const IsModalOpen = isOpen && type === "deEnrollApplicant"
+  const IsModalOpen = isOpen && type === "deEnrollStudent"
   const queryClient = useQueryClient()
 
-  const { mutateAsync: deEnrollApplicant, isPending: deEnrollApplicantPending } =
+  const { mutateAsync: deEnrollStudent, isPending: deEnrollStudentPending } =
     useMutation({
-      mutationFn: api.enrollment.applicantEnrollment.deEnrollApplicant.mutation,
+      mutationFn: api.students.enrolledStudent.deEnrollEnrolledStudent.mutation,
       onSuccess: () => {
         queryClient.invalidateQueries({
           queryKey: [
-            api.enrollment.applicantEnrollment.getApplicantEnrolledSubjects.queryKey,
+            api.students.enrolledStudent.findEnrolledStudentEnrolledSubjects
+            .queryKey,
           ],
         })
         if (loadingToastId) toast.dismiss(loadingToastId)
-        toast.success(`Applicant De-enrolled successfully 👌`)
+        toast.success(`Student De-enrolled successfully 👌`)
         dispatch(
           setOpenModal({
             isOpen: false,
@@ -117,14 +118,14 @@ const DeEnrollApplicantModal = () => {
                         })
                       )
                       const toastId = toast.loading(
-                        `De-Enrolling Applicant, please wait...`
+                        `De-Enrolling Student, please wait...`
                       )
                       setLoadingToastId(toastId.toString())
 
-                      await deEnrollApplicant(data?.value)
+                      await deEnrollStudent(data?.value)
                     }}
                   >
-                    {deEnrollApplicantPending ? (
+                    {deEnrollStudentPending ? (
                       <>
                         <LoadingIcon />
                       </>
@@ -133,7 +134,7 @@ const DeEnrollApplicantModal = () => {
                     )}
                   </button>
                   <button
-                    disabled={deEnrollApplicantPending}
+                    disabled={deEnrollStudentPending}
                     type="button"
                     className="disabled:bg-slate-300 mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
                     onClick={() => {
@@ -157,4 +158,4 @@ const DeEnrollApplicantModal = () => {
     </Transition.Root>
   )
 }
-export default DeEnrollApplicantModal
+export default DeEnrollStudentModal

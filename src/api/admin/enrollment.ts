@@ -232,7 +232,7 @@ export const applicantEnrollment = {
   deEnrollApplicant: {
     queryKey: " deEnrollApplicant",
     schema: enrollDataSchema,
-    query: async (enrollData: EnrollDataSchema) => {
+    mutation: async (enrollData: EnrollDataSchema) => {
       try {
         const response = await axios.post(
           `${route.applicantEnrollment.deEnrollApplicant}`,

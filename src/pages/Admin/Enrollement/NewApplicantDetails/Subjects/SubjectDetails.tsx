@@ -60,7 +60,6 @@ function NewApplicantSubjectDetails() {
 
   const {
     data: applicantData,
-
     isLoading: applicantDataIsLoading,
     isError: applicantDataIsError,
   } = useQuery({
@@ -432,7 +431,7 @@ function NewApplicantSubjectDetails() {
           <div>
             <div className="border-b border-gray-200 pb-5 mt-8">
               <h3 className="text-lg font-semibold leading-6 text-gray-900">
-                De-Enroll Student
+                De-Enroll Applicant
               </h3>
             </div>
             <FormProvider {...deEnrollMethods}>
@@ -559,7 +558,10 @@ function NewApplicantSubjectDetails() {
                         <div className="">
                           {deEnrollFormstate.errors?.enrolledSubjects && (
                             <span className="text-xs text-red-600">
-                              {deEnrollFormstate.errors?.enrolledSubjects[0]?.message}
+                              {
+                                deEnrollFormstate.errors?.enrolledSubjects[0]
+                                  ?.message
+                              }
                             </span>
                           )}
                         </div>
@@ -579,7 +581,6 @@ function NewApplicantSubjectDetails() {
                 </button>
               </form>
             </FormProvider>
-            {/* <IsCurrentTermModal /> */}
           </div>
         </>
       ) : (
