@@ -53,6 +53,7 @@ import AllClass from "./pages/Admin/Administration/ManageClass/AllClasses/AllCla
 import CreateClass from "./pages/Admin/Administration/ManageClass/CreateClass/CreateClass"
 import TimetableLayout from "./Layouts/TimetableLayout/TimetableLayout"
 import CreateTimeTable from "./pages/Admin/Timetable/CreateTimetable"
+import TermStudentList from "./pages/Admin/Administration/ManageTerm/AllTerms/TermDetails/TermStudentList"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -134,7 +135,10 @@ const router = createBrowserRouter(
             <Route path="create-term" element={<CreateTerm />} />
             <Route path="all-terms">
               <Route index element={<AllTerms />} />
-              <Route path="term-details/:id" element={<TermDetails />} />
+              <Route path="term-details/:id">
+                <Route index element={<TermDetails />} />
+                <Route path="studentList" element={<TermStudentList />} />
+              </Route>
             </Route>
           </Route>
           <Route path="manage-class" element={<ManageClassLayout />}>
@@ -145,7 +149,7 @@ const router = createBrowserRouter(
             </Route>
           </Route>
         </Route>
-        <Route path="timetable" element={<TimetableLayout/>}>
+        <Route path="timetable" element={<TimetableLayout />}>
           <Route index element={<Timetable />} />
           <Route path="create-timetable" element={<CreateTimeTable />} />
         </Route>

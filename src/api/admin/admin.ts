@@ -140,7 +140,6 @@ export const term = {
       id: number
       updatedTerm: ExtendCurrentTermSchema
     }) => {
-
       const response = await axios.put(
         `${route.admin.extendCurrentTerm}/${id}`,
         { updatedTerm }
@@ -213,6 +212,29 @@ export const term = {
       try {
         const response = await axios.get(`${route.admin.findUniqueTerm}/${id}`)
         return termSchema.parse(response.data)
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          // Handle Zod validation error
+          console.error("Zod validation error:", error.issues)
+        } else {
+          // Handle other types of errors (e.g., network errors)
+          console.error("Error:", error)
+        }
+        throw error // Re-throw the error if you want to propagate it
+      }
+    },
+  },
+  findStudentListInATerm: {
+    queryKey: "findStudentListInATerm",
+    schema: termSchema,
+    query: async (id: string) => {
+      try {
+        const response = await axios.get(
+          `${route.admin.studentListInATerm}/${id}`
+        )
+        // return termSchema.parse(response.data)
+        console.log(response.data)
+        return response.data
       } catch (error) {
         if (error instanceof z.ZodError) {
           // Handle Zod validation error

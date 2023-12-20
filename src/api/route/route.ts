@@ -14,6 +14,7 @@ export const route = {
     findAllTerms: `${baseURL}/api/v1/admin/administration/find-all-terms`,
     findUniqueTerm: `${baseURL}/api/v1/admin/administration/find/term-detail`,
     deleteTerm: `${baseURL}/api/v1/admin/administration/delete-term`,
+    studentListInATerm: `${baseURL}/api/v1/admin/administration/term-students-list`,
     groups: {
       findAllGroups: `${baseURL}/api/v1/admin/administration/get-all-groups`,
     },

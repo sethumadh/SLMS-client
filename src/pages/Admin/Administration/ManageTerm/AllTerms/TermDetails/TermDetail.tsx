@@ -119,7 +119,7 @@ export default function TermDetails() {
                   Publish Term
                 </dt>
                 <dd className="mt-1 flex text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                  <span className="flex-shrink-0">
+                  <span className="flex-shrink-0 flex justify-center items-end gap-4 italic">
                     <button
                       disabled={
                         (termData?.endDate
@@ -159,10 +159,10 @@ export default function TermDetails() {
               </div>
               <div className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                 <dt className="text-sm font-medium leading-6 text-gray-900">
-                  Make term current
+                  Make the term current term
                 </dt>
                 <dd className="mt-1 flex text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                  <span className="flex-shrink-0">
+                  <span className="flex-shrink-0 flex justify-center items-end gap-4 italic">
                     <button
                       disabled={
                         (termData?.endDate
@@ -189,41 +189,13 @@ export default function TermDetails() {
                     {termData?.endDate &&
                       new Date(termData.endDate) < new Date() && (
                         <p className="text-xs">
-                          {" "}
                           Please make the expiry date of the term greater than
                           today's date to activate the term
                         </p>
                       )}
                     {termData?.currentTerm && (
-                      <p className="text-xs"> The term is already active</p>
+                      <p className="text-xs"> The term is already current and active</p>
                     )}
-                  </span>
-                </dd>
-              </div>
-              <div className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                <dt className="text-sm font-medium leading-6 text-gray-900">
-                  Extend term
-                </dt>
-                <dd className="mt-1 flex text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                  <span className="flex-shrink-0">
-                    <button
-                      type="button"
-                      className="disabled:bg-slate-200 disabled:text-gray-400  px-2 border border-indigo-300 rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500"
-                      onClick={() => {
-                        dispatch(
-                          setOpenModal({
-                            isOpen: true,
-                            type: "termExtend",
-                            data: {
-                              id: termData?.id,
-                              value: termData?.name,
-                            },
-                          })
-                        )
-                      }}
-                    >
-                      Extend term
-                    </button>
                   </span>
                 </dd>
               </div>
@@ -254,11 +226,28 @@ export default function TermDetails() {
                   </span>
                 </dd>
               </div>
+              <div className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt className="text-sm font-medium leading-6 text-gray-900">
+                  Students List
+                </dt>
+                <dd className="mt-1 flex text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                  <span className="flex-shrink-0">
+                    <Link
+                      to={`${
+                        termData?.isPublish ? "/admin/students" : "studentList"
+                      }`}
+                      className="rounded-md px-2 font-medium text-indigo-600 hover:text-indigo-500 underline-offset-4 underline "
+                    >
+                      Click here to see the list of student
+                    </Link>
+                  </span>
+                </dd>
+              </div>
             </dl>
           </div>
         </>
       )}
-        <TermDateModal/>
+      <TermDateModal />
     </div>
   )
 }
