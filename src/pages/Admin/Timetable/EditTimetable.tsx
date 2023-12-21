@@ -17,6 +17,7 @@ import { setOpenModal } from "@/redux/slice/modalSlice"
 import { formatDate } from "@/helpers/dateFormatter"
 import UpdateTimetableModal from "@/components/Modal/UpdateTimetableModal"
 import { capitalizeFirstCharacter } from "@/helpers/capitalizeFirstCharacter"
+import Icons from "@/constants/icons"
 
 const teacherOptions = [
   { label: "Ms. Davis", value: "Ms. Davis" },
@@ -189,14 +190,17 @@ export default function EditTimeTable() {
                           key={field.id}
                           className="border border-slate-200  "
                         >
-                          <td className="relative py-4 pl-4 pr-3 text-sm sm:pl-6 bg-blue-300 w-32 h-20 border-4">
+                          <td
+                            className="relative py-4 pl-4 pr-3 text-sm sm:pl-6 bg-blue-300 border-4"
+                            style={{ width: "128px", height: "80px" }}
+                          >
                             {isEditMode ? (
-                              <div className="">
+                              <div className="w-full h-full ">
                                 <input
                                   type="text"
                                   defaultValue={field.name}
                                   {...register(`data.${index}.name` as const)}
-                                  className="text-center rounded-md border-gray-300 shadow-s"
+                                  className="w-full mt-4 text-center rounded-md border-gray-300 shadow-sm"
                                 />
                                 <div className="h-4">
                                   {errors?.data?.[index]?.rooms?.[0]?.root
@@ -211,11 +215,12 @@ export default function EditTimeTable() {
                                 </div>
                               </div>
                             ) : (
-                              <div className="font-medium text-gray-900 text-center">
+                              <div className="font-medium text-gray-900 text-center w-full h-full flex items-center justify-center">
                                 {field.name}
                               </div>
                             )}
                           </td>
+
                           {field.rooms.map((room, roomIndex) => {
                             const teacherKeyPart = room.teacherName || "empty"
                             const cellKey = `cell-${field.name}-${teacherKeyPart}-${roomIndex}`
@@ -370,15 +375,25 @@ export default function EditTimeTable() {
                           })}
                         </tr>
                         {/* add remove */}
-                        <button
-                          className=" bg-red-400 h-12 w-full"
-                          type="button"
-                          onClick={() => {
-                            remove(index)
-                          }}
-                        >
-                          Remove - {field.name}
-                        </button>
+                        <td col-span-4 className="">
+                          <button
+                            disabled={index == 0 || !isEditMode}
+                            className="flex justify-center gap-4 items-center text-md disabled:bg-slate-200 disabled:cursor-not-allowed disabled:text-slate-500 bg-red-400 h-12 w-full"
+                            type="button"
+                            onClick={() => {
+                              remove(index)
+                            }}
+                          >
+                            {index == 0 ? (
+                              <Icons.Trash2 className="text-slate-300" />
+                            ) : (
+                              <>
+                                <Icons.Trash2 />{field.name}
+                              </>
+                            )}
+                          </button>
+                        </td>
+                        <tr></tr>
                       </>
                     )
                   })}
@@ -388,7 +403,8 @@ export default function EditTimeTable() {
             <div className="w-full flex justify-center items-center">
               <button
                 type="button"
-                className="rounded bg-indigo-600 p-2 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                disabled={!isEditMode}
+                className="rounded-md disabled:bg-slate-200 disabled:cursor-not-allowed disabled:text-black/50 mt-8 bg-indigo-600 p-2 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 onClick={() => {
                   append({
                     name: "",
