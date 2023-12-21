@@ -5,10 +5,16 @@ import { cn } from "@/lib/utils"
 const tabs = [
 
   {
-    name: "Timetable",
+    name: "View Timetable",
     smName: "Current",
     href: ".",
     current: true,
+  },
+  {
+    name: "Edit Timetable",
+    smName: "All Terms",
+    href: "edit-timetable",
+    current: false,
   },
   {
     name: "Create Timetable",

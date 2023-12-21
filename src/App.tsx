@@ -21,7 +21,7 @@ import LoadingSpinner from "@/components/Loadingspinner"
 import EnrolledStudentList from "./pages/Admin/Students/EnrolledStudentList/EnrolledStudentList"
 import Finance from "./pages/Admin/Finance/Finance"
 import Attendance from "./pages/Admin/Attendance/Attendance"
-import Timetable from "./pages/Admin/Timetable/Timetable"
+import EditTimetable from "./pages/Admin/Timetable/EditTimetable"
 import Communication from "./pages/Admin/Communication/Communication"
 import Administration from "./pages/Admin/Administration/Administration"
 import PageNotFound from "./pages/PageNotFound/PageNotFound"
@@ -54,6 +54,7 @@ import CreateClass from "./pages/Admin/Administration/ManageClass/CreateClass/Cr
 import TimetableLayout from "./Layouts/TimetableLayout/TimetableLayout"
 import CreateTimeTable from "./pages/Admin/Timetable/CreateTimetable"
 import TermStudentList from "./pages/Admin/Administration/ManageTerm/AllTerms/TermDetails/TermStudentList"
+import ViewTimeTable from "./pages/Admin/Timetable/ViewTimetable"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -150,7 +151,8 @@ const router = createBrowserRouter(
           </Route>
         </Route>
         <Route path="timetable" element={<TimetableLayout />}>
-          <Route index element={<Timetable />} />
+          <Route index element={<ViewTimeTable />} />
+          <Route path="edit-timetable" element={<EditTimetable />} />
           <Route path="create-timetable" element={<CreateTimeTable />} />
         </Route>
       </Route>

@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import { z } from "zod"
 import { Controller, useFieldArray, useFormContext } from "react-hook-form"
 import ReactDatePicker from "react-datepicker"

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { Controller, useFieldArray, useForm } from "react-hook-form"
 import Select, { SingleValue } from "react-select"
 import { useAppDispatch } from "@/redux/store"
@@ -13,8 +13,10 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import LoadingSpinner from "@/components/Loadingspinner"
 import { formatString } from "@/helpers/formatStringTimetable"
 import { setOpenModal } from "@/redux/slice/modalSlice"
+
+import { formatDate } from "@/helpers/dateFormatter"
+import UpdateTimetableModal from "@/components/Modal/UpdateTimetableModal"
 import { capitalizeFirstCharacter } from "@/helpers/capitalizeFirstCharacter"
-import CreateTimetableModal from "@/components/Modal/CreateTimetableModal"
 
 const teacherOptions = [
   { label: "Ms. Davis", value: "Ms. Davis" },
@@ -29,7 +31,7 @@ const teacherOptions = [
 
 const NUM_ROOMS = 6
 
-export default function CreateTimeTable() {
+export default function EditTimeTable() {
   const dispatch = useAppDispatch()
   const [isEditMode, setEditMode] = useState(false)
   const { data: timetableData, isLoading: timetableDataLoading } = useQuery({
@@ -40,24 +42,18 @@ export default function CreateTimeTable() {
   const {
     register,
     handleSubmit,
-
+    reset,
     control,
     formState: { errors },
   } = useForm<TimetableSchema>({
     defaultValues: {
-      data: [
-        {
-          name: "",
-          rooms: [
-            { subjectName: "", teacherName: "" },
-            { subjectName: "", teacherName: "" },
-            { subjectName: "", teacherName: "" },
-            { subjectName: "", teacherName: "" },
-            { subjectName: "", teacherName: "" },
-            { subjectName: "", teacherName: "" },
-          ],
-        },
-      ],
+      data: timetableData?.data.map((field) => ({
+        ...field,
+        rooms: field.rooms.map((room) => ({
+          teacherName: room.teacherName || "",
+          subjectName: room.subjectName || "",
+        })),
+      })),
     },
     resolver: zodResolver(timetableSchema),
   })
@@ -65,6 +61,9 @@ export default function CreateTimeTable() {
     name: "data",
     control,
   })
+  useEffect(() => {
+    reset({ data: timetableData?.data })
+  }, [timetableData?.data, reset])
 
   const { data: currentTermClassesData, isLoading: currentTermClassesLoading } =
     useQuery({
@@ -99,7 +98,7 @@ export default function CreateTimeTable() {
     dispatch(
       setOpenModal({
         isOpen: true,
-        type: "createTimetable",
+        type: "updateTimetable",
         data: {
           id: timetableData?.id,
           value: data,
@@ -107,6 +106,7 @@ export default function CreateTimeTable() {
       })
     )
   }
+  console.log(timetableData)
 
   return (
     <div>
@@ -125,6 +125,18 @@ export default function CreateTimeTable() {
                 {timetableData?.name &&
                   capitalizeFirstCharacter(timetableData?.name)}
               </h3>
+              <div className="flex flex-col gap-1 mt-4">
+                <p className="mt-2 max-w-4xl text-sm text-gray-500">
+                  Created on -{" "}
+                  {timetableData?.createdAt &&
+                    formatDate(timetableData?.createdAt)}
+                </p>
+                <p className="mt-2 max-w-4xl text-sm text-gray-500">
+                  Last updated on -{" "}
+                  {timetableData?.updatedAt &&
+                    formatDate(timetableData?.updatedAt)}
+                </p>
+              </div>
             </div>
             <div className="sm:flex sm:items-center mt-8 gap-20">
               <div className="sm:flex-none">
@@ -359,14 +371,13 @@ export default function CreateTimeTable() {
                         </tr>
                         {/* add remove */}
                         <button
-                          disabled={index == 0}
-                          className="disabled:bg-slate-200 disabled:cursor-not-allowed disabled:text-slate-500 bg-red-400 h-12 w-full"
+                          className=" bg-red-400 h-12 w-full"
                           type="button"
                           onClick={() => {
                             remove(index)
                           }}
                         >
-                          {index == 0 ? "Remove" : `Remove - ${field.name}`}
+                          Remove - {field.name}
                         </button>
                       </>
                     )
@@ -399,7 +410,7 @@ export default function CreateTimeTable() {
           </div>
         </form>
       )}
-      <CreateTimetableModal />
+      <UpdateTimetableModal />
     </div>
   )
 }

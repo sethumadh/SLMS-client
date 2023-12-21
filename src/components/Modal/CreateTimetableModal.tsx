@@ -4,12 +4,10 @@ import { Dialog, Transition } from "@headlessui/react"
 import { useAppDispatch, useAppSelector } from "@/redux/store"
 import { setOpenModal } from "@/redux/slice/modalSlice"
 import Icons from "@/constants/icons"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { api } from "@/api/api"
 import { toast } from "react-toastify"
-import { handleAxiosError } from "@/helpers/errorhandler"
 import LoadingIcon from "../LoadingIcon"
 import { TimetableSchema } from "@/types/Admin/timetable/timetable"
+import { useCreateTimetableMutation } from "@/hooks/Admin.Timetable/mutation/useCreateTimetableMutation"
 
 const CreateTimetableModal = () => {
   const [loadingToastId, setLoadingToastId] = useState<string | null>(null)
@@ -20,30 +18,7 @@ const CreateTimetableModal = () => {
 
   const cancelButtonRef = useRef(null)
   const IsModalOpen = isOpen && type === "createTimetable"
-  const queryClient = useQueryClient()
-
-  const { mutateAsync: createTimetable, isPending: createTimetablePending } =
-    useMutation({
-      mutationFn: api.timetable.timetable.createActiveTimetable.mutation,
-      onSuccess: () => {
-        //invalidate qury of all classes
-        queryClient.invalidateQueries({
-          queryKey: [api.timetable.timetable.findActiveTimetable.querykey],
-        })
-        if (loadingToastId) toast.dismiss(loadingToastId)
-        toast.success(`updated timetable successfully 👌`)
-        dispatch(
-          setOpenModal({
-            isOpen: false,
-            type: "",
-          })
-        )
-      },
-      onError: (error: unknown) => {
-        if (loadingToastId) toast.dismiss(loadingToastId)
-        handleAxiosError(error)
-      },
-    })
+  const { createTimetable, createTimetablePending }= useCreateTimetableMutation(loadingToastId)
 
   return (
     <Transition.Root show={IsModalOpen} as={Fragment}>
@@ -100,7 +75,7 @@ const CreateTimetableModal = () => {
                     </Dialog.Title>
                     <div className="mt-2">
                       you are about to create a new timetable. This will replace
-                      your curret timetable. This action cannot be undone
+                      your current timetable for the current term.
                     </div>
                   </div>
                 </div>
@@ -130,7 +105,7 @@ const CreateTimetableModal = () => {
                         <LoadingIcon />
                       </>
                     ) : (
-                      <p>Update now</p>
+                      <p>Create now</p>
                     )}
                   </button>
                   <button
