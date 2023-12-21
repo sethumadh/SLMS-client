@@ -1,15 +1,12 @@
 import { Fragment, useRef, useState } from "react"
 import { Dialog, Transition } from "@headlessui/react"
-// import { useNavigate } from "react-router-dom"
+import { toast } from "react-toastify"
 
 import { useAppDispatch, useAppSelector } from "@/redux/store"
 import { setOpenModal } from "@/redux/slice/modalSlice"
 import Icons from "@/constants/icons"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { api } from "@/api/api"
-import { toast } from "react-toastify"
-import { handleAxiosError } from "@/helpers/errorhandler"
 import LoadingIcon from "../LoadingIcon"
+import { useEnrollStudentMutation } from "@/hooks/Admin.EnrolledStudent/mutation/useEnrollStudentMutation"
 
 const EnrollStudentModal = () => {
   const [loadingToastId, setLoadingToastId] = useState<string | null>(null)
@@ -18,34 +15,9 @@ const EnrollStudentModal = () => {
   const { isOpen, type, data } = useAppSelector((state) => state.modal)
   const cancelButtonRef = useRef(null)
   const IsModalOpen = isOpen && type === "enrollStudent"
-  const queryClient = useQueryClient()
 
-
-  const { mutateAsync: enrollStudent, isPending: enrollStudentPending } =
-    useMutation({
-      mutationFn: api.students.enrolledStudent.enrollEnrolledStudent.mutation,
-      onSuccess: () => {
-        queryClient.invalidateQueries({
-          queryKey: [
-            api.students.enrolledStudent.findEnrolledStudentEnrolledSubjects
-              .queryKey,
-          ],
-        })
-        if (loadingToastId) toast.dismiss(loadingToastId)
-        toast.success(`Student enrolled successfully 👌`)
-        dispatch(
-          setOpenModal({
-            isOpen: false,
-            type: "",
-          })
-        )
-        // navigate("/application-submit")
-      },
-      onError: (error: unknown) => {
-        if (loadingToastId) toast.dismiss(loadingToastId)
-        handleAxiosError(error)
-      },
-    })
+  const { enrollStudent, enrollStudentPending } =
+    useEnrollStudentMutation(loadingToastId)
 
   return (
     <Transition.Root show={IsModalOpen} as={Fragment}>

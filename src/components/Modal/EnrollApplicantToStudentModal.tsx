@@ -1,52 +1,22 @@
 import { Fragment, useRef, useState } from "react"
 import { Dialog, Transition } from "@headlessui/react"
-import { useNavigate } from "react-router-dom"
 
 import { useAppDispatch, useAppSelector } from "@/redux/store"
 import { setOpenModal } from "@/redux/slice/modalSlice"
 import Icons from "@/constants/icons"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { api } from "@/api/api"
 import { toast } from "react-toastify"
-import { handleAxiosError } from "@/helpers/errorhandler"
 import LoadingIcon from "../LoadingIcon"
+import { useEnrollApplicantToStudentMutation } from "@/hooks/Admin.Applicant/mutation/useEnrollApplicantToStudentMutation"
 
 const EnrollApplicantToStudentModal = () => {
   const [loadingToastId, setLoadingToastId] = useState<string | null>(null)
-  const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const { isOpen, type, data } = useAppSelector((state) => state.modal)
   const cancelButtonRef = useRef(null)
   const IsModalOpen = isOpen && type === "enrollApllicantToStudent"
-  const queryClient = useQueryClient()
 
-  const {
-    mutateAsync: enrollApplicantToStudent,
-    isPending: enrollApplicantToStudentPending,
-  } = useMutation({
-    mutationFn: api.enrollment.applicantEnrollment.enrollApplicantToStudent.query,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [
-          api.students.enrolledStudent.findAllEnrolledStudents.querykey,
-          api.enrollment.applicantEnrollment.findApplicantById.querykey,
-        ],
-      })
-      if (loadingToastId) toast.dismiss(loadingToastId)
-      toast.success(`Applicant enrolled student successfully 👌`)
-      dispatch(
-        setOpenModal({
-          isOpen: false,
-          type: "",
-        })
-      )
-      navigate("/admin/enrollment")
-    },
-    onError: (error: unknown) => {
-      if (loadingToastId) toast.dismiss(loadingToastId)
-      handleAxiosError(error)
-    },
-  })
+  const { enrollApplicantToStudent, enrollApplicantToStudentPending } =
+    useEnrollApplicantToStudentMutation(loadingToastId)
 
   return (
     <Transition.Root show={IsModalOpen} as={Fragment}>

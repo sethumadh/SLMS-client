@@ -1,6 +1,6 @@
 /* trunk-ignore-all(prettier) */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import { Link } from "react-router-dom"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -13,10 +13,8 @@ import Icons from "@/constants/icons"
 import { formatDate } from "@/helpers/dateFormatter"
 import { capitalizeFirstCharacter } from "@/helpers/capitalizeFirstCharacter"
 import LoadingSpinner from "@/components/Loadingspinner"
-
 import TermDetails from "@/components/Administration/ManageTerm/TermDetails"
 import ReactDatePicker from "react-datepicker"
-import { handleAxiosError } from "@/helpers/errorhandler"
 import {
   changeCurrentTermNameSchema,
   extendCurrentTermSchema,
@@ -25,6 +23,8 @@ import { useAppDispatch } from "@/redux/store"
 import { setOpenModal } from "@/redux/slice/modalSlice"
 import TermNameModal from "@/components/Modal/TermNameModal"
 import TermDateModal from "@/components/Modal/TermDateModal"
+import { useTermExtendmutation } from "@/hooks/Admin.Administration.Term/mutation/useTermExtendMutation"
+import { useTermNameChangeMutation } from "@/hooks/Admin.Administration.Term/mutation/useTermNameChangeMutation"
 
 export type ChangeCurrentTermNameSchema = z.infer<
   typeof changeCurrentTermNameSchema
@@ -37,46 +37,14 @@ function CurrentTerm() {
   const [loadingToastId, setLoadingToastId] = useState<string | null>(null)
   const [isEdit, setIsEdit] = useState(false)
   const [item, setItem] = useState("")
-  const queryClient = useQueryClient()
   const { data: currentTerm, isLoading } = useQuery({
     queryKey: [api.application.currentTerm.getTermSubjects.queryKey],
     queryFn: api.application.currentTerm.getTermSubjects.query,
   })
 
-  const { mutateAsync: termExtendMutation, isPending: termExtendIsPending } =
-    useMutation({
-      mutationFn: api.admin.term.extendCurrentTerm.mutation,
-      onSuccess: (data) => {
-        queryClient.invalidateQueries({
-          queryKey: [api.application.currentTerm.getTermSubjects.queryKey],
-        })
-        if (loadingToastId) toast.dismiss(loadingToastId)
-        toast.success(
-          `Term is extended to ${formatDate(data.endDate.toString())} 👌`
-        )
-      },
-      onError: (error: unknown) => {
-        if (loadingToastId) toast.dismiss(loadingToastId)
-        handleAxiosError(error)
-      },
-    })
-  const {
-    mutateAsync: termNameChangeMutation,
-    isPending: termNameChangeIsPending,
-  } = useMutation({
-    mutationFn: api.admin.term.changeCurrentTermName.mutation,
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({
-        queryKey: [api.application.currentTerm.getTermSubjects.queryKey],
-      })
-      if (loadingToastId) toast.dismiss(loadingToastId)
-      toast.success(`Term Name updated to ${data.name} 👌`)
-    },
-    onError: (error: unknown) => {
-      if (loadingToastId) toast.dismiss(loadingToastId)
-      handleAxiosError(error)
-    },
-  })
+  const { termExtendMutation, termExtendIsPending } =
+    useTermExtendmutation(loadingToastId)
+  const  { termNameChangeMutation, termNameChangeIsPending }=useTermNameChangeMutation(loadingToastId)
   const termExtendMethods = useForm<ExtendCurrentTermSchema>({
     resolver: zodResolver(extendCurrentTermSchema),
     defaultValues: {

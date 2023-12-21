@@ -5,51 +5,20 @@ import { useNavigate, useParams } from "react-router-dom"
 import { useAppDispatch, useAppSelector } from "@/redux/store"
 import { setOpenModal } from "@/redux/slice/modalSlice"
 import Icons from "@/constants/icons"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { api } from "@/api/api"
 import { toast } from "react-toastify"
-import { handleAxiosError } from "@/helpers/errorhandler"
+import { useMakePublishTermMutation } from "@/hooks/Admin.Administration.Term/mutation/useMakePublishTermMutation"
 
 const IsPublishTermModal = () => {
   const [loadingToastId, setLoadingToastId] = useState<string | null>(null)
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const { isOpen, type, data } = useAppSelector((state) => state.modal)
-
   const cancelButtonRef = useRef(null)
   const IsModalOpen = isOpen && type === "isPublishTerm"
-  const queryClient = useQueryClient()
-
   const params = useParams()
-
-  const { mutateAsync: makeCurrent } = useMutation({
-    mutationFn: api.admin.term.makePublishTerm.mutation,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [
-          api.application.currentTerm.getTermSubjects.queryKey,
-          api.application.publishedTerm.getPublishedTerm.queryKey,
-          api.admin.term.findAllTerms.queryKey,
-          api.admin.subjects.findAllSubjects.querykey,
-          api.admin.term.findUniqueTerm.queryKey,
-          `termDetail${params.id}`,
-        ],
-      })
-      // add inavlidate for getting all terms
-      if (loadingToastId) toast.dismiss(loadingToastId)
-      toast.success(`Term published successfully 👌`)
-      dispatch(
-        setOpenModal({
-          isOpen: false,
-          type: "",
-        })
-      )
-      navigate("administration/manage-term")
-    },
-    onError: (error: unknown) => {
-      if (loadingToastId) toast.dismiss(loadingToastId)
-      handleAxiosError(error)
-    },
+  const { makePublish, makePublishPending } = useMakePublishTermMutation({
+    loadingToastId,
+    params,
   })
 
   return (
@@ -132,10 +101,11 @@ const IsPublishTermModal = () => {
                       )
                       setLoadingToastId(toastId.toString())
                       if (data?.id) {
-                        await makeCurrent({ id: data?.id })
+                        await makePublish({ id: data?.id })
                       }
                     }}
                   >
+                    {makePublishPending ? "Publishing...." : " Publish now"}
                     Publish now
                   </button>
                   <button

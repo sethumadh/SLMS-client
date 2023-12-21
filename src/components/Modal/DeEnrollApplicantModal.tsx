@@ -1,49 +1,22 @@
 import { Fragment, useRef, useState } from "react"
 import { Dialog, Transition } from "@headlessui/react"
-// import { useNavigate } from "react-router-dom"
 
 import { useAppDispatch, useAppSelector } from "@/redux/store"
 import { setOpenModal } from "@/redux/slice/modalSlice"
 import Icons from "@/constants/icons"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { api } from "@/api/api"
 import { toast } from "react-toastify"
-import { handleAxiosError } from "@/helpers/errorhandler"
 import LoadingIcon from "../LoadingIcon"
+import { useDeEnrollApplicant } from "@/hooks/Admin.Applicant/mutation/useDeEnrollApplicant"
 
 const DeEnrollApplicantModal = () => {
   const [loadingToastId, setLoadingToastId] = useState<string | null>(null)
-  //   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const { isOpen, type, data } = useAppSelector((state) => state.modal)
   const cancelButtonRef = useRef(null)
   const IsModalOpen = isOpen && type === "deEnrollApplicant"
-  const queryClient = useQueryClient()
 
-  const { mutateAsync: deEnrollApplicant, isPending: deEnrollApplicantPending } =
-    useMutation({
-      mutationFn: api.enrollment.applicantEnrollment.deEnrollApplicant.mutation,
-      onSuccess: () => {
-        queryClient.invalidateQueries({
-          queryKey: [
-            api.enrollment.applicantEnrollment.getApplicantEnrolledSubjects.queryKey,
-          ],
-        })
-        if (loadingToastId) toast.dismiss(loadingToastId)
-        toast.success(`Applicant De-enrolled successfully 👌`)
-        dispatch(
-          setOpenModal({
-            isOpen: false,
-            type: "",
-          })
-        )
-        // navigate("/application-submit")
-      },
-      onError: (error: unknown) => {
-        if (loadingToastId) toast.dismiss(loadingToastId)
-        handleAxiosError(error)
-      },
-    })
+  const { deEnrollApplicant, deEnrollApplicantPending } =
+    useDeEnrollApplicant(loadingToastId)
 
   return (
     <Transition.Root show={IsModalOpen} as={Fragment}>

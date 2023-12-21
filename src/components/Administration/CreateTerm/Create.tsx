@@ -1,4 +1,3 @@
-/* trunk-ignore-all(prettier) */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { z } from "zod"
@@ -56,7 +55,7 @@ function Create() {
       return allLevelsData?.map((l) => ({
         value: l.name,
         label: capitalizeFirstCharacter(l.name),
-        isDisabled:l.isActive
+        isDisabled: !l.isActive,
       }))
     }, [allLevelsData])
 
@@ -109,7 +108,6 @@ function Create() {
     data.groupSubjects,
   ])
 
-  // console.log(allGroupData)
   const { control, register, formState } =
     useFormContext<CreateTermWithSubjectSchema>()
   const {

@@ -1,49 +1,23 @@
 import { Fragment, useRef, useState } from "react"
 import { Dialog, Transition } from "@headlessui/react"
-// import { useNavigate } from "react-router-dom"
 
 import { useAppDispatch, useAppSelector } from "@/redux/store"
 import { setOpenModal } from "@/redux/slice/modalSlice"
 import Icons from "@/constants/icons"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { api } from "@/api/api"
 import { toast } from "react-toastify"
-import { handleAxiosError } from "@/helpers/errorhandler"
 import LoadingIcon from "../LoadingIcon"
+import { useEnrollApplicant } from "@/hooks/Admin.Applicant/mutation/useEnrollApplicant"
 
 const EnrollApplicantModal = () => {
   const [loadingToastId, setLoadingToastId] = useState<string | null>(null)
-  //   const navigate = useNavigate()
+
   const dispatch = useAppDispatch()
   const { isOpen, type, data } = useAppSelector((state) => state.modal)
   const cancelButtonRef = useRef(null)
   const IsModalOpen = isOpen && type === "enrollApplicant"
-  const queryClient = useQueryClient()
 
-  const { mutateAsync: enrollApplicant, isPending: enrollApplicantPending } =
-    useMutation({
-      mutationFn: api.enrollment.applicantEnrollment.enrollApplicant.mutation,
-      onSuccess: () => {
-        queryClient.invalidateQueries({
-          queryKey: [
-            api.enrollment.applicantEnrollment.getApplicantEnrolledSubjects.queryKey,
-          ],
-        })
-        if (loadingToastId) toast.dismiss(loadingToastId)
-        toast.success(`Applicant enrolled successfully 👌`)
-        dispatch(
-          setOpenModal({
-            isOpen: false,
-            type: "",
-          })
-        )
-        // navigate("/application-submit")
-      },
-      onError: (error: unknown) => {
-        if (loadingToastId) toast.dismiss(loadingToastId)
-        handleAxiosError(error)
-      },
-    })
+  const { enrollApplicant, enrollApplicantPending } =
+    useEnrollApplicant(loadingToastId)
 
   return (
     <Transition.Root show={IsModalOpen} as={Fragment}>

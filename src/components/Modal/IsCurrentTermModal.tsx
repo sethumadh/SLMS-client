@@ -5,50 +5,19 @@ import { useNavigate } from "react-router-dom"
 import { useAppDispatch, useAppSelector } from "@/redux/store"
 import { setOpenModal } from "@/redux/slice/modalSlice"
 import Icons from "@/constants/icons"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { api } from "@/api/api"
 import { toast } from "react-toastify"
-import { handleAxiosError } from "@/helpers/errorhandler"
+import { useMakeCurrentTermMutation } from "@/hooks/Admin.Administration.Term/mutation/useMakeCurrentTermMutation"
 
 const IsCurrentTermModal = () => {
   const [loadingToastId, setLoadingToastId] = useState<string | null>(null)
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const { isOpen, type, data } = useAppSelector((state) => state.modal)
-
   const cancelButtonRef = useRef(null)
   const IsModalOpen = isOpen && type === "isCurrentTerm"
-  const queryClient = useQueryClient()
 
-  const { mutateAsync: makeCurrent } = useMutation({
-    mutationFn: api.admin.term.makeCurrentTerm.mutation,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [
-          api.application.currentTerm.getTermSubjects.queryKey,
-          api.application.publishedTerm.getPublishedTerm.queryKey,
-          api.admin.term.findAllTerms.queryKey,
-          api.admin.subjects.findAllSubjects.querykey,
-          api.admin.term.findUniqueTerm.queryKey,
-        ],
-      })
-      // add inavlidate for getting all terms
-      if (loadingToastId) toast.dismiss(loadingToastId)
-      toast.success(`Making current action is scuccessful 👌`)
-      dispatch(
-        setOpenModal({
-          isOpen: false,
-          type: "",
-        })
-      )
-      navigate("administration/manage-term")
-    },
-    onError: (error: unknown) => {
-      if (loadingToastId) toast.dismiss(loadingToastId)
-      handleAxiosError(error)
-    },
-  })
-
+  const { makeCurrent, makeCurrentPending } =
+    useMakeCurrentTermMutation(loadingToastId)
   return (
     <Transition.Root show={IsModalOpen} as={Fragment}>
       <Dialog
@@ -130,7 +99,9 @@ const IsCurrentTermModal = () => {
                       }
                     }}
                   >
-                    Make term current
+                    {makeCurrentPending
+                      ? "...Please wait"
+                      : "Make term current"}
                   </button>
                   <button
                     type="button"

@@ -1,59 +1,30 @@
-import { api } from "@/api/api"
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import Create from "@/components/Administration/CreateTerm/Create"
 import Review from "@/components/Administration/CreateTerm/Review"
 import { StepperSection } from "@/components/Administration/CreateTerm/StepperSection"
-import { handleAxiosError } from "@/helpers/errorhandler"
+import { useCreateTermMutation } from "@/hooks/Admin.Administration.Term/mutation/useCreateTermMutation"
 import { setTermData } from "@/redux/slice/termSlice"
-import { setOpenModal } from "@/redux/slice/modalSlice"
 import { useAppDispatch, useAppSelector } from "@/redux/store"
 
 import { createTermWithSubjectSchema } from "@/types/Admin/term/term"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useMemo, useState } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { toast } from "react-toastify"
 import { z } from "zod"
 
+
 export type CreateTermWithSubjectSchema = z.infer<
   typeof createTermWithSubjectSchema
 >
+
 function CreateTerm() {
   const [loadingToastId, setLoadingToastId] = useState<string | null>(null)
   const [nextPage, setNextPage] = useState(false)
-
+  const { createTermSetup, createTermPending } =
+    useCreateTermMutation(loadingToastId)
   const [step, setStep] = useState(0)
   const dispatch = useAppDispatch()
-  const queryClient = useQueryClient()
-  const { mutateAsync: createTermSetup, isPending: createTermPending } =
-    useMutation({
-      mutationFn: api.admin.term.createTermWithSubjectsSetup.mutation,
-      onSuccess: (data) => {
-        queryClient.invalidateQueries({
-          queryKey: [
-            api.application.currentTerm.getTermSubjects.queryKey,
-            api.admin.term.findAllTerms.queryKey,
-          ],
-        })
-        // add inavlidate for getting all terms
-        if (loadingToastId) toast.dismiss(loadingToastId)
-        toast.success(`new term is created 👌`)
-        dispatch(
-          setOpenModal({
-            isOpen: true,
-            type: "isPublishTerm",
-            data: {
-              id: data?.id,
-              value: data?.name,
-            },
-          })
-        )
-      },
-      onError: (error: unknown) => {
-        if (loadingToastId) toast.dismiss(loadingToastId)
-        handleAxiosError(error)
-      },
-    })
 
   const data = useAppSelector((state) => state.term)
   const termState = useMemo(
@@ -198,14 +169,11 @@ function CreateTerm() {
                 nextOnClick={() => {
                   handleNextStep()
                 }}
-
-                // isSubmitting={updateBrandProfile.isLoading}
               />
             </div>
           </div>
         </form>
       </FormProvider>
-      {/* <IsCurrentTermModal /> */}
     </div>
   )
 }

@@ -1,51 +1,22 @@
 import { Fragment, useRef, useState } from "react"
 import { Dialog, Transition } from "@headlessui/react"
-import { useNavigate } from "react-router-dom"
 
 import { useAppDispatch, useAppSelector } from "@/redux/store"
 import { setOpenModal } from "@/redux/slice/modalSlice"
 import Icons from "@/constants/icons"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { api } from "@/api/api"
 import { toast } from "react-toastify"
-import { handleAxiosError } from "@/helpers/errorhandler"
 import LoadingIcon from "../LoadingIcon"
+import { useSubmitApplicantMutation } from "@/hooks/Application/mutation/useSubmitApplicantMutation"
 
 const SubmitApplicantModal = () => {
   const [loadingToastId, setLoadingToastId] = useState<string | null>(null)
-  const navigate = useNavigate()
+
   const dispatch = useAppDispatch()
   const { isOpen, type, data } = useAppSelector((state) => state.modal)
   const cancelButtonRef = useRef(null)
   const IsModalOpen = isOpen && type === "submitApplicant"
-  const queryClient = useQueryClient()
 
-  const { mutateAsync: createApplicant, isPending: createApplicantPending } =
-    useMutation({
-      mutationFn: api.application.create.createApplicant.query,
-      onSuccess: () => {
-        queryClient.invalidateQueries({
-          queryKey: [
-            api.students.enrolledStudent.findAllEnrolledStudents.querykey,
-            api.enrollment.applicantEnrollment.findApplicantById.querykey,
-          ],
-        })
-        if (loadingToastId) toast.dismiss(loadingToastId)
-        toast.success(`Application successfully submitted 👌`)
-        dispatch(
-          setOpenModal({
-            isOpen: false,
-            type: "",
-          })
-        )
-        navigate("/application-submit")
-      },
-      onError: (error: unknown) => {
-        if (loadingToastId) toast.dismiss(loadingToastId)
-        handleAxiosError(error)
-      },
-    })
-
+const { createApplicant,createApplicantPending  }= useSubmitApplicantMutation(loadingToastId)
   return (
     <Transition.Root show={IsModalOpen} as={Fragment}>
       <Dialog
