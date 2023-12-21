@@ -177,14 +177,17 @@ export default function CreateTimeTable() {
                           key={field.id}
                           className="border border-slate-200  "
                         >
-                          <td className="relative py-4 pl-4 pr-3 text-sm sm:pl-6 bg-blue-300 w-32 h-20 border-4">
+                          <td
+                            className="relative py-4 pl-4 pr-3 text-sm sm:pl-6 bg-blue-300 border-4"
+                            style={{ width: "128px", height: "80px" }}
+                          >
                             {isEditMode ? (
-                              <div className="">
+                              <div className="w-full h-full ">
                                 <input
                                   type="text"
                                   defaultValue={field.name}
                                   {...register(`data.${index}.name` as const)}
-                                  className="text-center rounded-md border-gray-300 shadow-s"
+                                  className="w-full mt-4 text-center rounded-md border-gray-300 shadow-sm"
                                 />
                                 <div className="h-4">
                                   {errors?.data?.[index]?.rooms?.[0]?.root
@@ -199,7 +202,7 @@ export default function CreateTimeTable() {
                                 </div>
                               </div>
                             ) : (
-                              <div className="font-medium text-gray-900 text-center">
+                              <div className="font-medium text-gray-900 text-center w-full h-full flex items-center justify-center">
                                 {field.name}
                               </div>
                             )}
