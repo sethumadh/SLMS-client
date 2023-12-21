@@ -23,5 +23,5 @@ export default function TermStudentList() {
         },
         enabled: !!params.id,
       })
-  return <div>TermStudentList</div>
+  return <div className="h-full bg-red-400">TermStudentList</div>
 }
