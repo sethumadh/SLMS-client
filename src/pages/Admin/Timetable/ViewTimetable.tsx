@@ -112,8 +112,8 @@ export default function ViewTimeTable() {
     <div>
       {currentTermClassesLoading || timetableDataLoading ? (
         <>
-          <div className="h-600 flex justify-center items-center">
-            <LoadingSpinner />
+          <div className="h-[600px] flex justify-center items-center">
+            <LoadingSpinner className="w-24 h-24" />
           </div>
         </>
       ) : (

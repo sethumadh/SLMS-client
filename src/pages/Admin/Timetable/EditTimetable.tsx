@@ -113,8 +113,8 @@ export default function EditTimeTable() {
     <div>
       {currentTermClassesLoading || timetableDataLoading ? (
         <>
-          <div className="h-600 flex justify-center items-center">
-            <LoadingSpinner />
+          <div className="h-[600px] flex justify-center items-center">
+            <LoadingSpinner className="w-24 h-24" />
           </div>
         </>
       ) : (
@@ -388,7 +388,8 @@ export default function EditTimeTable() {
                               <Icons.Trash2 className="text-slate-300" />
                             ) : (
                               <>
-                                <Icons.Trash2 />{field.name}
+                                <Icons.Trash2 />
+                                {field.name}
                               </>
                             )}
                           </button>
