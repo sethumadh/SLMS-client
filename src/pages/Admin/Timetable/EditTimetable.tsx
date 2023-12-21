@@ -394,7 +394,7 @@ export default function EditTimeTable() {
                             )}
                           </button>
                         </td>
-                        <tr></tr>
+
                       </>
                     )
                   })}

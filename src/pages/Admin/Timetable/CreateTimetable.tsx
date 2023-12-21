@@ -15,6 +15,7 @@ import { formatString } from "@/helpers/formatStringTimetable"
 import { setOpenModal } from "@/redux/slice/modalSlice"
 import { capitalizeFirstCharacter } from "@/helpers/capitalizeFirstCharacter"
 import CreateTimetableModal from "@/components/Modal/CreateTimetableModal"
+import Icons from "@/constants/icons"
 
 const teacherOptions = [
   { label: "Ms. Davis", value: "Ms. Davis" },
@@ -361,16 +362,25 @@ export default function CreateTimeTable() {
                           })}
                         </tr>
                         {/* add remove */}
-                        <button
-                          disabled={index == 0}
-                          className="disabled:bg-slate-200 disabled:cursor-not-allowed disabled:text-slate-500 bg-red-400 h-12 w-full"
-                          type="button"
-                          onClick={() => {
-                            remove(index)
-                          }}
-                        >
-                          {index == 0 ? "Remove" : `Remove - ${field.name}`}
-                        </button>
+                        <td col-span-4 className="">
+                          <button
+                            disabled={index == 0 || !isEditMode}
+                            className="flex justify-center gap-4 items-center text-md disabled:bg-slate-200 disabled:cursor-not-allowed disabled:text-slate-500 bg-red-400 h-12 w-full"
+                            type="button"
+                            onClick={() => {
+                              remove(index)
+                            }}
+                          >
+                            {index == 0 ? (
+                              <Icons.Trash2 className="text-slate-300" />
+                            ) : (
+                              <>
+                                <Icons.Trash2 />
+                                {field.name}
+                              </>
+                            )}
+                          </button>
+                        </td>
                       </>
                     )
                   })}
@@ -380,7 +390,8 @@ export default function CreateTimeTable() {
             <div className="w-full flex justify-center items-center">
               <button
                 type="button"
-                className="rounded bg-indigo-600 p-2 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                disabled={!isEditMode}
+                className="rounded-md disabled:bg-slate-200 disabled:cursor-not-allowed disabled:text-black/50 mt-8 bg-indigo-600 p-2 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 onClick={() => {
                   append({
                     name: "",
