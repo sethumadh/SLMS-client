@@ -143,7 +143,7 @@ export default function ViewTimeTable() {
                 <button
                   type="button"
                   onClick={() => setEditMode(!isEditMode)}
-                  className={`block rounded-md ${
+                  className={`hidden ${
                     isEditMode
                       ? "bg-red-500 text-white hover:bg-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                       : "bg-slate-200 text-black hover:bg-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
@@ -152,7 +152,7 @@ export default function ViewTimeTable() {
                   {isEditMode ? "Cancel" : "Edit Timetable"}
                 </button>
               </div>
-              <div className=" sm:flex-none">
+              <div className="hidden sm:flex-none">
                 <button
                   disabled={!isEditMode}
                   className={`disabled:cursor-not-allowed disabled:bg-slate-300 block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}

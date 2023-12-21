@@ -137,7 +137,7 @@ export default function CreateTimeTable() {
                       : "bg-slate-200 text-black hover:bg-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                   }  px-3 py-2 text-center text-sm font-semibold shadow-sm `}
                 >
-                  {isEditMode ? "Cancel" : "Edit Timetable"}
+                  {isEditMode ? "Cancel" : "Create Timetable"}
                 </button>
               </div>
               <div className=" sm:flex-none">
