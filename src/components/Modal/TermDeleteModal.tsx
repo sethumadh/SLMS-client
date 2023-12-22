@@ -10,7 +10,7 @@ import { api } from "@/api/api"
 import { toast } from "react-toastify"
 import { handleAxiosError } from "@/helpers/errorhandler"
 
-const DeleteTermModal = () => {
+const TermDeleteModal = () => {
   const [loadingToastId, setLoadingToastId] = useState<string | null>(null)
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
@@ -175,4 +175,4 @@ const DeleteTermModal = () => {
     </Transition.Root>
   )
 }
-export default DeleteTermModal
+export default TermDeleteModal

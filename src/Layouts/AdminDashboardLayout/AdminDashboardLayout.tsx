@@ -2,8 +2,8 @@ import SideNavbar from "@/components/SideNavbar/SideNavbar"
 import { useAppSelector } from "@/redux/store"
 import { Outlet } from "react-router-dom"
 import IsCurrentTermModal from "@/components/Modal/IsCurrentTermModal"
-import DeleteTermModal from "@/components/Modal/DeleteTermModal"
 import IsPublishTermModal from "@/components/Modal/IsPublishTermModal"
+import TermDeleteModal from "@/components/Modal/TermDeleteModal"
 
 function AdminDashboardLayout() {
   const isModalOpen = useAppSelector((state) => state.modal.isOpen)
@@ -17,7 +17,7 @@ function AdminDashboardLayout() {
       </main>
       <IsCurrentTermModal />
       <IsPublishTermModal/>
-      <DeleteTermModal />
+      <TermDeleteModal/>
     </div>
   )
 }
