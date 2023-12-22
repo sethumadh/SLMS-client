@@ -112,12 +112,12 @@ export default function CreateTimeTable() {
 
   return (
     <div>
-      {currentTermClassesLoading || timetableDataLoading || pageLoad? (
+      {currentTermClassesLoading || timetableDataLoading || pageLoad ? (
         <>
-        <div className="h-[800px] flex justify-center items-center">
-          <LoadingSpinner className="w-20 h-20" />
-        </div>
-      </>
+          <div className="h-[800px] flex justify-center items-center">
+            <LoadingSpinner className="w-20 h-20" />
+          </div>
+        </>
       ) : (
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="px-4 sm:px-6 lg:px-20 lg:py-12">
@@ -190,13 +190,33 @@ export default function CreateTimeTable() {
                             style={{ width: "128px", height: "80px" }}
                           >
                             {isEditMode ? (
-                              <div className="w-full h-full ">
+                              <div className="w-full h-full flex justify-center items-center gap-4">
                                 <input
                                   type="text"
                                   defaultValue={field.name}
                                   {...register(`data.${index}.name` as const)}
-                                  className="w-full mt-4 text-center rounded-md border-gray-300 shadow-sm"
+                                  className="w-full text-center rounded-md border-gray-300 shadow-sm"
                                 />
+                                <td col-span-4 className="">
+                                  <button
+                                    disabled={index == 0 || !isEditMode}
+                                    className="flex justify-center gap-4 items-center text-md disabled:cursor-not-allowed disabled:text-slate-500 w-full"
+                                    type="button"
+                                    onClick={() => {
+                                      remove(index)
+                                    }}
+                                  >
+                                    {index == 0 ? (
+                                      <Icons.Trash2 className="text-slate-300" />
+                                    ) : (
+                                      <span className="w-full flex justify-center items-center">
+                                        <span>
+                                          <Icons.Trash2 className="text-red-500 w-7 h-7" />
+                                        </span>
+                                      </span>
+                                    )}
+                                  </button>
+                                </td>
                                 <div className="h-4">
                                   {errors?.data?.[index]?.rooms?.[0]?.root
                                     ?.message && (
@@ -369,7 +389,7 @@ export default function CreateTimeTable() {
                           })}
                         </tr>
                         {/* add remove */}
-                        <td col-span-4 className="">
+                        {/* <td col-span-4 className="">
                           <button
                             disabled={index == 0 || !isEditMode}
                             className="flex justify-center gap-4 items-center text-md disabled:bg-slate-200 disabled:cursor-not-allowed disabled:text-slate-500 bg-red-400 h-12 w-full"
@@ -387,7 +407,7 @@ export default function CreateTimeTable() {
                               </>
                             )}
                           </button>
-                        </td>
+                        </td> */}
                       </>
                     )
                   })}
