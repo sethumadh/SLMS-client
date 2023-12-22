@@ -34,6 +34,7 @@ const NUM_ROOMS = 6
 
 export default function EditTimeTable() {
   const dispatch = useAppDispatch()
+  const [pageLoad, setPageLoad] = useState(false)
   const [isEditMode, setEditMode] = useState(false)
   const { data: timetableData, isLoading: timetableDataLoading } = useQuery({
     queryKey: [api.timetable.timetable.findActiveTimetable.querykey],
@@ -111,10 +112,10 @@ export default function EditTimeTable() {
 
   return (
     <div>
-      {currentTermClassesLoading || timetableDataLoading ? (
+      {currentTermClassesLoading || timetableDataLoading || pageLoad ? (
         <>
-          <div className="h-[600px] flex justify-center items-center">
-            <LoadingSpinner className="w-24 h-24" />
+          <div className="h-[800px] flex justify-center items-center">
+            <LoadingSpinner className="w-20 h-20" />
           </div>
         </>
       ) : (
@@ -143,7 +144,13 @@ export default function EditTimeTable() {
               <div className="sm:flex-none">
                 <button
                   type="button"
-                  onClick={() => setEditMode(!isEditMode)}
+                  onClick={() => {
+                    setPageLoad(true)
+                    setTimeout(() => {
+                      setPageLoad(false)
+                    }, 500)
+                    setEditMode(!isEditMode)
+                  }}
                   className={`block rounded-md ${
                     isEditMode
                       ? "bg-red-500 text-white hover:bg-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
@@ -394,7 +401,6 @@ export default function EditTimeTable() {
                             )}
                           </button>
                         </td>
-
                       </>
                     )
                   })}
