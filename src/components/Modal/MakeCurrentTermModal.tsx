@@ -1,21 +1,29 @@
 import { Fragment, useRef, useState } from "react"
 import { Dialog, Transition } from "@headlessui/react"
-import { useNavigate } from "react-router-dom"
+// import { useNavigate } from "react-router-dom"
 
 import { useAppDispatch, useAppSelector } from "@/redux/store"
 import { setOpenModal } from "@/redux/slice/modalSlice"
 import Icons from "@/constants/icons"
 import { toast } from "react-toastify"
 import { useMakeCurrentTermMutation } from "@/hooks/Admin.Administration.Term/mutation/useMakeCurrentTermMutation"
+import Toggle from "../Toggle"
 
-const IsCurrentTermModal = () => {
+const MakeCurrentTermModal = () => {
+  const [currentEnabled, setCurrentEnabled] = useState(false)
+  const [studentsEnabled, setStudentsEnabled] = useState(false)
   const [loadingToastId, setLoadingToastId] = useState<string | null>(null)
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const { isOpen, type, data } = useAppSelector((state) => state.modal)
   const cancelButtonRef = useRef(null)
-  const IsModalOpen = isOpen && type === "isCurrentTerm"
-
+  const IsModalOpen = isOpen && type === "makeCurrentTerm"
+  const handleCurrentEnabled = (bool: boolean) => {
+    setCurrentEnabled(bool)
+  }
+  const handleStudentsEnabled = (bool: boolean) => {
+    setStudentsEnabled(bool)
+  }
   const { makeCurrent, makeCurrentPending } =
     useMakeCurrentTermMutation(loadingToastId)
   return (
@@ -58,31 +66,53 @@ const IsCurrentTermModal = () => {
             >
               <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
                 <div>
-                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
-                    <Icons.Check
-                      className="h-6 w-6 text-green-600"
+                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-yellow-300/50">
+                    <Icons.ShieldAlert
+                      className="h-10 w-10 text-red-600"
                       aria-hidden="true"
                     />
                   </div>
-                  <div className="mt-3 text-center sm:mt-5">
+                  <div className="mt-3 text-center sm:mt-5 flex flex-col items-start">
                     <Dialog.Title
                       as="h3"
-                      className="text-base font-semibold leading-6 text-gray-900"
+                      className="text-xs leading-6 text-gray-900 "
                     >
-                      Term is now created successfully
+                      This Action will perform following changes, Please confirm.
                     </Dialog.Title>
-                    <div className="mt-2">
-                      <p className="text-sm text-gray-500">
-                        Do you want to make this term current now? If you wish
-                        to make it current click make current now.
+                    <div className="mt-2 flex gap-11 justify-center items-center">
+                      <p className="text-lg font-semibold text-gray-800">
+                        <span className="text-red-600">*</span> Do you want to
+                        make this term current  ?
                       </p>
+                      <div className="w-12">
+                        <Toggle
+                          enabled={currentEnabled}
+                          handleEnabled={handleCurrentEnabled}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div className="mt-3 sm:mt-5 flex flex-col items-start">
+                    <div className="mt-2 flex gap-4 justify-center items-center">
+                      <p className="text-lg font-semibold text-gray-800">
+                        <span className="text-red-600">*</span> Make Enrolled
+                        students to Active Students?
+                      </p>
+                      <div className="w-12">
+                        <Toggle
+                          enabled={studentsEnabled}
+                          handleEnabled={handleStudentsEnabled}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
                 <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
                   <button
-                    // ref={saveRef}
-                    className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
+                    disabled={!currentEnabled || !studentsEnabled}
+                    className="disabled:bg-slate-400 disabled:cursor-not-allowed disabled:text-slate-200 inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
                     onClick={async () => {
                       dispatch(
                         setOpenModal({
@@ -99,9 +129,7 @@ const IsCurrentTermModal = () => {
                       }
                     }}
                   >
-                    {makeCurrentPending
-                      ? "...Please wait"
-                      : "Make term current"}
+                    {makeCurrentPending ? "...Please wait" : "Confirm Actions"}
                   </button>
                   <button
                     type="button"
@@ -113,7 +141,6 @@ const IsCurrentTermModal = () => {
                           type: "",
                         })
                       )
-                      navigate("administration/manage-term")
                     }}
                     ref={cancelButtonRef}
                   >
@@ -128,4 +155,4 @@ const IsCurrentTermModal = () => {
     </Transition.Root>
   )
 }
-export default IsCurrentTermModal
+export default MakeCurrentTermModal

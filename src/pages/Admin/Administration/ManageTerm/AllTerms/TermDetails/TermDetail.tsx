@@ -127,7 +127,7 @@ export default function TermDetails() {
                           : false) || termData?.isPublish
                       }
                       type="button"
-                      className="disabled:bg-slate-200 disabled:text-gray-400  px-2 border border-indigo-300 rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500"
+                      className="disabled:bg-slate-200 disabled:text-gray-400  px-8 border border-indigo-300 rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500"
                       onClick={() => {
                         dispatch(
                           setOpenModal({
@@ -157,7 +157,7 @@ export default function TermDetails() {
                   </span>
                 </dd>
               </div>
-              <div className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+              {/* <div className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                 <dt className="text-sm font-medium leading-6 text-gray-900">
                   Make the term current term
                 </dt>
@@ -198,7 +198,7 @@ export default function TermDetails() {
                     )}
                   </span>
                 </dd>
-              </div>
+              </div> */}
               <div className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                 <dt className="text-sm font-medium leading-6 text-gray-900">
                   Delete term
@@ -207,7 +207,7 @@ export default function TermDetails() {
                   <span className="flex-shrink-0">
                     <button
                       type="button"
-                      className="rounded-md bg-red-600 px-2 font-medium text-white hover:text-red-50"
+                      className="rounded-md bg-red-600 px-8 font-medium text-white hover:text-red-50"
                       onClick={() => {
                         dispatch(
                           setOpenModal({

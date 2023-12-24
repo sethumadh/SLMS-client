@@ -1,3 +1,4 @@
+// PublishedTerm
 /* trunk-ignore-all(prettier) */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useQuery } from "@tanstack/react-query"
@@ -16,59 +17,68 @@ import LoadingSpinner from "@/components/Loadingspinner"
 import TermDetails from "@/components/Administration/ManageTerm/TermDetails"
 import ReactDatePicker from "react-datepicker"
 import {
-  changeCurrentTermNameSchema,
-  extendCurrentTermSchema,
-} from "@/types/Admin/term/currentTerm"
+  changePublishedTermNameSchema,
+  extendPublishedTermSchema,
+} from "@/types/Admin/term/publishTerm"
 import { useAppDispatch } from "@/redux/store"
 import { setOpenModal } from "@/redux/slice/modalSlice"
 import TermNameModal from "@/components/Modal/TermNameModal"
 import TermDateModal from "@/components/Modal/TermDateModal"
 import { useTermExtendmutation } from "@/hooks/Admin.Administration.Term/mutation/useTermExtendMutation"
 import { useTermNameChangeMutation } from "@/hooks/Admin.Administration.Term/mutation/useTermNameChangeMutation"
+import { publishedTerm } from "@/api/application/application"
+import MakeCurrentTermModal from "@/components/Modal/MakeCurrentTermModal"
 
-export type ChangeCurrentTermNameSchema = z.infer<
-  typeof changeCurrentTermNameSchema
+export type ChangePublishedTermNameSchema = z.infer<
+  typeof changePublishedTermNameSchema
 >
-export type ExtendCurrentTermSchema = z.infer<typeof extendCurrentTermSchema>
-function CurrentTerm() {
+export type ExtendPublishedTermSchema = z.infer<
+  typeof extendPublishedTermSchema
+>
+function PublishedTerm() {
   const dispatch = useAppDispatch()
   const saveTermNameRef = useRef<HTMLButtonElement | null>(null)
   const saveTermDateRef = useRef<HTMLButtonElement | null>(null)
   const [loadingToastId, setLoadingToastId] = useState<string | null>(null)
   const [isEdit, setIsEdit] = useState(false)
   const [item, setItem] = useState("")
-  const { data: currentTerm, isLoading } = useQuery({
+  const { data: PublishedTerm, isLoading } = useQuery({
     queryKey: [
-      api.admin.term.currentTerm.findCurrentTermAdministration.queryKey,
+      api.admin.term.publishedTerm.findPublishedTermAdministration.queryKey,
     ],
-    queryFn: api.admin.term.currentTerm.findCurrentTermAdministration.query,
+    queryFn: api.admin.term.publishedTerm.findPublishedTermAdministration.query,
   })
-
+  console.log(publishedTerm)
   const { termExtendMutation, termExtendIsPending } =
     useTermExtendmutation(loadingToastId)
   const { termNameChangeMutation, termNameChangeIsPending } =
     useTermNameChangeMutation(loadingToastId)
-  const termExtendMethods = useForm<ExtendCurrentTermSchema>({
-    resolver: zodResolver(extendCurrentTermSchema),
+  const termExtendMethods = useForm<ExtendPublishedTermSchema>({
+    resolver: zodResolver(extendPublishedTermSchema),
     defaultValues: {
-      date: currentTerm?.endDate ? new Date(currentTerm.endDate) : new Date(),
+      date: PublishedTerm?.endDate
+        ? new Date(PublishedTerm.endDate)
+        : new Date(),
     },
     shouldFocusError: true,
   })
-  const termNameMethods = useForm<ChangeCurrentTermNameSchema>({
-    resolver: zodResolver(changeCurrentTermNameSchema),
+  const termNameMethods = useForm<ChangePublishedTermNameSchema>({
+    resolver: zodResolver(changePublishedTermNameSchema),
     defaultValues: {
-      name: !isLoading ? currentTerm?.name : "",
+      name: !isLoading ? PublishedTerm?.name : "",
     },
     shouldFocusError: true,
   })
-  const onTermExtendSubmit = async (values: ExtendCurrentTermSchema) => {
-    if (currentTerm?.id) {
+  const onTermExtendSubmit = async (values: ExtendPublishedTermSchema) => {
+    if (PublishedTerm?.id) {
       const toastId = toast.loading(`Extending term , please wait`)
       setLoadingToastId(toastId.toString())
-      const updatedTerm = { ...currentTerm, endDate: values.date.toISOString() }
+      const updatedTerm = {
+        ...PublishedTerm,
+        endDate: values.date.toISOString(),
+      }
       await termExtendMutation({
-        id: currentTerm?.id,
+        id: PublishedTerm?.id,
         updatedTerm,
       })
     } else {
@@ -78,8 +88,8 @@ function CurrentTerm() {
     setItem("")
     setIsEdit(false)
   }
-  const onTermNameSubmit = async (values: ChangeCurrentTermNameSchema) => {
-    if (currentTerm?.id) {
+  const onTermNameSubmit = async (values: ChangePublishedTermNameSchema) => {
+    if (PublishedTerm?.id) {
       dispatch(
         setOpenModal({
           isOpen: false,
@@ -88,9 +98,9 @@ function CurrentTerm() {
       )
       const toastId = toast.loading(`Term Name is Getting updated`)
       setLoadingToastId(toastId.toString())
-      const updatedTerm = { ...currentTerm, name: values.name }
+      const updatedTerm = { ...PublishedTerm, name: values.name }
       await termNameChangeMutation({
-        id: currentTerm?.id,
+        id: PublishedTerm?.id,
         updatedTerm,
       })
     } else {
@@ -101,16 +111,16 @@ function CurrentTerm() {
     setIsEdit(false)
   }
   useEffect(() => {
-    if (currentTerm && !isLoading) {
+    if (PublishedTerm && !isLoading) {
       termNameMethods.reset({
-        name: currentTerm?.name,
+        name: PublishedTerm?.name,
       })
       termExtendMethods.reset({
-        date: new Date(currentTerm?.endDate),
+        date: new Date(PublishedTerm?.endDate),
       })
     }
-  }, [currentTerm, isLoading, termNameMethods, termExtendMethods])
-  if (!currentTerm?.name) {
+  }, [PublishedTerm, isLoading, termNameMethods, termExtendMethods])
+  if (!PublishedTerm?.name) {
     return (
       <div className="h-screen textxl font-medium flex justify-center items-center">
         <h1 className="italic">There are no data to show</h1>
@@ -159,8 +169,8 @@ function CurrentTerm() {
                     {item != "termName" && (
                       <>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                          {currentTerm?.name &&
-                            capitalizeFirstCharacter(currentTerm?.name)}
+                          {PublishedTerm?.name &&
+                            capitalizeFirstCharacter(PublishedTerm?.name)}
                         </dd>
                         <button
                           onClick={() => {
@@ -231,7 +241,7 @@ function CurrentTerm() {
                             className="rounded-md bg-white font-medium text-red-600 hover:text-red-500"
                             onClick={() => {
                               termNameMethods.reset({
-                                name: currentTerm?.name,
+                                name: PublishedTerm?.name,
                               })
                               setIsEdit(false)
                               setItem("")
@@ -256,11 +266,11 @@ function CurrentTerm() {
                   )}
                 </form>
               </FormProvider>
-              {currentTerm && (
+              {PublishedTerm && (
                 <>
                   <TermDetails
                     description=" Start date"
-                    value={currentTerm?.startDate}
+                    value={PublishedTerm?.startDate}
                   />
                 </>
               )}
@@ -276,8 +286,8 @@ function CurrentTerm() {
                     {item != "termExtend" && (
                       <>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                          {currentTerm?.endDate &&
-                            formatDate(currentTerm?.endDate)}
+                          {PublishedTerm?.endDate &&
+                            formatDate(PublishedTerm?.endDate)}
                         </dd>
                         <button
                           onClick={() => {
@@ -409,15 +419,60 @@ function CurrentTerm() {
                   </div>
                 </form>
               </FormProvider>
-              {currentTerm && (
+              <div className="px-4 py-2 sm:grid sm:grid-cols-4 sm:gap-4 sm:px-0">
+                <dt className="text-sm font-medium leading-6 text-gray-900">
+                  Make the term current term
+                </dt>
+                <dd className="mt-1 flex text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                  <span className="flex-shrink-0 flex justify-center items-end gap-4 italic">
+                    <button
+                      disabled={
+                        (PublishedTerm?.endDate
+                          ? new Date(PublishedTerm.endDate) < new Date()
+                          : false) || PublishedTerm?.currentTerm
+                      }
+                      type="button"
+                      className="disabled:bg-slate-200 disabled:text-gray-400  px-2 border border-indigo-300 rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500"
+                      onClick={() => {
+                        dispatch(
+                          setOpenModal({
+                            isOpen: true,
+                            type: "makeCurrentTerm",
+                            data: {
+                              id: PublishedTerm?.id,
+                              value: PublishedTerm?.name,
+                            },
+                          })
+                        )
+                      }}
+                    >
+                      Make term current
+                    </button>
+                    {PublishedTerm?.endDate &&
+                      new Date(PublishedTerm.endDate) < new Date() && (
+                        <p className="text-xs">
+                          Please make the expiry date of the term greater than
+                          today's date to activate the term
+                        </p>
+                      )}
+                    {PublishedTerm?.currentTerm && (
+                      <p className="text-xs">
+                        {" "}
+                        The term is already current and active
+                      </p>
+                    )}
+                  </span>
+                </dd>
+              </div>
+              {PublishedTerm && (
                 <>
                   <TermDetails
                     description="Created on"
-                    value={currentTerm?.createdAt}
+                    value={PublishedTerm?.createdAt}
                   />
                   <TermDetails
                     description="Last Updated on"
-                    value={currentTerm?.updatedAt}
+                    value={PublishedTerm?.updatedAt}
                   />
                   <TermDetails description="Total Students" value={100} />
                 </>
@@ -432,8 +487,9 @@ function CurrentTerm() {
       )}
       <TermNameModal ref={saveTermNameRef} />
       <TermDateModal ref={saveTermDateRef} />
+      <MakeCurrentTermModal />
     </div>
   )
 }
 
-export default CurrentTerm
+export default PublishedTerm

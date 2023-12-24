@@ -1,4 +1,3 @@
-
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { api } from "@/api/api"
 import { handleAxiosError } from "@/helpers/errorhandler"
@@ -8,7 +7,9 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { toast } from "react-toastify"
 import { useNavigate } from "react-router-dom"
 
-export const  useEnrollApplicantToStudentMutation= (loadingToastId: string | null) => {
+export const useEnrollApplicantToStudentMutation = (
+  loadingToastId: string | null
+) => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const queryClient = useQueryClient()
@@ -16,11 +17,16 @@ export const  useEnrollApplicantToStudentMutation= (loadingToastId: string | nul
     mutateAsync: enrollApplicantToStudent,
     isPending: enrollApplicantToStudentPending,
   } = useMutation({
-    mutationFn: api.enrollment.applicantEnrollment.enrollApplicantToStudent.query,
+    mutationFn:
+      api.enrollment.applicantEnrollment.enrollApplicantToStudent.query,
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [
           api.students.enrolledStudent.findAllEnrolledStudents.querykey,
+        ],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [
           api.enrollment.applicantEnrollment.findApplicantById.querykey,
         ],
       })
@@ -39,5 +45,5 @@ export const  useEnrollApplicantToStudentMutation= (loadingToastId: string | nul
       handleAxiosError(error)
     },
   })
-  return {enrollApplicantToStudent,enrollApplicantToStudentPending }
+  return { enrollApplicantToStudent, enrollApplicantToStudentPending }
 }

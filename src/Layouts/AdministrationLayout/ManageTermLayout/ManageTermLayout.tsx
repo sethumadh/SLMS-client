@@ -5,6 +5,12 @@ import { cn } from "@/lib/utils"
 const tabs = [
   { name: "Current Term", smName: "Current", href: ".", current: true },
   {
+    name: "Published Term",
+    smName: "Publish",
+    href: "view-publish-term",
+    current: false,
+  },
+  {
     name: "Create New Term",
     smName: "Create",
     href: "create-term",

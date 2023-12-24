@@ -3,23 +3,7 @@ import axios from "axios"
 import { route } from "../route/route"
 import { termSchema } from "../admin/admin"
 
-/* Get Current Active Term*/
-
-const getCurentTermSchema = termSchema
-// Example type derived from the schema
-export type GetCurentTermSchema = z.infer<typeof getCurentTermSchema>
-export const currentTerm = {
-  getTermSubjects: {
-    queryKey: "getTermSubjects",
-    schema: getCurentTermSchema,
-    query: async () => {
-      const response = await axios.get(`${route.application.getCurrentTerm}`)
-
-      return getCurentTermSchema.parse(response.data)
-    },
-  },
-}
-export const getPublishedTermSchema = getCurentTermSchema
+export const getPublishedTermSchema = termSchema
 export type GetPublishedTermSchema = z.infer<typeof getPublishedTermSchema>
 
 export const publishedTerm = {

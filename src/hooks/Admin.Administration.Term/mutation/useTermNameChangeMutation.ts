@@ -12,9 +12,19 @@ export const useTermNameChangeMutation = (loadingToastId: string | null) => {
   } = useMutation({
     mutationFn: api.admin.term.changeCurrentTermName.mutation,
     onSuccess: (data) => {
+      console.log("Mutation onSuccess called", data)
+      console.log("Invalidating queries with key:", data)
       queryClient.invalidateQueries({
-        queryKey: [api.application.currentTerm.getTermSubjects.queryKey],
+        queryKey: [
+          api.admin.term.currentTerm.findCurrentTermAdministration.queryKey,
+        ],
       })
+      queryClient.invalidateQueries({
+        queryKey: [
+          api.admin.term.publishedTerm.findPublishedTermAdministration.queryKey,
+        ],
+      })
+
       if (loadingToastId) toast.dismiss(loadingToastId)
       toast.success(`Term Name updated to ${data.name} 👌`)
     },

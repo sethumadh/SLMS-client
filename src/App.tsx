@@ -55,7 +55,8 @@ import TimetableLayout from "./Layouts/TimetableLayout/TimetableLayout"
 import CreateTimeTable from "./pages/Admin/Timetable/CreateTimetable"
 import TermStudentList from "./pages/Admin/Administration/ManageTerm/AllTerms/TermDetails/TermStudentList"
 import ViewTimeTable from "./pages/Admin/Timetable/ViewTimetable"
-
+import PublishedTerm from "./pages/Admin/Administration/ManageTerm/PublishedTerm/PublishedTerm"
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
@@ -133,6 +134,7 @@ const router = createBrowserRouter(
           <Route index element={<Administration />} />
           <Route path="manage-term" element={<ManageTermLayout />}>
             <Route index element={<CurrentTerm />} />
+            <Route path="view-publish-term" element={<PublishedTerm />} />
             <Route path="create-term" element={<CreateTerm />} />
             <Route path="all-terms">
               <Route index element={<AllTerms />} />
@@ -185,6 +187,7 @@ function App() {
           <RouterProvider router={router} />
         </PersistGate>
         {/* <TermNameModal /> */}
+        <ReactQueryDevtools initialIsOpen={false} />
       </Provider>
       <ToastContainer />
     </QueryClientProvider>

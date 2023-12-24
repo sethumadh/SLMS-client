@@ -3,7 +3,7 @@ import { Controller, useFieldArray, useFormContext } from "react-hook-form"
 import ReactDatePicker from "react-datepicker"
 import Select, { SingleValue } from "react-select"
 
-import { createTermWithSubjectSchema } from "@/types/Admin/term/term"
+import { createTermWithSubjectSchema } from "@/types/Admin/term/currentTerm"
 import SubjectCreate from "./SubjectCreate"
 import { useQuery } from "@tanstack/react-query"
 import { api } from "@/api/api"

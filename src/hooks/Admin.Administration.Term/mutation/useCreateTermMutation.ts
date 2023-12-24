@@ -15,9 +15,11 @@ export const useCreateTermMutation = (loadingToastId: string | null) => {
       onSuccess: (data) => {
         queryClient.invalidateQueries({
           queryKey: [
-            api.application.currentTerm.getTermSubjects.queryKey,
-            api.admin.term.findAllTerms.queryKey,
+            api.admin.term.currentTerm.findCurrentTermAdministration.queryKey,
           ],
+        })
+        queryClient.invalidateQueries({
+          queryKey: [api.admin.term.findAllTerms.queryKey],
         })
         // add inavlidate for getting all terms
         if (loadingToastId) toast.dismiss(loadingToastId)

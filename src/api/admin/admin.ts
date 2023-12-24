@@ -113,6 +113,9 @@ export type changeCurrentTermNameSchema = z.infer<
 const extendCurrentTermSchema = changeCurrentTermNameSchema
 export type ExtendCurrentTermSchema = z.infer<typeof extendCurrentTermSchema>
 
+/* Get Current Active Term*/
+const getCurentTermSchema = termSchema
+export type GetCurentTermSchema = z.infer<typeof getCurentTermSchema>
 export const term = {
   changeCurrentTermName: {
     schema: termSchema,
@@ -129,6 +132,27 @@ export const term = {
       )
 
       return termSchema.parse(response.data)
+    },
+  },
+  publishedTerm: {
+    findPublishedTermAdministration: {
+      queryKey: "findPublishedTermAdministration",
+      schema: getCurentTermSchema,
+      query: async () => {
+        const response = await axios.get(`${route.admin.findPublishedTerm}`)
+        console.log(response.data)
+        return getCurentTermSchema.parse(response.data)
+      },
+    },
+  },
+  currentTerm: {
+    findCurrentTermAdministration: {
+      queryKey: "findCurrentTermAdministration",
+      schema: getCurentTermSchema,
+      query: async () => {
+        const response = await axios.get(`${route.admin.findCurrentTerm}`)
+        return getCurentTermSchema.parse(response.data)
+      },
     },
   },
   extendCurrentTerm: {

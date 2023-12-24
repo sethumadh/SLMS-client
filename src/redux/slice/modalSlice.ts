@@ -9,7 +9,7 @@ type initialStateProps = {
     | ""
     | "termName"
     | "termExtend"
-    | "isCurrentTerm"
+    | "isCurrentTerm"|"makeCurrentTerm"
     | "deleteTerm"
     | "submitApplicant"
     | "isPublishTerm"

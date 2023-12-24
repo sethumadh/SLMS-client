@@ -5,14 +5,22 @@ import { handleAxiosError } from "@/helpers/errorhandler"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { toast } from "react-toastify"
 
-export const useTermExtendmutation=(loadingToastId: string | null)=>{
-    const queryClient = useQueryClient()
-    const { mutateAsync: termExtendMutation, isPending: termExtendIsPending } =
+export const useTermExtendmutation = (loadingToastId: string | null) => {
+  const queryClient = useQueryClient()
+  const { mutateAsync: termExtendMutation, isPending: termExtendIsPending } =
     useMutation({
       mutationFn: api.admin.term.extendCurrentTerm.mutation,
       onSuccess: (data) => {
         queryClient.invalidateQueries({
-          queryKey: [api.application.currentTerm.getTermSubjects.queryKey],
+          queryKey: [
+            api.admin.term.currentTerm.findCurrentTermAdministration.queryKey,
+          ],
+        })
+        queryClient.invalidateQueries({
+          queryKey: [
+            api.admin.term.publishedTerm.findPublishedTermAdministration
+              .queryKey,
+          ],
         })
         if (loadingToastId) toast.dismiss(loadingToastId)
         toast.success(
@@ -24,5 +32,5 @@ export const useTermExtendmutation=(loadingToastId: string | null)=>{
         handleAxiosError(error)
       },
     })
-    return {termExtendMutation,termExtendIsPending}
+  return { termExtendMutation, termExtendIsPending }
 }

@@ -2,7 +2,7 @@ import axios from "axios"
 import { route } from "../route/route"
 import { z } from "zod"
 
-/*Students*/
+/* enrolled Students*/
 
 const PersonalDetailsSchema = z.object({
   id: z.number(),
@@ -63,6 +63,7 @@ const enrolledStudentSchema = z.object({
   createdAt: z.string(),
   updatedAt: z.string(),
 })
+
 /* term to enroll schema*/
 const subjectSchema = z.object({
   id: z.number(),
@@ -181,7 +182,9 @@ export const enrolledStudent = {
     schema: enrolledStudentSchema,
     query: async (id: string) => {
       try {
-        const response = await axios.get(`${route.enrolledStudents.findEnrolledStudentById}/${id}`)
+        const response = await axios.get(
+          `${route.enrolledStudents.findEnrolledStudentById}/${id}`
+        )
 
         return enrolledStudentSchema.parse(response.data)
       } catch (error) {
@@ -201,7 +204,9 @@ export const enrolledStudent = {
     schema: termToEnrollSchema,
     query: async () => {
       try {
-        const response = await axios.get(`${route.enrolledStudents.findTermToEnrollEnrolledStudent}`)
+        const response = await axios.get(
+          `${route.enrolledStudents.findTermToEnrollEnrolledStudent}`
+        )
         return termToEnrollSchema.parse(response.data)
       } catch (error) {
         if (error instanceof z.ZodError) {

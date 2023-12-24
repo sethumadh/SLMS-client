@@ -1,7 +1,6 @@
 const baseURL = import.meta.env.VITE_BASE_URL
 export const route = {
   application: {
-    getCurrentTerm: `${baseURL}/api/v1/application/find-current-term`,
     getPublishedTerm: `${baseURL}/api/v1/application/find-published-term`,
     createApplicant: `${baseURL}/api/v1/application/create-applicant`,
   },
@@ -12,6 +11,8 @@ export const route = {
     makePublishTerm: `${baseURL}/api/v1/admin/administration/update/make-publish-term`,
     createTermWithSubjectsSetup: `${baseURL}/api/v1/admin/administration/create-new-term-setup`,
     findAllTerms: `${baseURL}/api/v1/admin/administration/find-all-terms`,
+    findCurrentTerm: `${baseURL}/api/v1/admin/administration/find-current-term`,
+    findPublishedTerm: `${baseURL}/api/v1/admin/administration/find-published-term-administration`,
     findUniqueTerm: `${baseURL}/api/v1/admin/administration/find/term-detail`,
     deleteTerm: `${baseURL}/api/v1/admin/administration/delete-term`,
     studentListInATerm: `${baseURL}/api/v1/admin/administration/term-students-list`,
@@ -48,12 +49,15 @@ export const route = {
     enrollApplicantToStudent: `${baseURL}/api/v1/admin/applicant/enroll-applicant-to-student`,
   },
   enrolledStudents: {
-    getAllEnrolledStudents: `${baseURL}/api/v1/admin/student/get-all-enrolled-students`,
-    searchEnrolledStudents: `${baseURL}/api/v1/admin/student/search-enrolled-students`,
-    findEnrolledStudentById: `${baseURL}/api/v1/admin/student/enrolled-student-detail`,
-    findTermToEnrollEnrolledStudent: `${baseURL}/api/v1/admin/student/term-to-enroll-student-enrolled`,
-    findEnrolledStudentEnrolledSubjects: `${baseURL}/api/v1/admin/student/find-enrolled-subjects-for-enrolled-student`,
-    enrollEnrolledStudent: `${baseURL}/api/v1/admin/student/enroll-enrolled-student`,
-    deEnrollEnrolledStudent: `${baseURL}/api/v1/admin/student/de-enroll-enrolled-student`,
+    getAllEnrolledStudents: `${baseURL}/api/v1/admin/student/enrolled/get-all-enrolled-students`,
+    searchEnrolledStudents: `${baseURL}/api/v1/admin/student/enrolled/search-enrolled-students`,
+    findEnrolledStudentById: `${baseURL}/api/v1/admin/student/enrolled/enrolled-student-detail`,
+    findTermToEnrollEnrolledStudent: `${baseURL}/api/v1/admin/student/enrolled/term-to-enroll-student-enrolled`,
+    findEnrolledStudentEnrolledSubjects: `${baseURL}/api/v1/admin/student/enrolled/find-enrolled-subjects-for-enrolled-student`,
+    enrollEnrolledStudent: `${baseURL}/api/v1/admin/student/enrolled/enroll-enrolled-student`,
+    deEnrollEnrolledStudent: `${baseURL}/api/v1/admin/student/enrolled/de-enroll-enrolled-student`,
+  },
+  activeStudents: {
+    getAllActiveStudents: `${baseURL}/api/v1/admin/student/active/get-all-active-students`,
   },
 }
