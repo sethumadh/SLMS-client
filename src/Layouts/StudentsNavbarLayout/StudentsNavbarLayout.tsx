@@ -3,11 +3,18 @@ import { NavLink, Outlet, useLocation } from "react-router-dom"
 
 const tabs = [
   {
-    name: "Enrolled Students",
+    name: "Active Students",
     href: "/admin/students/student-detail",
     to: "/admin/students",
     current: false,
     end: true,
+  },
+  {
+    name: "Enrolled Students",
+    href: "/admin/students/enrolled-students/student-detail",
+    to: "/admin/students/enrolled-students",
+    current: false,
+    end: false,
   },
   {
     name: "Alumni",

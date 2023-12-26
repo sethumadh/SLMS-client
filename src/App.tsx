@@ -26,7 +26,7 @@ import Communication from "./pages/Admin/Communication/Communication"
 import Administration from "./pages/Admin/Administration/Administration"
 import PageNotFound from "./pages/PageNotFound/PageNotFound"
 import ClassesAndEvents from "./pages/ClassesAndEvents/ClassesAndEvents"
-import StudentDetailLayout from "./Layouts/StudentDetailLayout/StudentDetailLayout"
+
 import PersonalDetails from "./pages/Admin/Students/EnrolledStudentDetail/PersonalDetails/PersonalDetails"
 import ParentDetails from "./pages/Admin/Students/EnrolledStudentDetail/ParentDetails/ParentDetails"
 import HealthDetails from "./pages/Admin/Students/EnrolledStudentDetail/HealthDetails.tsx/HealthDetails"
@@ -57,6 +57,10 @@ import TermStudentList from "./pages/Admin/Administration/ManageTerm/AllTerms/Te
 import ViewTimeTable from "./pages/Admin/Timetable/ViewTimetable"
 import PublishedTerm from "./pages/Admin/Administration/ManageTerm/PublishedTerm/PublishedTerm"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
+import ActiveStudentsList from "./pages/Admin/Students/ActiveStudentsList/ActiveStudentsList"
+import EnrolledStudentDetailLayout from "./Layouts/StudentDetailLayout/EnrolledStudentDetailLayout"
+import ActiveStudentDetailLayout from "./Layouts/StudentDetailLayout/ActiveStudentDetailLayout"
+import PersonalInformation from "./pages/Admin/Students/ActiveStudentDetail/PersonalInformation/PersonalInformation"
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
@@ -73,8 +77,18 @@ const router = createBrowserRouter(
         <Route index element={<Dashboard />} />
         {/* student */}
         <Route path="students" element={<StudentsNavbarLayout />}>
-          <Route index element={<EnrolledStudentList />} />
-          <Route path="student-detail/:id" element={<StudentDetailLayout />}>
+          <Route index element={<ActiveStudentsList />} />
+          <Route
+            path="student-detail/:id"
+            element={<ActiveStudentDetailLayout />}
+          >
+            <Route index element={<PersonalInformation/>}/>
+          </Route>
+          <Route path="enrolled-students" element={<EnrolledStudentList />} />
+          <Route
+            path="enrolled-students/student-detail/:id"
+            element={<EnrolledStudentDetailLayout />}
+          >
             <Route index element={<PersonalDetails />} />
             <Route
               path="manage-subjects-classes"

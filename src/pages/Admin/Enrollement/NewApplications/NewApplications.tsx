@@ -33,7 +33,9 @@ function NewStudentApplications() {
           currentPage
         )
       } else {
-        return api.enrollment.applicantEnrollment.findAllApplicants.query(currentPage)
+        return api.enrollment.applicantEnrollment.findAllApplicants.query(
+          currentPage
+        )
       }
     },
   })
@@ -221,14 +223,17 @@ function NewStudentApplications() {
           </>
         ) : allApplicantDataIsError ? (
           <div className="flex flex-row h-[650px] w-full justify-center items-center ">
-            <p className="font-medium ">There are no Applicants data to show</p>
+            <p className="font-medium ">
+              There are no Enrolled Students data to show
+            </p>
           </div>
         ) : (
           <>
             <>
               <div className="flex flex-row h-[650px] w-full justify-center items-center ">
                 <p className="font-medium ">
-                  There are no Applicants data to show. Some error happened
+                  There are no Enrolled Applications data to show. Some error
+                  happened
                 </p>
               </div>
             </>

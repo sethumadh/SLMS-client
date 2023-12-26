@@ -3,9 +3,6 @@ import axios from "axios"
 import { route } from "../route/route"
 import { z } from "zod"
 
-
-
-
 const PersonalDetailsSchema = z.object({
   id: z.number(),
   firstName: z.string(),
@@ -51,7 +48,7 @@ const OtherInformationSchema = z.object({
   declaration: z.array(z.string()),
 })
 
-const enrolledStudentSchema = z.object({
+const activeStudentSchema = z.object({
   id: z.number(),
   role: z.string(),
   isActive: z.boolean(),
@@ -106,7 +103,7 @@ const enrolledSubjectSchema = z.object({
 const enrolledSubjectsSchema = z.array(enrolledSubjectSchema)
 
 const activeStudentsDataSchema = z.object({
-  enrolledStudents: z.array(enrolledStudentSchema),
+  activeStudents: z.array(activeStudentSchema),
   count: z.object({
     _count: z.object({
       id: z.number(),
@@ -114,7 +111,7 @@ const activeStudentsDataSchema = z.object({
   }),
 })
 const enrollDataSchema = z.object({
-  enrolledStudentId: z.number(),
+  activeStudentId: z.number(),
   enrollData: z.array(
     z.object({
       subject: z.string(),
@@ -127,30 +124,77 @@ const enrollDataSchema = z.object({
   ),
 })
 export type EnrollDataSchema = z.infer<typeof enrollDataSchema>
-export const activeStudent ={
-    findAllActiveStudents: {
-        querykey: "findAllActiveStudents",
-        schema: activeStudentsDataSchema,
-        query: async (page = 0) => {
-          try {
-            const response = await axios.get(
-              route.activeStudents.getAllActiveStudents,
-              {
-                params: { page },
-              }
-            )
-    
-            return activeStudentsDataSchema.parse(response.data)
-          } catch (error) {
-            if (error instanceof z.ZodError) {
-              // Handle Zod validation error
-              console.error("Zod validation error:", error.issues)
-            } else {
-              // Handle other types of errors (e.g., network errors)
-              console.error("Error:", error)
-            }
-            throw error // Re-throw the error if you want to propagate it
+export const activeStudent = {
+  findAllActiveStudents: {
+    querykey: "findAllActiveStudents",
+    schema: activeStudentsDataSchema,
+    query: async (page = 0) => {
+      try {
+        const response = await axios.get(
+          route.activeStudents.getAllActiveStudents,
+          {
+            params: { page },
           }
-        },
-      },
+        )
+
+        return activeStudentsDataSchema.parse(response.data)
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          // Handle Zod validation error
+          console.error("Zod validation error:", error.issues)
+        } else {
+          // Handle other types of errors (e.g., network errors)
+          console.error("Error:", error)
+        }
+        throw error // Re-throw the error if you want to propagate it
+      }
+    },
+  },
+  searchActiveStudents: {
+    querykey: "searchActiveStudents",
+    schema: activeStudentsDataSchema,
+    query: async (search = "", page = 0) => {
+      try {
+        const response = await axios.get(
+          route.activeStudents.searchActiveStudents,
+          {
+            params: { search, page },
+          }
+        )
+
+        return activeStudentsDataSchema.parse(response.data)
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          // Handle Zod validation error
+          console.error("Zod validation error:", error.issues)
+        } else {
+          // Handle other types of errors (e.g., network errors)
+          console.error("Error:", error)
+        }
+        throw error // Re-throw the error if you want to propagate it
+      }
+    },
+  },
+  findActiveStudentById: {
+    querykey: "findActiveStudentById",
+    schema: activeStudentSchema,
+    query: async (id: string) => {
+      try {
+        const response = await axios.get(
+          `${route.activeStudents.findActiveStudentById}/${id}`
+        )
+
+        return activeStudentSchema.parse(response.data)
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          // Handle Zod validation error
+          console.error("Zod validation error:", error.issues)
+        } else {
+          // Handle other types of errors (e.g., network errors)
+          console.error("Error:", error)
+        }
+        throw error // Re-throw the error if you want to propagate it
+      }
+    },
+  },
 }

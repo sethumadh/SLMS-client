@@ -7,13 +7,14 @@ import { z } from "zod"
 import Icons from "@/constants/icons"
 import { useQuery } from "@tanstack/react-query"
 import { api } from "@/api/api"
-import { enrolledStudentPersonalDetailSchema } from "@/types/Admin/student/enrolledStudentSchema"
+
 import LoadingSpinner from "@/components/Loadingspinner"
 import { capitalizeFirstCharacter } from "@/helpers/capitalizeFirstCharacter"
 import { formatDate } from "@/helpers/dateFormatter"
+import { activeStudentPersonalDetailSchema } from "@/types/Admin/student/activeStudentSchema"
 
-export type enrolledStudentPersonalDetailsSchema = z.infer<
-  typeof enrolledStudentPersonalDetailSchema
+export type activeStudentPersonalDetailsSchema = z.infer<
+  typeof activeStudentPersonalDetailSchema
 >
 
 const people = {
@@ -33,19 +34,17 @@ function PersonalDetails() {
   const [isEdit, setIsEdit] = useState(false)
   const [item, setItem] = useState("")
   const {
-    data: enrolledStudentData,
-    isLoading: enrolledStudentDataIsLoading,
-    isError: enrolledStudentDataIsError,
+    data: activeStudentData,
+    isLoading: activeStudentDataIsLoading,
+    isError: activeStudentDataIsError,
   } = useQuery({
     queryKey: [
-      api.students.enrolledStudent.findEnrolledStudentById.querykey,
+      api.students.activeStudent.findActiveStudentById.querykey,
       params.id,
     ],
     queryFn: () => {
       if (params.id) {
-        return api.students.enrolledStudent.findEnrolledStudentById.query(
-          params.id
-        )
+        return api.students.activeStudent.findActiveStudentById.query(params.id)
       }
     },
     enabled: !!params.id,
@@ -64,19 +63,11 @@ function PersonalDetails() {
     postcode,
     state,
     suburb,
-  } = enrolledStudentData?.personalDetails ?? {}
-  const methods = useForm<enrolledStudentPersonalDetailsSchema>({
-    resolver: zodResolver(enrolledStudentPersonalDetailSchema),
-
-    defaultValues: {
-      email: "karansingh@example.com",
-      contact: "0123456789",
-      address: `Unit 1 , Plumtpton Court, 8th Gillinham street`,
-      suburb: "Dandenong ",
-      postcode: "4222",
-    },
+  } = activeStudentData?.personalDetails ?? {}
+  const methods = useForm<activeStudentPersonalDetailsSchema>({
+    resolver: zodResolver(activeStudentPersonalDetailSchema),
   })
-  const onSubmit = (values: enrolledStudentPersonalDetailsSchema) => {
+  const onSubmit = (values: activeStudentPersonalDetailsSchema) => {
     console.log({ personalDetails: values })
     setIsEdit(false)
   }
@@ -89,7 +80,7 @@ function PersonalDetails() {
       postcode: postcode,
     })
   }, [email, contact, address, suburb, postcode, methods])
-  if (enrolledStudentDataIsError) {
+  if (activeStudentDataIsError) {
     return (
       <>
         <div className="h-[600px] w-full flex justify-center items-center">
@@ -100,13 +91,13 @@ function PersonalDetails() {
   }
   return (
     <>
-      {enrolledStudentDataIsLoading ? (
+      {activeStudentDataIsLoading ? (
         <>
           <div className="h-[600px] w-full flex justify-center items-center">
             <LoadingSpinner className="w-20 h-20" />
           </div>
         </>
-      ) : enrolledStudentData?.personalDetails ? (
+      ) : activeStudentData?.personalDetails ? (
         <>
           <div>
             <div className="px-4 sm:px-0 flex justify-between gap-x-4 lg:mt-4">
@@ -150,13 +141,13 @@ function PersonalDetails() {
                       <dl className="mt-1 flex flex-grow flex-col justify-between">
                         <dt className="sr-only">Title</dt>
                         <dd className="text-sm text-gray-500">
-                          {enrolledStudentData?.role &&
-                            capitalizeFirstCharacter(enrolledStudentData?.role)}
+                          {activeStudentData?.role &&
+                            capitalizeFirstCharacter(activeStudentData?.role)}
                         </dd>
                         <dt className="sr-only">Role</dt>
                         <dd className="mt-3">
                           <span className="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                            Enrolled
+                            Student
                           </span>
                         </dd>
                       </dl>

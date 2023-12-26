@@ -59,5 +59,7 @@ export const route = {
   },
   activeStudents: {
     getAllActiveStudents: `${baseURL}/api/v1/admin/student/active/get-all-active-students`,
+    searchActiveStudents: `${baseURL}/api/v1/admin/student/active/search-active-students`,
+    findActiveStudentById: `${baseURL}/api/v1/admin/student/active/active-student-detail`,
   },
 }

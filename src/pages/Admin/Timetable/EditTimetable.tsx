@@ -123,9 +123,11 @@ export default function EditTimeTable() {
           <div className="px-4 sm:px-6 lg:px-20 lg:py-12">
             <div className="border-b-2 border-gray-200 pb-5 ">
               <h3 className="text-2xl font-semibold leading-6 text-gray-900">
-                Timetable for{" "}
-                {timetableData?.name &&
-                  capitalizeFirstCharacter(timetableData?.name)}
+                Timetable for current Term{" "}
+                <span className="underline underline-offset-4 text-blue-300 italic">
+                  {timetableData?.name &&
+                    capitalizeFirstCharacter(timetableData?.name)}
+                </span>
               </h3>
               <div className="flex flex-col gap-1 mt-4">
                 <p className="mt-2 max-w-4xl text-sm text-gray-500">
@@ -202,12 +204,12 @@ export default function EditTimeTable() {
                             style={{ width: "128px", height: "80px" }}
                           >
                             {isEditMode ? (
-                              <div className="w-full h-full flex justify-center items-center gap-4">
+                              <div className="w-full h-full flex justify-center items-center gap-2">
                                 <input
                                   type="text"
                                   defaultValue={field.name}
                                   {...register(`data.${index}.name` as const)}
-                                  className="w-full text-center rounded-md border-gray-300 shadow-sm"
+                                  className="w-full flex-1 text-center text-xs rounded-md border-gray-300 shadow-sm"
                                 />
                                 <td col-span-4 className="">
                                   <button
@@ -223,7 +225,7 @@ export default function EditTimeTable() {
                                     ) : (
                                       <span className="w-full flex justify-center items-center">
                                         <span>
-                                          <Icons.Trash2 className="text-red-500 w-7 h-7" />
+                                          <Icons.Trash2 className="text-red-500 w-4 h-4" />
                                         </span>
                                       </span>
                                     )}

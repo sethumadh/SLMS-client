@@ -5,27 +5,32 @@ import { cn } from "@/lib/utils"
 const tabs = [
   { name: "Personal Details", smName: "Personal", href: ".", current: true },
   {
-    name: "Subject & classes",
-    smName: "Classes",
-    href: "manage-subjects-classes",
-    current: true,
-  },
-  {
-    name: "Parents Details",
-    smName: "Parents",
-    href: "parent",
+    name: "Fees",
+    smName: "Fees",
+    href: "manage-fees",
     current: false,
   },
   {
-    name: "Emergency and Health",
-    smName: "Health",
-    href: "health",
+    name: "Attendance",
+    smName: "attendance",
+    href: "attendance",
     current: false,
   },
-  { name: "Declaration", smName: "Terms", href: "declaration", current: false },
+  {
+    name: "Feedbacks",
+    smName: "Feedbacks",
+    href: "feedbacks",
+    current: false,
+  },
+  {
+    name: "Manage & Assign",
+    smName: "Terms",
+    href: "manage-assign",
+    current: false,
+  },
 ]
 
-export default function StudentDetailLayout() {
+export default function ActiveStudentDetailLayout() {
   const location = useLocation()
   const activeLink = location.pathname
 

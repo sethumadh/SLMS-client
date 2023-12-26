@@ -190,12 +190,12 @@ export default function CreateTimeTable() {
                             style={{ width: "128px", height: "80px" }}
                           >
                             {isEditMode ? (
-                              <div className="w-full h-full flex justify-center items-center gap-4">
+                              <div className="w-full h-full flex justify-center items-center gap-2">
                                 <input
                                   type="text"
                                   defaultValue={field.name}
                                   {...register(`data.${index}.name` as const)}
-                                  className="w-full text-center rounded-md border-gray-300 shadow-sm"
+                                  className="w-full flex-1 text-center text-xs rounded-md border-gray-300 shadow-sm"
                                 />
                                 <td col-span-4 className="">
                                   <button
@@ -211,7 +211,7 @@ export default function CreateTimeTable() {
                                     ) : (
                                       <span className="w-full flex justify-center items-center">
                                         <span>
-                                          <Icons.Trash2 className="text-red-500 w-7 h-7" />
+                                          <Icons.Trash2 className="text-red-500 w-4 h-4" />
                                         </span>
                                       </span>
                                     )}
@@ -388,26 +388,6 @@ export default function CreateTimeTable() {
                             )
                           })}
                         </tr>
-                        {/* add remove */}
-                        {/* <td col-span-4 className="">
-                          <button
-                            disabled={index == 0 || !isEditMode}
-                            className="flex justify-center gap-4 items-center text-md disabled:bg-slate-200 disabled:cursor-not-allowed disabled:text-slate-500 bg-red-400 h-12 w-full"
-                            type="button"
-                            onClick={() => {
-                              remove(index)
-                            }}
-                          >
-                            {index == 0 ? (
-                              <Icons.Trash2 className="text-slate-300" />
-                            ) : (
-                              <>
-                                <Icons.Trash2 />
-                                {field.name}
-                              </>
-                            )}
-                          </button>
-                        </td> */}
                       </>
                     )
                   })}

@@ -39,7 +39,7 @@ export const useMakeCurrentTermMutation = (loadingToastId: string | null) => {
             type: "",
           })
         )
-        navigate("administration/manage-term")
+        navigate("/administration/manage-term")
       },
       onError: (error: unknown) => {
         if (loadingToastId) toast.dismiss(loadingToastId)
