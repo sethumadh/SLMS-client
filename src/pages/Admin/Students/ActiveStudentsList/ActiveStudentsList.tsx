@@ -62,7 +62,6 @@ function ActiveStudentsList() {
     },
     enabled: !!currentTerm?.id,
   })
-
   const nPages = Math.ceil((allStudentData?.count ?? 0) / recordsPerPage)
 
   const handleSearch = useCallback(
@@ -77,7 +76,7 @@ function ActiveStudentsList() {
 
   const handlePageChange = (page: { selected: number }) => {
     const currentPage = page.selected
-    setCurrentPage(currentPage + 1)
+    setCurrentPage(currentPage)
   }
   const handleSubjectSelect = (
     selectedSubject: SingleValue<{ value: string; label: string }>

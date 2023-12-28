@@ -118,7 +118,7 @@ function ManageAndEnroll() {
 
     enabled: !!params.id,
   })
-  console.log(enrolledStudentEnrolledData)
+
   useEffect(() => {
     if (termToEnrollData?.termSubject) {
       const transformedSubjectOptions = termToEnrollData?.termSubject?.map(
@@ -133,11 +133,6 @@ function ManageAndEnroll() {
       setSubjectOptions(transformedSubjectOptions)
     }
   }, [termToEnrollData])
-  console.log(
-    enrolledStudentData,
-    termToEnrollData,
-    enrolledStudentEnrolledData
-  )
   const subjectRelated = enrolledStudentData?.subjectRelated
   const subjectsChosen = enrolledStudentData?.subjectsChosen
 

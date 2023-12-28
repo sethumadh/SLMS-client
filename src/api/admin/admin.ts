@@ -256,7 +256,7 @@ export const term = {
           `${route.admin.studentListInATerm}/${id}`
         )
         // return termSchema.parse(response.data)
-        console.log(response.data)
+
         return response.data
       } catch (error) {
         if (error instanceof z.ZodError) {
@@ -441,7 +441,7 @@ export const classes = {
         route.admin.class.createClass,
         creatClassData
       )
-      console.log(response.data)
+
       return z
         .object({
           message: z.string(),

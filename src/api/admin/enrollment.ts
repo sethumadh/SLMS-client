@@ -260,7 +260,7 @@ export const applicantEnrollment = {
           enrollData
         )
         // return termToEnrollSchema.parse(response.data)
-        console.log(response.data)
+
         return response.data
       } catch (error) {
         if (error instanceof z.ZodError) {

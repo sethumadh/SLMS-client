@@ -26,7 +26,7 @@ const EnrollToActiveStudentModal = () => {
   })
 
   const termId = currentTerm?.id
-  console.log(id, termId)
+
   const cancelButtonRef = useRef(null)
   const IsModalOpen = isOpen && type === "enrollToActiveStudent"
 
@@ -109,7 +109,7 @@ const EnrollToActiveStudentModal = () => {
                       )
                       setLoadingToastId(toastId.toString())
                       if (id && termId) {
-                        console.log(id, termId)
+
                         await enrollToActiveStudent({ id, termId })
                       }
                     }}

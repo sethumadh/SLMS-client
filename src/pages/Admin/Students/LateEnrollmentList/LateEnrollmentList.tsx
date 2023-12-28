@@ -77,7 +77,7 @@ function LateEnrollmentList() {
 
   const handlePageChange = (page: { selected: number }) => {
     const currentPage = page.selected
-    setCurrentPage(currentPage + 1)
+    setCurrentPage(currentPage)
   }
   const handleSubjectSelect = (
     selectedSubject: SingleValue<{ value: string; label: string }>

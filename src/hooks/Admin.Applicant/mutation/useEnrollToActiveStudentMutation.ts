@@ -22,7 +22,7 @@ export const useEnrollToActiveStudentMutation = (
         { id, termId }
       ),
     onSuccess: (data) => {
-      console.log(data, "hello")
+
       queryClient.invalidateQueries({
         queryKey: [
           api.students.enrolledStudent.findAllEnrolledStudents.querykey,
