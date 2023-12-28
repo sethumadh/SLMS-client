@@ -9,7 +9,8 @@ type initialStateProps = {
     | ""
     | "termName"
     | "termExtend"
-    | "isCurrentTerm"|"makeCurrentTerm"
+    | "isCurrentTerm"
+    | "makeCurrentTerm"
     | "deleteTerm"
     | "submitApplicant"
     | "isPublishTerm"
@@ -17,10 +18,10 @@ type initialStateProps = {
     | "deEnrollStudent"
     | "enrollApplicant"
     | "deEnrollApplicant"
-    | "enrollApllicantToStudent"
     | "createClass"
     | "updateTimetable"
     | "createTimetable"
+    | "enrollStudentToCurrentTerm"|"enrollToActiveStudent"
   data?: {
     id?: number
     value?: any

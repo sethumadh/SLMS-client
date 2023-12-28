@@ -14,27 +14,31 @@ export type ParentDetailsSchema = z.infer<typeof applicantParentDetailsSchema>
 
 // More people...
 
-function NewApplicantParentDetails() {
+function LateEnrollmentParentDetails() {
   const params = useParams()
   const saveRef = useRef<HTMLButtonElement | null>(null)
   const [isEdit, setIsEdit] = useState(false)
   const [item, setItem] = useState("")
   const {
-    data: applicantData,
-    isLoading: applicantDataIsLoading,
-    isError: applicantDataIsError,
+    data: lateEnrolledStudentData,
+    isLoading: lateEnrolledStudentDataIsLoading,
+    isError: lateEnrolledStudentDataIsError,
   } = useQuery({
-    queryKey: [api.enrollment.applicantEnrollment.findApplicantById.querykey, params.id],
+    queryKey: [
+      api.students.lateEnrolledStudent.findLateEnrolledStudentById.querykey,
+      params.id,
+    ],
     queryFn: () => {
       if (params.id) {
-        return api.enrollment.applicantEnrollment.findApplicantById.query(params.id)
+        return api.students.lateEnrolledStudent.findLateEnrolledStudentById.query(
+          params.id
+        )
       }
     },
     enabled: !!params.id,
   })
-
   const { fatherName, motherName, parentContact, parentEmail } =
-    applicantData?.parentsDetails ?? {}
+    lateEnrolledStudentData?.parentsDetails ?? {}
   const methods = useForm<ParentDetailsSchema>({
     resolver: zodResolver(applicantParentDetailsSchema),
   })
@@ -48,7 +52,7 @@ function NewApplicantParentDetails() {
       parentEmail,
     })
   }, [parentContact, parentEmail, methods])
-  if (applicantDataIsError) {
+  if (lateEnrolledStudentDataIsError) {
     return (
       <>
         <div className="h-[600px] w-full flex justify-center items-center">
@@ -59,13 +63,13 @@ function NewApplicantParentDetails() {
   }
   return (
     <>
-      {applicantDataIsLoading ? (
+      {lateEnrolledStudentDataIsLoading ? (
         <>
           <div className="h-[600px] w-full flex justify-center items-center">
             <LoadingSpinner className="w-20 h-20" />
           </div>
         </>
-      ) : applicantData?.personalDetails ? (
+      ) : lateEnrolledStudentData?.personalDetails ? (
         <>
           <div>
             <div className="px-4 sm:px-0 flex justify-between gap-x-4 lg:mt-4 ">
@@ -296,4 +300,4 @@ function NewApplicantParentDetails() {
   )
 }
 
-export default NewApplicantParentDetails
+export default LateEnrollmentParentDetails

@@ -4,46 +4,39 @@ import { handleAxiosError } from "@/helpers/errorhandler"
 import { setOpenModal } from "@/redux/slice/modalSlice"
 import { useAppDispatch } from "@/redux/store"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { toast } from "react-toastify"
 import { useNavigate } from "react-router-dom"
+import { toast } from "react-toastify"
 
-export const useEnrollApplicantToStudentMutation = (
+export const useEnrollStudentToCurrentTermMutation = (
   loadingToastId: string | null
 ) => {
-  const dispatch = useAppDispatch()
   const navigate = useNavigate()
+  const dispatch = useAppDispatch()
   const queryClient = useQueryClient()
   const {
-    mutateAsync: enrollApplicantToStudent,
-    isPending: enrollApplicantToStudentPending,
+    mutateAsync: enrollStudentToCurrentTerm,
+    isPending: enrollStudentToCurrentTermPending,
   } = useMutation({
     mutationFn:
-      api.enrollment.applicantEnrollment.enrollApplicantToStudent.query,
+      api.students.enrolledStudent.enrollEnrolledStudentToCurrentTerm.mutation,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [
-          api.students.enrolledStudent.findAllEnrolledStudents.querykey,
-        ],
-      })
-      queryClient.invalidateQueries({
-        queryKey: [
-          api.enrollment.applicantEnrollment.findApplicantById.querykey,
-        ],
+        queryKey: [api.students.activeStudent.findAllActiveStudents.querykey],
       })
       if (loadingToastId) toast.dismiss(loadingToastId)
-      toast.success(`Applicant enrolled student successfully 👌`)
+      toast.success(`Student enrolled to current term successfully 👌`)
       dispatch(
         setOpenModal({
           isOpen: false,
           type: "",
         })
       )
-      navigate("/admin/enrollment")
+      navigate("/admin/students/enrolled-students")
     },
     onError: (error: unknown) => {
       if (loadingToastId) toast.dismiss(loadingToastId)
       handleAxiosError(error)
     },
   })
-  return { enrollApplicantToStudent, enrollApplicantToStudentPending }
+  return { enrollStudentToCurrentTerm, enrollStudentToCurrentTermPending }
 }

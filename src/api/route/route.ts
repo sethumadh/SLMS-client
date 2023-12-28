@@ -43,6 +43,7 @@ export const route = {
     searchApplicants: `${baseURL}/api/v1/admin/applicant/search-applicants`,
     findApplicantById: `${baseURL}/api/v1/admin/applicant/applicant-detail`,
     findTermToEnroll: `${baseURL}/api/v1/admin/applicant/term-to-enroll`,
+    findCurrentTermToEnroll: `${baseURL}/api/v1/admin/applicant/current-term-to-enroll`,
     enrollApplicant: `${baseURL}/api/v1/admin/applicant/enroll-applicant`,
     deEnrollApplicant: `${baseURL}/api/v1/admin/applicant/de-enroll-applicant`,
     findApplicantEnrolledSubjects: `${baseURL}/api/v1/admin/applicant/find-enrolled-subjects-applicant`,
@@ -55,8 +56,20 @@ export const route = {
     findTermToEnrollEnrolledStudent: `${baseURL}/api/v1/admin/student/enrolled/term-to-enroll-student-enrolled`,
     findEnrolledStudentEnrolledSubjects: `${baseURL}/api/v1/admin/student/enrolled/find-enrolled-subjects-for-enrolled-student`,
     enrollEnrolledStudent: `${baseURL}/api/v1/admin/student/enrolled/enroll-enrolled-student`,
+    enrollEnrolledStudentToCurrentTerm: `${baseURL}/api/v1/admin/student/enrolled/enrolled-student-to-current-term`,
     deEnrollEnrolledStudent: `${baseURL}/api/v1/admin/student/enrolled/de-enroll-enrolled-student`,
   },
+  lateEnrolledStudents: {
+    getAllLateEnrolledStudents: `${baseURL}/api/v1/admin/student/late-enrolled/get-all-late-enrolled-students`,
+    searchLateEnrolledStudents: `${baseURL}/api/v1/admin/student/late-enrolled/search-all-late-enrolled-students`,
+    findLateEnrolledStudentById: `${baseURL}/api/v1/admin/student/late-enrolled/late-enrolled-student-detail`,
+    findTermToEnrollLateEnrolledStudent: `${baseURL}/api/v1/admin/student/late-enrolled/term-to-enroll-late-enrolled-student`,
+    findLateEnrolledStudentEnrolledSubjects: `${baseURL}/api/v1/admin/student/late-enrolled/find-enrolled-subjects-for-late-enrolled-student`,
+    enrollLateEnrolledStudent: `${baseURL}/api/v1/admin/student/late-enrolled/enroll-late-enrolled-student`,
+    enrollLateStudentToActive: `${baseURL}/api/v1/admin/student/late-enrolled//enroll-late-enrolled-student-to-active`,
+    deEnrollLateEnrolledStudent: `${baseURL}/api/v1/admin/student/late-enrolled/de-enroll-late-enrolled-student`,
+  },
+
   activeStudents: {
     getAllActiveStudents: `${baseURL}/api/v1/admin/student/active/get-all-active-students`,
     searchActiveStudents: `${baseURL}/api/v1/admin/student/active/search-active-students`,

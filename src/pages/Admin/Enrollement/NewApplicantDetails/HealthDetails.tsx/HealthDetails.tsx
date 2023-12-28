@@ -15,16 +15,6 @@ function NewApplicantHealthDetails() {
   const [item, setItem] = useState("")
   const methods = useForm<HealthDetailsSchema>({
     resolver: zodResolver(applicantHealthDetailsSchema),
-
-    defaultValues: {
-      medicareNumber: "1234567890",
-      ambulanceMembershipNumber: "999999999",
-      medicalCondition: "condition1 , condition 2",
-      allergy: "allergy 1, allergy 2",
-      contactPerson: "JohnDOe",
-      contactNumber: "1234567890",
-      relationship: "Father",
-    },
   })
   const onSubmit = (values: HealthDetailsSchema) => {
     console.log(values)

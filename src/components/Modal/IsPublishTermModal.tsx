@@ -106,7 +106,6 @@ const IsPublishTermModal = () => {
                     }}
                   >
                     {makePublishPending ? "Publishing...." : " Publish now"}
-                    Publish now
                   </button>
                   <button
                     type="button"

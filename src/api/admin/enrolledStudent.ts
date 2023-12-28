@@ -105,11 +105,7 @@ const enrolledSubjectsSchema = z.array(enrolledSubjectSchema)
 
 const enrolledStudentsDataSchema = z.object({
   enrolledStudents: z.array(enrolledStudentSchema),
-  count: z.object({
-    _count: z.object({
-      id: z.number(),
-    }),
-  }),
+  count: z.number(),
 })
 const enrollDataSchema = z.object({
   enrolledStudentId: z.number(),
@@ -128,14 +124,14 @@ export type EnrollDataSchema = z.infer<typeof enrollDataSchema>
 
 export const enrolledStudent = {
   findAllEnrolledStudents: {
-    querykey: "getAllEnrolledStudents",
+    querykey: "findAllEnrolledStudents",
     schema: enrolledStudentsDataSchema,
-    query: async (page = 0) => {
+    query: async (page = 0, termId:number) => {
       try {
         const response = await axios.get(
           route.enrolledStudents.getAllEnrolledStudents,
           {
-            params: { page },
+            params: { page , termId}
           }
         )
 
@@ -155,12 +151,12 @@ export const enrolledStudent = {
   searchEnrolledStudents: {
     querykey: "searchEnrolledStudents",
     schema: enrolledStudentsDataSchema,
-    query: async (search = "", page = 0) => {
+    query: async (search = "", page = 0,termId: number) => {
       try {
         const response = await axios.get(
           route.enrolledStudents.searchEnrolledStudents,
           {
-            params: { search, page },
+            params: { search, page , termId},
           }
         )
 
@@ -289,4 +285,25 @@ export const enrolledStudent = {
       }
     },
   },
+  enrollEnrolledStudentToCurrentTerm: {
+    queryKey: "enrollEnrolledStudentToCurrentTerm",
+    mutation: async (id: string) => {
+      try {
+        const response = await axios.post(
+          `${route.enrolledStudents.enrollEnrolledStudentToCurrentTerm}/${id}`
+        )
+        return response.data
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          // Handle Zod validation error
+          console.error("Zod validation error:", error.issues)
+        } else {
+          // Handle other types of errors (e.g., network errors)
+          console.error("Error:", error)
+        }
+        throw error // Re-throw the error if you want to propagate it
+      }
+    },
+  },
 }
+//'/enroll-enrolled-student-to-current-term'

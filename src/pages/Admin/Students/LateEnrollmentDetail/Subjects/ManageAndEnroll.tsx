@@ -16,6 +16,7 @@ import { capitalizeFirstCharacter } from "@/helpers/capitalizeFirstCharacter"
 import { formatDate } from "@/helpers/dateFormatter"
 import EnrollStudentModal from "@/components/Modal/EnrollStudentModal"
 import DeEnrollStudentModal from "@/components/Modal/DeEnrollStudentModal"
+import EnrollToActiveStudentModal from "@/components/Modal/EnrollToActiveStudentModal"
 
 export type EnrolledStudentSubjectDetailSchema = z.infer<
   typeof enrolledStudentSubjectDetailSchema
@@ -32,18 +33,13 @@ type studentEnrollData = {
     termSubjectId: number
   }[]
 }
-function SubjectDetails() {
+function ManageAndEnroll() {
   const params = useParams()
   const dispatch = useAppDispatch()
   const [subjectOptions, setSubjectOptions] = useState<
     { label: string; value: string }[]
   >([])
-  const { data: publishedTerm } = useQuery({
-    queryKey: [
-      api.admin.term.publishedTerm.findPublishedTermAdministration.queryKey,
-    ],
-    queryFn: api.admin.term.publishedTerm.findPublishedTermAdministration.query,
-  })
+
   const { data: currentTerm } = useQuery({
     queryKey: [
       api.admin.term.currentTerm.findCurrentTermAdministration.queryKey,
@@ -73,12 +69,14 @@ function SubjectDetails() {
     isError: enrolledStudentDataIsError,
   } = useQuery({
     queryKey: [
-      api.students.enrolledStudent.findEnrolledStudentById.querykey,
-      params.id,
+      api.students.lateEnrolledStudent.findLateEnrolledStudentById.querykey,
+      params?.id,
+      currentTerm?.id,
     ],
+    // findLateEnrolledStudentEnrolledSubjects:
     queryFn: () => {
-      if (params.id) {
-        return api.students.enrolledStudent.findEnrolledStudentById.query(
+      if (params.id && currentTerm?.id) {
+        return api.students.lateEnrolledStudent.findLateEnrolledStudentById.query(
           params.id
         )
       }
@@ -91,9 +89,12 @@ function SubjectDetails() {
     isError: termToEnrollDataIsError,
   } = useQuery({
     queryKey: [
-      api.students.enrolledStudent.findTermToEnrollEnrolledStudent.queryKey,
+      api.students.lateEnrolledStudent.findTermToEnrollLateEnrolledStudent
+        .queryKey,
     ],
-    queryFn: api.students.enrolledStudent.findTermToEnrollEnrolledStudent.query,
+    queryFn:
+      api.students.lateEnrolledStudent.findTermToEnrollLateEnrolledStudent
+        .query,
 
     enabled: !!params.id,
   })
@@ -103,19 +104,21 @@ function SubjectDetails() {
     isError: enrolledStudentEnrolledDataIsError,
   } = useQuery({
     queryKey: [
-      api.students.enrolledStudent.findEnrolledStudentEnrolledSubjects.queryKey,
+      api.students.lateEnrolledStudent.findLateEnrolledStudentEnrolledSubjects
+        .queryKey,
     ],
     queryFn: () => {
-      if (params.id) {
-        return api.students.enrolledStudent.findEnrolledStudentEnrolledSubjects.query(
-          params.id
+      if (params.id && currentTerm?.id) {
+        return api.students.lateEnrolledStudent.findLateEnrolledStudentEnrolledSubjects.query(
+          params.id,
+          currentTerm?.id
         )
       }
     },
 
     enabled: !!params.id,
   })
-
+  console.log(enrolledStudentEnrolledData)
   useEffect(() => {
     if (termToEnrollData?.termSubject) {
       const transformedSubjectOptions = termToEnrollData?.termSubject?.map(
@@ -130,7 +133,11 @@ function SubjectDetails() {
       setSubjectOptions(transformedSubjectOptions)
     }
   }, [termToEnrollData])
-
+  console.log(
+    enrolledStudentData,
+    termToEnrollData,
+    enrolledStudentEnrolledData
+  )
   const subjectRelated = enrolledStudentData?.subjectRelated
   const subjectsChosen = enrolledStudentData?.subjectsChosen
 
@@ -198,7 +205,7 @@ function SubjectDetails() {
   }
 
   return (
-    <div className="">
+    <div className="sm:py-12">
       {enrolledStudentDataIsLoading ||
       termToEnrollDataIsLoading ||
       enrolledStudentEnrolledDataIsLoading ? (
@@ -212,7 +219,7 @@ function SubjectDetails() {
       ) : !enrolledStudentDataIsError ||
         !termToEnrollDataIsError ||
         !enrolledStudentEnrolledDataIsError ? (
-        <div>
+        <div className="sm:py-12">
           <div className="px-4 sm:px-0 flex justify-between gap-x-4 lg:mt-4 ">
             <div className="flex flex-col sm:flex sm:flex-row gap-x-4">
               <h3 className="sm:text-base font-semibold leading-7 text-gray-900  ">
@@ -288,19 +295,15 @@ function SubjectDetails() {
               </dl>
             </div>
           </ul>
-          {publishedTerm?.name === currentTerm?.name && (
-            <div className="px-4 py-4 text-red-400 text-lg font-medium">
-              **You have the current term and the published term to be same.
-            </div>
-          )}
-          <div className="flex gap-4">
+
+          <div className="flex gap-4 my-12">
             <div className="px-8 py-4 shadow-md rounded-lg ">
               <div className="border-b border-gray-200 pb-5">
                 <h3 className="text-lg font-semibold leading-6 text-gray-900">
                   Enroll Student to{" "}
                   <span className="font-medium underline underline-offset-4">
-                    {publishedTerm?.name &&
-                      capitalizeFirstCharacter(publishedTerm?.name)}
+                    {currentTerm?.name &&
+                      capitalizeFirstCharacter(currentTerm?.name)}
                   </span>
                 </h3>
               </div>
@@ -405,7 +408,7 @@ function SubjectDetails() {
                             render={({ field }) => (
                               <Select
                                 isMulti
-                                className="lg:w-60"
+                                className="w-60"
                                 options={subjectOptions}
                                 value={subjectOptions?.filter((option) =>
                                   field?.value?.includes(option?.value)
@@ -455,8 +458,8 @@ function SubjectDetails() {
                 <h3 className="text-lg font-semibold leading-6 text-gray-900">
                   De-Enroll Student{" "}
                   <span className="font-medium underline underline-offset-4">
-                    {publishedTerm?.name &&
-                      capitalizeFirstCharacter(publishedTerm?.name)}
+                    {currentTerm?.name &&
+                      capitalizeFirstCharacter(currentTerm?.name)}
                   </span>
                 </h3>
               </div>
@@ -563,7 +566,7 @@ function SubjectDetails() {
                             rules={{ required: true }}
                             render={({ field }) => (
                               <Select
-                                className="lg:w-60"
+                                className="w-60"
                                 isMulti
                                 options={subjectOptions}
                                 value={subjectOptions?.filter((option) =>
@@ -612,6 +615,23 @@ function SubjectDetails() {
               </FormProvider>
             </div>
           </div>
+          <div className="w-full flex justify-center">
+            <button
+              onClick={() => {
+                if (currentTerm?.id && params.id) {
+                  dispatch(
+                    setOpenModal({
+                      isOpen: true,
+                      type: "enrollToActiveStudent",
+                    })
+                  )
+                }
+              }}
+              className="bg-green-400 px-4 py-2 rounded"
+            >
+              Transfer Student to the current term
+            </button>
+          </div>
         </div>
       ) : (
         <>
@@ -623,8 +643,9 @@ function SubjectDetails() {
 
       <EnrollStudentModal />
       <DeEnrollStudentModal />
+      <EnrollToActiveStudentModal />
     </div>
   )
 }
 
-export default SubjectDetails
+export default ManageAndEnroll

@@ -36,10 +36,10 @@ import Alumni from "./pages/Admin/Students/Alumni/Alumni"
 import EnrollmentNavbarLayout from "./Layouts/EnrollmentNavbarLayout/EnrollmentNavbarLayout"
 import NewStudentApplications from "./pages/Admin/Enrollement/NewApplications/NewApplications"
 import NewApplicatantDetailsLayout from "./Layouts/NewApplicationsDetailLayout/NewApplicationsDetailLayout"
-import NewApplicantPersonalDetails from "./pages/Admin/Enrollement/NewApplicantDetails/PersonalDetails/PersonalDetails"
-import NewApplicantParentDetails from "./pages/Admin/Enrollement/NewApplicantDetails/ParentDetails/ParentDetails"
-import NewApplicantHealthDetails from "./pages/Admin/Enrollement/NewApplicantDetails/HealthDetails.tsx/HealthDetails"
-import NewApplicantDeclaration from "./pages/Admin/Enrollement/NewApplicantDetails/Declaration/Declaration"
+// import NewApplicantPersonalDetails from "./pages/Admin/Enrollement/NewApplicantDetails/PersonalDetails/ NewApplicantPersonalDetails"
+// import NewApplicantParentDetails from "./pages/Admin/Enrollement/NewApplicantDetails/ParentDetails/ParentDetails"
+// import NewApplicantHealthDetails from "./pages/Admin/Enrollement/NewApplicantDetails/HealthDetails.tsx/HealthDetails"
+// import NewApplicantDeclaration from "./pages/Admin/Enrollement/NewApplicantDetails/Declaration/Declaration"
 import NewApplicantSubjectDetails from "./pages/Admin/Enrollement/NewApplicantDetails/Subjects/SubjectDetails"
 import StudentsNavbarLayout from "./Layouts/StudentsNavbarLayout/StudentsNavbarLayout"
 import AdministrationLayout from "./Layouts/AdministrationLayout/AdministrationLayout"
@@ -61,6 +61,15 @@ import ActiveStudentsList from "./pages/Admin/Students/ActiveStudentsList/Active
 import EnrolledStudentDetailLayout from "./Layouts/StudentDetailLayout/EnrolledStudentDetailLayout"
 import ActiveStudentDetailLayout from "./Layouts/StudentDetailLayout/ActiveStudentDetailLayout"
 import PersonalInformation from "./pages/Admin/Students/ActiveStudentDetail/PersonalInformation/PersonalInformation"
+import NewApplicantDetail from "./pages/Admin/Enrollement/NewApplicantDetails/NewApplicantDetail"
+import LateEnrollmentList from "./pages/Admin/Students/LateEnrollmentList/LateEnrollmentList"
+import LateEnrollmentLayout from "./Layouts/StudentDetailLayout/LateEnrollmentLayout"
+import LateEnrollmentPersonalDetails from "./pages/Admin/Students/LateEnrollmentDetail/PersonalDetails/PersonalDetails"
+import LateEnrollmentParentDetails from "./pages/Admin/Students/LateEnrollmentDetail/ParentDetails/ParentDetails"
+import LateEnrollmentHealthDetails from "./pages/Admin/Students/LateEnrollmentDetail/HealthDetails.tsx/HealthDetails"
+import LateEnrolledDeclaration from "./pages/Admin/Students/LateEnrollmentDetail/Declaration/Declaration"
+import ManageAndEnroll from "./pages/Admin/Students/LateEnrollmentDetail/Subjects/ManageAndEnroll"
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
@@ -82,7 +91,21 @@ const router = createBrowserRouter(
             path="student-detail/:id"
             element={<ActiveStudentDetailLayout />}
           >
-            <Route index element={<PersonalInformation/>}/>
+            <Route index element={<PersonalInformation />} />
+          </Route>
+          <Route
+            path="late-enrolled-students"
+            element={<LateEnrollmentList />}
+          />
+          <Route
+            path="late-enrolled-students/student-detail/:id"
+            element={<LateEnrollmentLayout />}
+          >
+            <Route index element={<LateEnrollmentPersonalDetails />} />
+            <Route path="parent" element={<LateEnrollmentParentDetails />} />
+            <Route path="health" element={<LateEnrollmentHealthDetails />} />
+            <Route path="declaration" element={<LateEnrolledDeclaration />} />
+            <Route path="manage-and-enroll" element={<ManageAndEnroll/>} />
           </Route>
           <Route path="enrolled-students" element={<EnrolledStudentList />} />
           <Route
@@ -109,14 +132,14 @@ const router = createBrowserRouter(
             path="new-applicant-detail/:id"
             element={<NewApplicatantDetailsLayout />}
           >
-            <Route index element={<NewApplicantPersonalDetails />} />
+            <Route index element={<NewApplicantDetail />} />
             <Route
               path="manage-subjects-classes"
               element={<NewApplicantSubjectDetails />}
             />
-            <Route path="parent" element={<NewApplicantParentDetails />} />
+            {/* <Route path="parent" element={<NewApplicantParentDetails />} />
             <Route path="health" element={<NewApplicantHealthDetails />} />
-            <Route path="declaration" element={<NewApplicantDeclaration />} />
+            <Route path="declaration" element={<NewApplicantDeclaration />} /> */}
           </Route>
           <Route
             path="waitlisted"

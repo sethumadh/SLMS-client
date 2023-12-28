@@ -60,9 +60,9 @@ const actionPanels = [
 function Administration() {
   return (
     <div className="mt-2">
-      <div className="bg-white">
+      <div className="bg-white ">
         <div className="">
-          <div className="mx-auto mt-6 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-6  border-gray-200 pt-4 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+          <div className="mx-auto mt-6 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-6  border-gray-200 pt-4 lg:mx-0 lg:max-w-none lg:grid-cols-3 sm:px-8">
             {actionPanels.map((actionPanel) => (
               <article
                 key={actionPanel.id}

@@ -19,6 +19,12 @@ export const useEnrollStudentMutation= (loadingToastId: string | null) => {
               .queryKey,
           ],
         })
+        queryClient.invalidateQueries({
+          queryKey: [
+            api.students.lateEnrolledStudent.findLateEnrolledStudentEnrolledSubjects
+            .queryKey,
+          ],
+        })
         if (loadingToastId) toast.dismiss(loadingToastId)
         toast.success(`Student enrolled successfully 👌`)
         dispatch(

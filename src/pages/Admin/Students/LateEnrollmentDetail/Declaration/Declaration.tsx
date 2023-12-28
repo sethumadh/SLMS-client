@@ -1,48 +1,38 @@
-import { api } from "@/api/api"
-import LoadingSpinner from "@/components/Loadingspinner"
-import EnrollApplicantToStudentModal from "@/components/Modal/EnrollToActiveStudentModal"
-import Icons from "@/constants/icons"
 import { useQuery } from "@tanstack/react-query"
 import { Link, useParams } from "react-router-dom"
 
-export default function NewApplicantDeclaration() {
+import { api } from "@/api/api"
+import LoadingSpinner from "@/components/Loadingspinner"
+import Icons from "@/constants/icons"
+
+export default function LateEnrolledDeclaration() {
   const params = useParams()
   const {
-    data: applicantData,
-    isLoading: applicantDataIsLoading,
-    isError: applicantDataIsError,
+    data: lateEnrolledStudentData,
+    isLoading: lateEnrolledStudentDataIsLoading,
   } = useQuery({
     queryKey: [
-      api.enrollment.applicantEnrollment.findApplicantById.querykey,
+      api.students.lateEnrolledStudent.findLateEnrolledStudentById.querykey,
       params.id,
     ],
     queryFn: () => {
       if (params.id) {
-        return api.enrollment.applicantEnrollment.findApplicantById.query(
+        return api.students.lateEnrolledStudent.findLateEnrolledStudentById.query(
           params.id
         )
       }
     },
     enabled: !!params.id,
   })
-  if (applicantDataIsError) {
-    return (
-      <>
-        <div className="h-[600px] w-full flex justify-center items-center">
-          <p className="font-medium text-lg">There is no data to show</p>
-        </div>
-      </>
-    )
-  }
   return (
     <div>
-      {applicantDataIsLoading ? (
+      {lateEnrolledStudentDataIsLoading ? (
         <>
           <div className="h-[600px] w-full flex justify-center items-center">
             <LoadingSpinner className="w-20 h-20" />
           </div>
         </>
-      ) : applicantData?.personalDetails ? (
+      ) : lateEnrolledStudentData?.otherInformation ? (
         <>
           <div>
             <div className="px-4 sm:px-0 flex justify-between gap-x-4 lg:mt-4 ">
@@ -71,13 +61,13 @@ export default function NewApplicantDeclaration() {
                     Any comments
                   </dt>
                   <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                    {applicantData.otherInformation.otherInfo}
+                    {lateEnrolledStudentData.otherInformation.otherInfo}
                   </dd>
                   <dt className="text-sm font-medium leading-6 text-gray-900">
-                    About
+                    Declaration
                   </dt>
                   <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                    {applicantData.otherInformation.declaration}
+                    {lateEnrolledStudentData.otherInformation.declaration}
                   </dd>
                   <dt className="text-sm font-medium leading-6 text-gray-900">
                     Signature
@@ -97,7 +87,6 @@ export default function NewApplicantDeclaration() {
           </div>
         </>
       )}
-      <EnrollApplicantToStudentModal />
     </div>
   )
 }

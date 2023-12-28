@@ -26,7 +26,12 @@ function ActiveStudentsList() {
   const [_isLoading, setIsLoading] = useState(false)
   const [currentPage, setCurrentPage] = useState(0)
   const [recordsPerPage, _setRecordPerPage] = useState(10)
-
+  const { data: currentTerm, isLoading } = useQuery({
+    queryKey: [
+      api.admin.term.currentTerm.findCurrentTermAdministration.queryKey,
+    ],
+    queryFn: api.admin.term.currentTerm.findCurrentTermAdministration.query,
+  })
   const {
     data: allStudentData,
     isLoading: allStudentDataLoading,
@@ -37,27 +42,28 @@ function ActiveStudentsList() {
       api.students.activeStudent.findAllActiveStudents.querykey,
       currentPage,
       query,
+      currentTerm?.id,
     ],
     queryFn: () => {
       if (query) {
-        return api.students.activeStudent.searchActiveStudents.query(
-          query,
-          currentPage
-        )
+        if (currentTerm?.id)
+          return api.students.activeStudent.searchActiveStudents.query(
+            query,
+            currentPage,
+            currentTerm?.id
+          )
       } else {
-        return api.students.activeStudent.findAllActiveStudents.query(
-          currentPage
-        )
+        if (currentTerm?.id)
+          return api.students.activeStudent.findAllActiveStudents.query(
+            currentPage,
+            currentTerm?.id
+          )
       }
-    // return api.students.activeStudent.findAllActiveStudents.query(
-    //     currentPage
-    //   )
     },
+    enabled: !!currentTerm?.id,
   })
 
-  const nPages = Math.ceil(
-    (allStudentData?.count._count?.id ?? 0) / recordsPerPage
-  )
+  const nPages = Math.ceil((allStudentData?.count ?? 0) / recordsPerPage)
 
   const handleSearch = useCallback(
     (term: string) => {
@@ -83,6 +89,7 @@ function ActiveStudentsList() {
   ) => {
     console.log(selectedClass)
   }
+
   return (
     <div className=" mt-2">
       <div className="container">
@@ -90,7 +97,11 @@ function ActiveStudentsList() {
           <div className="flex justify-between items-end sm:flex-auto ">
             <div className="">
               <h3 className="text-xl font-semibold leading-6 text-gray-900 mb-4">
-                Active Students
+                Active Students for{" "}
+                <span className="italic font-medium text-md text-indigo-500 underline underline-offset-4">
+                  {currentTerm?.name &&
+                    capitalizeFirstCharacter(currentTerm?.name)}
+                </span>
               </h3>
               <span className="italic text-xs text-slate-400">
                 *Search by student's name,primary or secondary email or contact
@@ -139,7 +150,7 @@ function ActiveStudentsList() {
           <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none"></div>
         </div>
 
-        {allStudentDataLoading ? (
+        {allStudentDataLoading || isLoading ? (
           <>
             <Skeleton />
             <Skeleton />
@@ -154,7 +165,7 @@ function ActiveStudentsList() {
           </>
         ) : allStudentData ? (
           <>
-            <div className="mt-2 flow-root h-[575px]">
+            <div className="mt-2 flow-root">
               <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
                   <table className="min-w-full divide-y divide-gray-300">
@@ -194,42 +205,49 @@ function ActiveStudentsList() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
-                      {allStudentData?.activeStudents.map(
-                        (activeStudent) => (
-                          <tr key={activeStudent.id}>
-                            <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
-                              {activeStudent.id}
-                            </td>
-                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                              {activeStudent.personalDetails.firstName &&
-                                capitalizeFirstCharacter(
-                                  activeStudent.personalDetails.firstName
-                                )}
-                              {activeStudent.personalDetails.lastName &&
-                                capitalizeFirstCharacter(
-                                  activeStudent.personalDetails.lastName
-                                )}
-                            </td>
-                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                              {activeStudent.personalDetails.email}
-                            </td>
-                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                              {activeStudent.personalDetails.contact}
-                            </td>
+                      {allStudentData?.activeStudents.map((activeStudent) => (
+                        <tr key={activeStudent.id}>
+                          <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+                            {activeStudent.id}
+                          </td>
+                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                            {activeStudent.personalDetails.firstName &&
+                              capitalizeFirstCharacter(
+                                activeStudent.personalDetails.firstName
+                              )}
+                            {activeStudent.personalDetails.lastName &&
+                              capitalizeFirstCharacter(
+                                activeStudent.personalDetails.lastName
+                              )}
+                          </td>
+                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                            {activeStudent.personalDetails.email}
+                          </td>
+                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                            {activeStudent.personalDetails.contact}
+                          </td>
 
-                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 ">
-                              <Link
-                                to={`student-detail/${activeStudent.id.toString()}`}
-                                className="text-indigo-600 hover:text-indigo-900 "
-                              >
-                                View
-                              </Link>
-                            </td>
-                          </tr>
-                        )
-                      )}
+                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 ">
+                            <Link
+                              to={`student-detail/${activeStudent.id.toString()}`}
+                              className="text-indigo-600 hover:text-indigo-900 "
+                            >
+                              View
+                            </Link>
+                          </td>
+                        </tr>
+                      ))}
                     </tbody>
                   </table>
+                  {allStudentData?.count == 0 && (
+                    <>
+                      <div className="flex flex-row h-[650px] w-full justify-center items-center ">
+                        <p className="font-medium ">
+                          There are no results or data to show.
+                        </p>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
@@ -274,6 +292,7 @@ function ActiveStudentsList() {
             </div>
           </>
         )}
+
         {/* pagination */}
       </div>
     </div>

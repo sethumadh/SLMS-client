@@ -10,6 +10,13 @@ const tabs = [
     end: true,
   },
   {
+    name: "Late Enrollments",
+    href: "/admin/students/late-enrolled-students/student-detail",
+    to: "/admin/students/late-enrolled-students",
+    current: false,
+    end: false,
+  },
+  {
     name: "Enrolled Students",
     href: "/admin/students/enrolled-students/student-detail",
     to: "/admin/students/enrolled-students",

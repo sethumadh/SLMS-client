@@ -32,14 +32,14 @@ export const useMakeCurrentTermMutation = (loadingToastId: string | null) => {
         })
         // add inavlidate for getting all terms
         if (loadingToastId) toast.dismiss(loadingToastId)
-        toast.success(`Making current action is scuccessful 👌`)
+        toast.success(`Making current action is successful 👌`)
         dispatch(
           setOpenModal({
             isOpen: false,
             type: "",
           })
         )
-        navigate("/administration/manage-term")
+        navigate("/admin/administration/manage-term")
       },
       onError: (error: unknown) => {
         if (loadingToastId) toast.dismiss(loadingToastId)

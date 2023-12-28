@@ -64,51 +64,35 @@ const activeStudentSchema = z.object({
 })
 
 /* term to enroll schema*/
-const subjectSchema = z.object({
-  id: z.number(),
-  name: z.string(),
-  isActive: z.boolean(),
-})
+// const subjectSchema = z.object({
+//   id: z.number(),
+//   name: z.string(),
+//   isActive: z.boolean(),
+// })
 
-const termSubjectGroupSchema = z.object({
-  id: z.number(),
-  termId: z.number(),
-  feeId: z.number(),
-  subjectGroupId: z.number(),
-})
+// const termSubjectGroupSchema = z.object({
+//   id: z.number(),
+//   termId: z.number(),
+//   feeId: z.number(),
+//   subjectGroupId: z.number(),
+// })
 
-const termSubjectSchema = z.array(
-  z.object({
-    id: z.number(),
-    subject: subjectSchema,
-    termSubjectGroup: termSubjectGroupSchema,
-  })
-)
-const termToEnrollSchema = z.object({
-  id: z.number(),
-  name: z.string(),
-  isPublish: z.boolean(),
-  currentTerm: z.boolean(),
-  startDate: z.string(),
-  endDate: z.string(),
-  createdAt: z.string(),
-  updatedAt: z.string(),
-  termSubject: termSubjectSchema,
-})
-const enrolledSubjectSchema = z.object({
-  subjectId: z.number(),
-  subjectName: z.string(),
-})
+// const termSubjectSchema = z.array(
+//   z.object({
+//     id: z.number(),
+//     subject: subjectSchema,
+//     termSubjectGroup: termSubjectGroupSchema,
+//   })
+// )
+// const enrolledSubjectSchema = z.object({
+//   subjectId: z.number(),
+//   subjectName: z.string(),
+// })
 
-const enrolledSubjectsSchema = z.array(enrolledSubjectSchema)
 
 const activeStudentsDataSchema = z.object({
   activeStudents: z.array(activeStudentSchema),
-  count: z.object({
-    _count: z.object({
-      id: z.number(),
-    }),
-  }),
+  count: z.number(),
 })
 const enrollDataSchema = z.object({
   activeStudentId: z.number(),
@@ -128,12 +112,12 @@ export const activeStudent = {
   findAllActiveStudents: {
     querykey: "findAllActiveStudents",
     schema: activeStudentsDataSchema,
-    query: async (page = 0) => {
+    query: async (page = 0, termId: number) => {
       try {
         const response = await axios.get(
           route.activeStudents.getAllActiveStudents,
           {
-            params: { page },
+            params: { page, termId },
           }
         )
 
@@ -153,12 +137,12 @@ export const activeStudent = {
   searchActiveStudents: {
     querykey: "searchActiveStudents",
     schema: activeStudentsDataSchema,
-    query: async (search = "", page = 0) => {
+    query: async (search = "", page = 0, termId: number) => {
       try {
         const response = await axios.get(
           route.activeStudents.searchActiveStudents,
           {
-            params: { search, page },
+            params: { search, page, termId },
           }
         )
 

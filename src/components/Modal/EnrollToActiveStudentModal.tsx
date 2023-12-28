@@ -1,22 +1,37 @@
 import { Fragment, useRef, useState } from "react"
 import { Dialog, Transition } from "@headlessui/react"
-import { toast } from "react-toastify"
 
 import { useAppDispatch, useAppSelector } from "@/redux/store"
 import { setOpenModal } from "@/redux/slice/modalSlice"
 import Icons from "@/constants/icons"
+import { toast } from "react-toastify"
 import LoadingIcon from "../LoadingIcon"
-import { useDeEnrollStudentMutation } from "@/hooks/Admin.EnrolledStudent/mutation/useDeEnrollStudentMutation"
+import { useEnrollToActiveStudentMutation } from "@/hooks/Admin.Applicant/mutation/useEnrollToActiveStudentMutation"
+import { useParams } from "react-router-dom"
+import { useQuery } from "@tanstack/react-query"
+import { api } from "@/api/api"
 
-const DeEnrollStudentModal = () => {
+const EnrollToActiveStudentModal = () => {
+  const params = useParams()
   const [loadingToastId, setLoadingToastId] = useState<string | null>(null)
   const dispatch = useAppDispatch()
-  const { isOpen, type, data } = useAppSelector((state) => state.modal)
+  const { isOpen, type } = useAppSelector((state) => state.modal)
+  const id = params?.id
+
+  const { data: currentTerm } = useQuery({
+    queryKey: [
+      api.admin.term.currentTerm.findCurrentTermAdministration.queryKey,
+    ],
+    queryFn: api.admin.term.currentTerm.findCurrentTermAdministration.query,
+  })
+
+  const termId = currentTerm?.id
+  console.log(id, termId)
   const cancelButtonRef = useRef(null)
-  const IsModalOpen = isOpen && type === "deEnrollStudent"
+  const IsModalOpen = isOpen && type === "enrollToActiveStudent"
 
-
-  const {deEnrollStudent, deEnrollStudentPending }= useDeEnrollStudentMutation(loadingToastId)
+  const { enrollToActiveStudent, enrollToActiveStudentPending } =
+    useEnrollToActiveStudentMutation(loadingToastId)
 
   return (
     <Transition.Root show={IsModalOpen} as={Fragment}>
@@ -69,7 +84,7 @@ const DeEnrollStudentModal = () => {
                       as="h3"
                       className="text-base font-semibold leading-6 text-gray-900"
                     >
-                      Confirm de-enrollment.
+                      Confirm Enrollment of the applicant to student
                     </Dialog.Title>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">
@@ -81,7 +96,7 @@ const DeEnrollStudentModal = () => {
                 <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
                   <button
                     // ref={saveRef}
-                    className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
+                    className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
                     onClick={async () => {
                       dispatch(
                         setOpenModal({
@@ -90,23 +105,25 @@ const DeEnrollStudentModal = () => {
                         })
                       )
                       const toastId = toast.loading(
-                        `De-Enrolling Student, please wait...`
+                        `Submitting your application, please wait`
                       )
                       setLoadingToastId(toastId.toString())
-
-                      await deEnrollStudent(data?.value)
+                      if (id && termId) {
+                        console.log(id, termId)
+                        await enrollToActiveStudent({ id, termId })
+                      }
                     }}
                   >
-                    {deEnrollStudentPending ? (
+                    {enrollToActiveStudentPending ? (
                       <>
                         <LoadingIcon />
                       </>
                     ) : (
-                      <p>De Enroll now</p>
+                      <p>Submit now</p>
                     )}
                   </button>
                   <button
-                    disabled={deEnrollStudentPending}
+                    disabled={enrollToActiveStudentPending}
                     type="button"
                     className="disabled:bg-slate-300 mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
                     onClick={() => {
@@ -130,4 +147,4 @@ const DeEnrollStudentModal = () => {
     </Transition.Root>
   )
 }
-export default DeEnrollStudentModal
+export default EnrollToActiveStudentModal

@@ -19,6 +19,12 @@ export const  useDeEnrollApplicant= (loadingToastId: string | null) => {
             api.enrollment.applicantEnrollment.getApplicantEnrolledSubjects.queryKey,
           ],
         })
+        queryClient.invalidateQueries({
+          queryKey: [
+            api.students.lateEnrolledStudent.findLateEnrolledStudentEnrolledSubjects
+            .queryKey,
+          ],
+        })
         if (loadingToastId) toast.dismiss(loadingToastId)
         toast.success(`Applicant De-enrolled successfully 👌`)
         dispatch(

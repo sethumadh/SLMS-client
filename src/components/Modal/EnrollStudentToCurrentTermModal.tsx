@@ -6,17 +6,18 @@ import { setOpenModal } from "@/redux/slice/modalSlice"
 import Icons from "@/constants/icons"
 import { toast } from "react-toastify"
 import LoadingIcon from "../LoadingIcon"
-import { useEnrollApplicantToStudentMutation } from "@/hooks/Admin.Applicant/mutation/useEnrollApplicantToStudentMutation"
+import { useEnrollStudentToCurrentTermMutation } from "@/hooks/Admin.EnrolledStudent/mutation/useEnrollStudentToCurrentTermMutation"
 
-const EnrollApplicantToStudentModal = () => {
+const EnrollStudentToCurrentTermToCurrentModal = () => {
   const [loadingToastId, setLoadingToastId] = useState<string | null>(null)
   const dispatch = useAppDispatch()
   const { isOpen, type, data } = useAppSelector((state) => state.modal)
   const cancelButtonRef = useRef(null)
-  const IsModalOpen = isOpen && type === "enrollApllicantToStudent"
+  const IsModalOpen = isOpen && type === "enrollStudentToCurrentTerm"
+  console.log(IsModalOpen)
 
-  const { enrollApplicantToStudent, enrollApplicantToStudentPending } =
-    useEnrollApplicantToStudentMutation(loadingToastId)
+  const { enrollStudentToCurrentTerm, enrollStudentToCurrentTermPending } =
+  useEnrollStudentToCurrentTermMutation(loadingToastId)
 
   return (
     <Transition.Root show={IsModalOpen} as={Fragment}>
@@ -69,11 +70,12 @@ const EnrollApplicantToStudentModal = () => {
                       as="h3"
                       className="text-base font-semibold leading-6 text-gray-900"
                     >
-                      Confirm Enrollment of the applicant to student
+                      Confirm Enrollment of thestudent to current term
                     </Dialog.Title>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">
                         Please check all details are correct before submitting.
+                        This will action will add the student to the current term list.
                       </p>
                     </div>
                   </div>
@@ -94,11 +96,11 @@ const EnrollApplicantToStudentModal = () => {
                       )
                       setLoadingToastId(toastId.toString())
                       if (data?.id) {
-                        await enrollApplicantToStudent(data?.id.toString())
+                        await enrollStudentToCurrentTerm(data?.id.toString())
                       }
                     }}
                   >
-                    {enrollApplicantToStudentPending ? (
+                    {enrollStudentToCurrentTermPending ? (
                       <>
                         <LoadingIcon />
                       </>
@@ -107,7 +109,7 @@ const EnrollApplicantToStudentModal = () => {
                     )}
                   </button>
                   <button
-                    disabled={enrollApplicantToStudentPending}
+                    disabled={enrollStudentToCurrentTermPending}
                     type="button"
                     className="disabled:bg-slate-300 mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
                     onClick={() => {
@@ -131,4 +133,4 @@ const EnrollApplicantToStudentModal = () => {
     </Transition.Root>
   )
 }
-export default EnrollApplicantToStudentModal
+export default EnrollStudentToCurrentTermToCurrentModal

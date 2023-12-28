@@ -3,26 +3,26 @@ import { NavLink, Outlet, useLocation } from "react-router-dom"
 import { cn } from "@/lib/utils"
 
 const tabs = [
-  { name: "Personal Details", smName: "Personal", href: ".", current: true },
+  { name: "Applicant Details", smName: "Personal", href: ".", current: true },
   {
-    name: "Subject & classes",
+    name: "Enrol Applicant",
     smName: "Classes",
     href: "manage-subjects-classes",
     current: true,
   },
-  {
-    name: "Parents Details",
-    smName: "Parents",
-    href: "parent",
-    current: false,
-  },
-  {
-    name: "Emergency and Health",
-    smName: "Health",
-    href: "health",
-    current: false,
-  },
-  { name: "Declaration", smName: "Terms", href: "declaration", current: false },
+  // {
+  //   name: "Parents Details",
+  //   smName: "Parents",
+  //   href: "parent",
+  //   current: false,
+  // },
+  // {
+  //   name: "Emergency and Health",
+  //   smName: "Health",
+  //   href: "health",
+  //   current: false,
+  // },
+  // { name: "Declaration", smName: "Terms", href: "declaration", current: false },
 ]
 
 export default function NewApplicatantDetailsLayout() {

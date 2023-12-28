@@ -26,7 +26,6 @@ import TermNameModal from "@/components/Modal/TermNameModal"
 import TermDateModal from "@/components/Modal/TermDateModal"
 import { useTermExtendmutation } from "@/hooks/Admin.Administration.Term/mutation/useTermExtendMutation"
 import { useTermNameChangeMutation } from "@/hooks/Admin.Administration.Term/mutation/useTermNameChangeMutation"
-import { publishedTerm } from "@/api/application/application"
 import MakeCurrentTermModal from "@/components/Modal/MakeCurrentTermModal"
 
 export type ChangePublishedTermNameSchema = z.infer<
@@ -48,7 +47,7 @@ function PublishedTerm() {
     ],
     queryFn: api.admin.term.publishedTerm.findPublishedTermAdministration.query,
   })
-  console.log(publishedTerm)
+
   const { termExtendMutation, termExtendIsPending } =
     useTermExtendmutation(loadingToastId)
   const { termNameChangeMutation, termNameChangeIsPending } =

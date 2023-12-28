@@ -1,10 +1,9 @@
-/*enrollment*/
-
 import axios from "axios"
 import { route } from "../route/route"
 import { z } from "zod"
 
-//applicant schema
+/* enrolled Students*/
+
 const PersonalDetailsSchema = z.object({
   id: z.number(),
   firstName: z.string(),
@@ -50,10 +49,10 @@ const OtherInformationSchema = z.object({
   declaration: z.array(z.string()),
 })
 
-const ApplicantSchema = z.object({
+const lateEnrolledStudentSchema = z.object({
   id: z.number(),
-  role: z.literal("APPLICANT"),
-  createdAt: z.string(),
+  role: z.string(),
+  isActive: z.boolean(),
   personalDetails: PersonalDetailsSchema,
   parentsDetails: ParentsDetailsSchema,
   emergencyContact: EmergencyContactSchema,
@@ -61,15 +60,8 @@ const ApplicantSchema = z.object({
   subjectRelated: z.array(z.string()),
   subjectsChosen: z.array(z.string()),
   otherInformation: OtherInformationSchema,
-})
-
-const applicantsDataSchema = z.object({
-  applicants: z.array(ApplicantSchema),
-  count: z.object({
-    _count: z.object({
-      id: z.number(),
-    }),
-  }),
+  createdAt: z.string(),
+  updatedAt: z.string(),
 })
 
 /* term to enroll schema*/
@@ -93,7 +85,6 @@ const termSubjectSchema = z.array(
     termSubjectGroup: termSubjectGroupSchema,
   })
 )
-
 const termToEnrollSchema = z.object({
   id: z.number(),
   name: z.string(),
@@ -105,12 +96,19 @@ const termToEnrollSchema = z.object({
   updatedAt: z.string(),
   termSubject: termSubjectSchema,
 })
+const enrolledSubjectSchema = z.object({
+  subjectId: z.number(),
+  subjectName: z.string(),
+})
 
-export type TermToEnrollSchema = z.infer<typeof termToEnrollSchema>
-/* term to enroll schema*/
+const enrolledSubjectsSchema = z.array(enrolledSubjectSchema)
 
+const lateEnrolledStudentsDataSchema = z.object({
+  lateEnrolledStudents: z.array(lateEnrolledStudentSchema),
+  count: z.number(),
+})
 const enrollDataSchema = z.object({
-  applicantId: z.number(),
+  enrolledStudentId: z.number(),
   enrollData: z.array(
     z.object({
       subject: z.string(),
@@ -124,28 +122,20 @@ const enrollDataSchema = z.object({
 })
 export type EnrollDataSchema = z.infer<typeof enrollDataSchema>
 
-/*get enrolled subjects for applicant*/
-const enrolledSubjectSchema = z.object({
-  subjectId: z.number(),
-  subjectName: z.string(),
-})
-
-const enrolledSubjectsSchema = z.array(enrolledSubjectSchema)
-
-export const applicantEnrollment = {
-  findAllApplicants: {
-    querykey: "getAllApplicants",
-    schema: applicantsDataSchema,
-    query: async (page = 0) => {
+export const lateEnrolledStudent = {
+  findAllLateEnrolledStudents: {
+    querykey: "findAllLateEnrolledStudents",
+    schema: lateEnrolledStudentsDataSchema,
+    query: async (page = 0, termId: number) => {
       try {
         const response = await axios.get(
-          route.applicantEnrollment.getAllApplicants,
+          route.lateEnrolledStudents.getAllLateEnrolledStudents,
           {
-            params: { page },
+            params: { page, termId },
           }
         )
 
-        return applicantsDataSchema.parse(response.data)
+        return lateEnrolledStudentsDataSchema.parse(response.data)
       } catch (error) {
         if (error instanceof z.ZodError) {
           // Handle Zod validation error
@@ -158,38 +148,60 @@ export const applicantEnrollment = {
       }
     },
   },
-  searchApplicants: {
-    querykey: "searchApplicants",
-    schema: applicantsDataSchema,
-    query: async (search = "", page = 0) => {
-      const response = await axios.get(
-        route.applicantEnrollment.searchApplicants,
-        {
-          params: { search, page },
+  searchLateEnrolledStudents: {
+    querykey: "searchlateEnrolledStudents",
+    schema: lateEnrolledStudentsDataSchema,
+    query: async (search = "", page = 0, termId: number) => {
+      try {
+        const response = await axios.get(
+          route.lateEnrolledStudents.searchLateEnrolledStudents,
+          {
+            params: { search, page, termId },
+          }
+        )
+
+        return lateEnrolledStudentsDataSchema.parse(response.data)
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          // Handle Zod validation error
+          console.error("Zod validation error:", error.issues)
+        } else {
+          // Handle other types of errors (e.g., network errors)
+          console.error("Error:", error)
         }
-      )
-
-      return applicantsDataSchema.parse(response.data)
+        throw error // Re-throw the error if you want to propagate it
+      }
     },
   },
-  findApplicantById: {
-    querykey: "findApplicantById",
-    schema: ApplicantSchema,
+  findLateEnrolledStudentById: {
+    querykey: "findlateEnrolledStudentById",
+    schema: lateEnrolledStudentSchema,
     query: async (id: string) => {
-      const response = await axios.get(
-        `${route.applicantEnrollment.findApplicantById}/${id}`
-      )
+      try {
+        const response = await axios.get(
+          `${route.lateEnrolledStudents.findLateEnrolledStudentById}/${id}`
+        )
 
-      return ApplicantSchema.parse(response.data)
+        return lateEnrolledStudentSchema.parse(response.data)
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          // Handle Zod validation error
+          console.error("Zod validation error:", error.issues)
+        } else {
+          // Handle other types of errors (e.g., network errors)
+          console.error("Error:", error)
+        }
+        throw error // Re-throw the error if you want to propagate it
+      }
     },
   },
-  getTermToEnroll: {
-    queryKey: "getTermToEnroll",
+  findTermToEnrollLateEnrolledStudent: {
+    queryKey: "findTermToEnrollLateEnrolledStudent",
     schema: termToEnrollSchema,
     query: async () => {
       try {
         const response = await axios.get(
-          `${route.applicantEnrollment.findTermToEnroll}`
+          `${route.lateEnrolledStudents.findTermToEnrollLateEnrolledStudent}`
         )
         return termToEnrollSchema.parse(response.data)
       } catch (error) {
@@ -204,82 +216,12 @@ export const applicantEnrollment = {
       }
     },
   },
-  findCurrentTermToEnroll: {
-    queryKey: "findCurrentTermToEnroll",
-    schema: termToEnrollSchema,
-    query: async () => {
+  findLateEnrolledStudentEnrolledSubjects: {
+    queryKey: "findLateEnrolledStudentEnrolledSubjects",
+    query: async (id: string, termId: number) => {
       try {
         const response = await axios.get(
-          `${route.applicantEnrollment.findCurrentTermToEnroll}`
-        )
-        return termToEnrollSchema.parse(response.data)
-      } catch (error) {
-        if (error instanceof z.ZodError) {
-          // Handle Zod validation error
-          console.error("Zod validation error:", error.issues)
-        } else {
-          // Handle other types of errors (e.g., network errors)
-          console.error("Error:", error)
-        }
-        throw error // Re-throw the error if you want to propagate it
-      }
-    },
-  },
-  enrollApplicant: {
-    queryKey: "enrollApplicant",
-    schema: enrollDataSchema,
-    mutation: async (enrollData: EnrollDataSchema) => {
-      try {
-        const response = await axios.post(
-          `${route.applicantEnrollment.enrollApplicant}`,
-          enrollData
-        )
-        // return termToEnrollSchema.parse(response.data)
-
-        return response.data
-      } catch (error) {
-        if (error instanceof z.ZodError) {
-          // Handle Zod validation error
-          console.error("Zod validation error:", error.issues)
-        } else {
-          // Handle other types of errors (e.g., network errors)
-          console.error("Error:", error)
-        }
-        throw error // Re-throw the error if you want to propagate it
-      }
-    },
-  },
-
-  deEnrollApplicant: {
-    queryKey: " deEnrollApplicant",
-    schema: enrollDataSchema,
-    mutation: async (enrollData: EnrollDataSchema) => {
-      try {
-        const response = await axios.post(
-          `${route.applicantEnrollment.deEnrollApplicant}`,
-          enrollData
-        )
-        // return termToEnrollSchema.parse(response.data)
-        console.log(response.data)
-        return response.data
-      } catch (error) {
-        if (error instanceof z.ZodError) {
-          // Handle Zod validation error
-          console.error("Zod validation error:", error.issues)
-        } else {
-          // Handle other types of errors (e.g., network errors)
-          console.error("Error:", error)
-        }
-        throw error // Re-throw the error if you want to propagate it
-      }
-    },
-  },
-  getApplicantEnrolledSubjects: {
-    queryKey: "getApplicantEnrolledSubjects",
-    query: async (id: string) => {
-      try {
-        const response = await axios.get(
-          `${route.applicantEnrollment.findApplicantEnrolledSubjects}/${id}`
+          `${route.lateEnrolledStudents.findLateEnrolledStudentEnrolledSubjects}/${id}/${termId}`
         )
 
         return enrolledSubjectsSchema.parse(response.data)
@@ -295,13 +237,16 @@ export const applicantEnrollment = {
       }
     },
   },
-  enrollApplicantToStudent: {
-    queryKey: "enrollApplicantToStudent",
-    mutation: async (id: string) => {
+  enrollLateEnrolledStudent: {
+    queryKey: "enrollLateEnrolledStudent",
+    schema: enrollDataSchema,
+    mutation: async (enrollData: EnrollDataSchema) => {
       try {
         const response = await axios.post(
-          `${route.applicantEnrollment.enrollApplicantToStudent}/${id}`
+          `${route.lateEnrolledStudents.enrollLateEnrolledStudent}`,
+          enrollData
         )
+        // return termToEnrollSchema.parse(response.data)
 
         return response.data
       } catch (error) {
@@ -316,4 +261,57 @@ export const applicantEnrollment = {
       }
     },
   },
+  deEnrollLateEnrolledStudent: {
+    queryKey: "deEnrollLateEnrolledStudent",
+    schema: enrollDataSchema,
+    mutation: async (enrollData: EnrollDataSchema) => {
+      try {
+        const response = await axios.post(
+          `${route.lateEnrolledStudents.deEnrollLateEnrolledStudent}`,
+          enrollData
+        )
+        // return termToEnrollSchema.parse(response.data)
+
+        return response.data
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          // Handle Zod validation error
+          console.error("Zod validation error:", error.issues)
+        } else {
+          // Handle other types of errors (e.g., network errors)
+          console.error("Error:", error)
+        }
+        throw error // Re-throw the error if you want to propagate it
+      }
+    },
+  },
+  enrollLateEnrolledStudentToCurrentTerm: {
+    queryKey: "enrollLateEnrolledStudentToCurrentTerm",
+    mutation: async ({ id, termId }: { id: string; termId: number }) => {
+      console.log(id, termId)
+      try {
+        const response = await axios.post(
+          `${route.lateEnrolledStudents.enrollLateStudentToActive}`,
+          {},
+          {
+            params: {
+              id,
+              termId,
+            },
+          }
+        )
+        return response.data
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          // Handle Zod validation error
+          console.error("Zod validation error:", error.issues)
+        } else {
+          // Handle other types of errors (e.g., network errors)
+          console.error("Error:", error)
+        }
+        throw error // Re-throw the error if you want to propagate it
+      }
+    },
+  },
 }
+//enrollLateStudentToActive

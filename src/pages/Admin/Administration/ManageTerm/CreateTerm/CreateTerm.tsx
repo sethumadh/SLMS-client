@@ -164,7 +164,7 @@ function CreateTerm() {
                   setStep(step - 1)
                 }}
                 type={!nextPage ? "button" : "submit"}
-                nextText={step != 1 ? "Create Details" : "Review & Submit"}
+                nextText={step != 1 ? "Create Details" : "Submit"}
                 nextOnClick={() => {
                   handleNextStep()
                 }}

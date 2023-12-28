@@ -140,7 +140,6 @@ export const term = {
       schema: getCurentTermSchema,
       query: async () => {
         const response = await axios.get(`${route.admin.findPublishedTerm}`)
-        console.log(response.data)
         return getCurentTermSchema.parse(response.data)
       },
     },

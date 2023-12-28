@@ -4,6 +4,7 @@ import { applicantEnrollment } from "./admin/enrollment"
 import { enrolledStudent } from "./admin/enrolledStudent"
 import { activeStudent } from "./admin/activeStudent"
 import { timetable } from "./admin/timetable"
+import { lateEnrolledStudent } from "./admin/lateEnrolledStudent"
 
 export const api = {
   application: {
@@ -23,7 +24,8 @@ export const api = {
   },
   students: {
     enrolledStudent,
-    activeStudent
+    activeStudent,
+    lateEnrolledStudent,
   },
   timetable: {
     timetable,

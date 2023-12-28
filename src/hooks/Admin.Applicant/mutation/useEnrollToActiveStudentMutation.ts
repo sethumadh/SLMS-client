@@ -1,4 +1,3 @@
-
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { api } from "@/api/api"
 import { handleAxiosError } from "@/helpers/errorhandler"
@@ -6,39 +5,48 @@ import { setOpenModal } from "@/redux/slice/modalSlice"
 import { useAppDispatch } from "@/redux/store"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { toast } from "react-toastify"
+import { useNavigate } from "react-router-dom"
 
-export const  useEnrollApplicant= (loadingToastId: string | null) => {
+export const useEnrollToActiveStudentMutation = (
+  loadingToastId: string | null
+) => {
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
   const queryClient = useQueryClient()
-  const { mutateAsync: enrollApplicant, isPending: enrollApplicantPending } =
-  useMutation({
-    mutationFn: api.enrollment.applicantEnrollment.enrollApplicant.mutation,
-    onSuccess: () => {
+  const {
+    mutateAsync: enrollToActiveStudent,
+    isPending: enrollToActiveStudentPending,
+  } = useMutation({
+    mutationFn: ({ id, termId }: { id: string; termId: number }) =>
+      api.students.lateEnrolledStudent.enrollLateEnrolledStudentToCurrentTerm.mutation(
+        { id, termId }
+      ),
+    onSuccess: (data) => {
+      console.log(data, "hello")
       queryClient.invalidateQueries({
         queryKey: [
-          api.enrollment.applicantEnrollment.getApplicantEnrolledSubjects.queryKey,
+          api.students.enrolledStudent.findAllEnrolledStudents.querykey,
         ],
       })
       queryClient.invalidateQueries({
         queryKey: [
-          api.students.lateEnrolledStudent.findLateEnrolledStudentEnrolledSubjects
-          .queryKey,
+          api.enrollment.applicantEnrollment.findApplicantById.querykey,
         ],
       })
       if (loadingToastId) toast.dismiss(loadingToastId)
-      toast.success(`Applicant enrolled successfully 👌`)
+      toast.success(`Applicant enrolled student successfully 👌`)
       dispatch(
         setOpenModal({
           isOpen: false,
           type: "",
         })
       )
-      // navigate("/application-submit")
+      navigate("/admin/students/enrolled-students")
     },
     onError: (error: unknown) => {
       if (loadingToastId) toast.dismiss(loadingToastId)
       handleAxiosError(error)
     },
   })
-  return {enrollApplicant,enrollApplicantPending }
+  return { enrollToActiveStudent, enrollToActiveStudentPending }
 }

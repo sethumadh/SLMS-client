@@ -11,7 +11,6 @@ import { useQuery } from "@tanstack/react-query"
 import { api } from "@/api/api"
 import { capitalizeFirstCharacter } from "@/helpers/capitalizeFirstCharacter"
 
-
 const subjectOptions = [
   { value: "maths", label: "Maths" },
   { value: "science", label: "Science" },
@@ -22,16 +21,16 @@ const classOptions = [
   { value: "class2", label: "Class2" },
   { value: "class3", label: "Class3" },
 ]
-function EnrolledStudentList() {
+function LateEnrollmentList() {
   const [query, setQuery] = useState("")
   const [_isLoading, setIsLoading] = useState(false)
   const [currentPage, setCurrentPage] = useState(0)
   const [recordsPerPage, _setRecordPerPage] = useState(10)
-  const { data: PublishedTerm} = useQuery({
+  const { data: currentTerm, isLoading } = useQuery({
     queryKey: [
-      api.admin.term.publishedTerm.findPublishedTermAdministration.queryKey,
+      api.admin.term.currentTerm.findCurrentTermAdministration.queryKey,
     ],
-    queryFn: api.admin.term.publishedTerm.findPublishedTermAdministration.query,
+    queryFn: api.admin.term.currentTerm.findCurrentTermAdministration.query,
   })
   const {
     data: allStudentData,
@@ -40,28 +39,28 @@ function EnrolledStudentList() {
     error: _allStudentDataError,
   } = useQuery({
     queryKey: [
-      api.students.enrolledStudent.findAllEnrolledStudents.querykey,
+      api.students.lateEnrolledStudent.findAllLateEnrolledStudents.querykey,
       currentPage,
       query,
-      PublishedTerm?.id,
+      currentTerm?.id,
     ],
     queryFn: () => {
       if (query) {
-        if (PublishedTerm?.id)
-          return api.students.enrolledStudent.searchEnrolledStudents.query(
+        if (currentTerm?.id)
+          return api.students.lateEnrolledStudent.searchLateEnrolledStudents.query(
             query,
             currentPage,
-            PublishedTerm?.id
+            currentTerm?.id
           )
       } else {
-        if (PublishedTerm?.id)
-          return api.students.enrolledStudent.findAllEnrolledStudents.query(
+        if (currentTerm?.id)
+          return api.students.lateEnrolledStudent. findAllLateEnrolledStudents.query(
             currentPage,
-            PublishedTerm?.id
+            currentTerm?.id
           )
       }
     },
-    enabled: !!PublishedTerm?.id,
+    enabled: !!currentTerm?.id,
   })
 
   const nPages = Math.ceil((allStudentData?.count ?? 0) / recordsPerPage)
@@ -98,9 +97,10 @@ function EnrolledStudentList() {
           <div className="flex justify-between items-end sm:flex-auto ">
             <div className="">
               <h3 className="text-xl font-semibold leading-6 text-gray-900 mb-4">
-                Enrolled Students  <span className="italic font-medium text-md text-indigo-500 underline underline-offset-4">
-                  {PublishedTerm?.name &&
-                    capitalizeFirstCharacter(PublishedTerm?.name)}
+                Late Enrolled Students for{" "}
+                <span className="italic font-medium text-md text-indigo-500 underline underline-offset-4">
+                  {currentTerm?.name &&
+                    capitalizeFirstCharacter(currentTerm?.name)}
                 </span>
               </h3>
               <span className="italic text-xs text-slate-400">
@@ -150,7 +150,7 @@ function EnrolledStudentList() {
           <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none"></div>
         </div>
 
-        {allStudentDataLoading ? (
+        {allStudentDataLoading || isLoading ? (
           <>
             <Skeleton />
             <Skeleton />
@@ -205,47 +205,45 @@ function EnrolledStudentList() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
-                      {allStudentData?.enrolledStudents.map(
-                        (enrolledStudent) => (
-                          <tr key={enrolledStudent.id}>
-                            <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
-                              {enrolledStudent.id}
-                            </td>
-                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                              {enrolledStudent.personalDetails.firstName &&
-                                capitalizeFirstCharacter(
-                                  enrolledStudent.personalDetails.firstName
-                                )}
-                              {enrolledStudent.personalDetails.lastName &&
-                                capitalizeFirstCharacter(
-                                  enrolledStudent.personalDetails.lastName
-                                )}
-                            </td>
-                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                              {enrolledStudent.personalDetails.email}
-                            </td>
-                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                              {enrolledStudent.personalDetails.contact}
-                            </td>
+                      {allStudentData?.lateEnrolledStudents.map((lateEnrolledStudent) => (
+                        <tr key={lateEnrolledStudent.id}>
+                          <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+                            {lateEnrolledStudent.id}
+                          </td>
+                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                            {lateEnrolledStudent.personalDetails.firstName &&
+                              capitalizeFirstCharacter(
+                                lateEnrolledStudent.personalDetails.firstName
+                              )}
+                            {lateEnrolledStudent.personalDetails.lastName &&
+                              capitalizeFirstCharacter(
+                                lateEnrolledStudent.personalDetails.lastName
+                              )}
+                          </td>
+                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                            {lateEnrolledStudent.personalDetails.email}
+                          </td>
+                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                            {lateEnrolledStudent.personalDetails.contact}
+                          </td>
 
-                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 ">
-                              <Link
-                                to={`student-detail/${enrolledStudent.id.toString()}`}
-                                className="text-indigo-600 hover:text-indigo-900 "
-                              >
-                                View
-                              </Link>
-                            </td>
-                          </tr>
-                        )
-                      )}
+                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 ">
+                            <Link
+                              to={`student-detail/${lateEnrolledStudent.id.toString()}`}
+                              className="text-indigo-600 hover:text-indigo-900 "
+                            >
+                              View
+                            </Link>
+                          </td>
+                        </tr>
+                      ))}
                     </tbody>
                   </table>
-                  {allStudentData.count == 0 && (
+                  {allStudentData?.count == 0 && (
                     <>
-                      <div className="h-[600px] w-full flex justify-center items-center">
-                        <p className="font-medium text-lg">
-                          There is no enrolled students to show
+                      <div className="flex flex-row h-[650px] w-full justify-center items-center ">
+                        <p className="font-medium ">
+                          There are no results or data to show.
                         </p>
                       </div>
                     </>
@@ -294,10 +292,11 @@ function EnrolledStudentList() {
             </div>
           </>
         )}
+
         {/* pagination */}
       </div>
     </div>
   )
 }
 
-export default EnrolledStudentList
+export default LateEnrollmentList
