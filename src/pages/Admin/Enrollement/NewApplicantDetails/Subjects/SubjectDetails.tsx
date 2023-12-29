@@ -53,16 +53,6 @@ function NewApplicantSubjectDetails() {
   })
   const { control, formState } = methods
 
-  // De enroll
-  // const deEnrollMethods = useForm<EnrollStudentToTermSchema>({
-  //   resolver: zodResolver(enrollStudentToTermSchema),
-  //   defaultValues: {
-  //     enrolledSubjects: [""],
-  //   },
-  // })
-  // const { control: deEnrollConrol, formState: deEnrollFormstate } =
-  //   deEnrollMethods
-
   const {
     data: applicantData,
     isLoading: applicantDataIsLoading,
@@ -177,37 +167,6 @@ function NewApplicantSubjectDetails() {
       )
     }
   }
-  // const onDeEnrollSubmit = (values: EnrollStudentToTermSchema) => {
-  //   if (termToEnrollData?.termSubject && applicantData?.id) {
-  //     const enrollData: applicantEnrollData["enrollData"] =
-  //       termToEnrollData?.termSubject
-  //         .filter((item) => values.enrolledSubjects.includes(item.subject.name))
-  //         .map((item) => {
-  //           return {
-  //             subject: item.subject.name,
-  //             termSubjectGroupId: item.termSubjectGroup.id,
-  //             subjectGroupId: item.termSubjectGroup.subjectGroupId,
-  //             termId: item.termSubjectGroup.termId,
-  //             feeId: item.termSubjectGroup.feeId,
-  //             termSubjectId: item.id,
-  //           }
-  //         })
-
-  //     const applicantEnrollData: applicantEnrollData = {
-  //       applicantId: applicantData?.id,
-  //       enrollData,
-  //     }
-  //     dispatch(
-  //       setOpenModal({
-  //         isOpen: true,
-  //         type: "deEnrollApplicant",
-  //         data: {
-  //           value: applicantEnrollData,
-  //         },
-  //       })
-  //     )
-  //   }
-  // }
 
   return (
     <div className="">

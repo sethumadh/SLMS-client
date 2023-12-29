@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useCallback, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 import { Link } from "react-router-dom"
 import ReactPaginate from "react-paginate"
 import Select, { SingleValue } from "react-select"
@@ -11,17 +11,14 @@ import { useQuery } from "@tanstack/react-query"
 import { api } from "@/api/api"
 import { capitalizeFirstCharacter } from "@/helpers/capitalizeFirstCharacter"
 
-const subjectOptions = [
-  { value: "maths", label: "Maths" },
-  { value: "science", label: "Science" },
-  { value: "english", label: "English" },
-]
 const classOptions = [
   { value: "class1", label: "Class1 " },
   { value: "class2", label: "Class2" },
   { value: "class3", label: "Class3" },
 ]
 function ActiveStudentsList() {
+  const [subjectOption, setSubjectOption] = useState<string>()
+  const [pageLoad, setPageLoad] = useState(false)
   const [query, setQuery] = useState("")
   const [_isLoading, setIsLoading] = useState(false)
   const [currentPage, setCurrentPage] = useState(0)
@@ -43,12 +40,14 @@ function ActiveStudentsList() {
       currentPage,
       query,
       currentTerm?.id,
+      subjectOption,
     ],
     queryFn: () => {
-      if (query) {
+      if (query || subjectOption) {
         if (currentTerm?.id)
           return api.students.activeStudent.searchActiveStudents.query(
             query,
+            subjectOption,
             currentPage,
             currentTerm?.id
           )
@@ -82,12 +81,31 @@ function ActiveStudentsList() {
     selectedSubject: SingleValue<{ value: string; label: string }>
   ) => {
     console.log(selectedSubject)
+    selectedSubject?.value
+      ? setSubjectOption(selectedSubject?.value)
+      : setSubjectOption("")
+    setPageLoad(true)
+    setTimeout(() => {
+      setPageLoad(false)
+    }, 500)
   }
   const handleClassSelect = (
     selectedClass: SingleValue<{ value: string; label: string }>
   ) => {
     console.log(selectedClass)
   }
+  console.log(subjectOption)
+  const transformedSubjectOptions = useMemo(() => {
+    return (
+      currentTerm?.termSubject?.map((item) => {
+        const name = item.subject.name
+        return {
+          label: name.charAt(0).toUpperCase() + name.slice(1),
+          value: name,
+        }
+      }) || []
+    )
+  }, [currentTerm])
 
   return (
     <div className=" mt-2">
@@ -126,8 +144,9 @@ function ActiveStudentsList() {
                 <div>
                   <p className="text-slate-400 text-xs italic">*subjects</p>
                   <Select
+                    isClearable
                     className="absolute right-0 z-10 mt-2  origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                    options={subjectOptions}
+                    options={transformedSubjectOptions}
                     onChange={(
                       val: SingleValue<{ value: string; label: string }>
                     ) => handleSubjectSelect(val)}
@@ -149,7 +168,7 @@ function ActiveStudentsList() {
           <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none"></div>
         </div>
 
-        {allStudentDataLoading || isLoading ? (
+        {allStudentDataLoading || isLoading || pageLoad ? (
           <>
             <Skeleton />
             <Skeleton />

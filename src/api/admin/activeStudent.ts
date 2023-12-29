@@ -89,7 +89,6 @@ const activeStudentSchema = z.object({
 //   subjectName: z.string(),
 // })
 
-
 const activeStudentsDataSchema = z.object({
   activeStudents: z.array(activeStudentSchema),
   count: z.number(),
@@ -137,14 +136,26 @@ export const activeStudent = {
   searchActiveStudents: {
     querykey: "searchActiveStudents",
     schema: activeStudentsDataSchema,
-    query: async (search = "", page = 0, termId: number) => {
+    query: async (
+      search = "",
+      subjectOption = "",
+      page = 0,
+      termId: number
+    ) => {
+      console.log(subjectOption)
       try {
         const response = await axios.get(
           route.activeStudents.searchActiveStudents,
           {
-            params: { search, page, termId },
+            params: {
+              search: search.length ? search : null,
+              subjectOption: subjectOption.length ? subjectOption : null,
+              page,
+              termId,
+            },
           }
         )
+        console.log(response.data)
 
         return activeStudentsDataSchema.parse(response.data)
       } catch (error) {
