@@ -5,7 +5,7 @@ import PersonalDetails from "./PersonalDetails/PersonalDetails"
 
 const PersonalInformation = () => {
   return (
-    <div>
+    <div className="">
       <PersonalDetails />
       <ParentDetails />
       <HealthDetails/>

@@ -192,4 +192,27 @@ export const activeStudent = {
       }
     },
   },
+  findActiveStudentFeeDetailsById: {
+    querykey: "findActiveStudentFeeDetailsById",
+    schema: activeStudentSchema,
+    query: async (studentId: string, termId: number) => {
+      try {
+        const response = await axios.get(
+          `${route.activeStudents.findActiveStudentFeeDetailsById}/${studentId}`,
+          { params: { termId } }
+        )
+        console.log(response.data)
+        return response.data
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          // Handle Zod validation error
+          console.error("Zod validation error:", error.issues)
+        } else {
+          // Handle other types of errors (e.g., network errors)
+          console.error("Error:", error)
+        }
+        throw error // Re-throw the error if you want to propagate it
+      }
+    },
+  },
 }

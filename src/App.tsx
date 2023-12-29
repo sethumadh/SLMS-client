@@ -36,10 +36,6 @@ import Alumni from "./pages/Admin/Students/Alumni/Alumni"
 import EnrollmentNavbarLayout from "./Layouts/EnrollmentNavbarLayout/EnrollmentNavbarLayout"
 import NewStudentApplications from "./pages/Admin/Enrollement/NewApplications/NewApplications"
 import NewApplicatantDetailsLayout from "./Layouts/NewApplicationsDetailLayout/NewApplicationsDetailLayout"
-// import NewApplicantPersonalDetails from "./pages/Admin/Enrollement/NewApplicantDetails/PersonalDetails/ NewApplicantPersonalDetails"
-// import NewApplicantParentDetails from "./pages/Admin/Enrollement/NewApplicantDetails/ParentDetails/ParentDetails"
-// import NewApplicantHealthDetails from "./pages/Admin/Enrollement/NewApplicantDetails/HealthDetails.tsx/HealthDetails"
-// import NewApplicantDeclaration from "./pages/Admin/Enrollement/NewApplicantDetails/Declaration/Declaration"
 import NewApplicantSubjectDetails from "./pages/Admin/Enrollement/NewApplicantDetails/Subjects/SubjectDetails"
 import StudentsNavbarLayout from "./Layouts/StudentsNavbarLayout/StudentsNavbarLayout"
 import AdministrationLayout from "./Layouts/AdministrationLayout/AdministrationLayout"
@@ -69,6 +65,7 @@ import LateEnrollmentParentDetails from "./pages/Admin/Students/LateEnrollmentDe
 import LateEnrollmentHealthDetails from "./pages/Admin/Students/LateEnrollmentDetail/HealthDetails.tsx/HealthDetails"
 import LateEnrolledDeclaration from "./pages/Admin/Students/LateEnrollmentDetail/Declaration/Declaration"
 import ManageAndEnroll from "./pages/Admin/Students/LateEnrollmentDetail/Subjects/ManageAndEnroll"
+import FeeDetails from "./pages/Admin/Students/ActiveStudentDetail/Fee/FeeDetails"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -92,6 +89,7 @@ const router = createBrowserRouter(
             element={<ActiveStudentDetailLayout />}
           >
             <Route index element={<PersonalInformation />} />
+            <Route path="manage-fee-details" element={<FeeDetails/>}/>
           </Route>
           <Route
             path="late-enrolled-students"
@@ -105,7 +103,7 @@ const router = createBrowserRouter(
             <Route path="parent" element={<LateEnrollmentParentDetails />} />
             <Route path="health" element={<LateEnrollmentHealthDetails />} />
             <Route path="declaration" element={<LateEnrolledDeclaration />} />
-            <Route path="manage-and-enroll" element={<ManageAndEnroll/>} />
+            <Route path="manage-and-enroll" element={<ManageAndEnroll />} />
           </Route>
           <Route path="enrolled-students" element={<EnrolledStudentList />} />
           <Route
@@ -137,9 +135,6 @@ const router = createBrowserRouter(
               path="manage-subjects-classes"
               element={<NewApplicantSubjectDetails />}
             />
-            {/* <Route path="parent" element={<NewApplicantParentDetails />} />
-            <Route path="health" element={<NewApplicantHealthDetails />} />
-            <Route path="declaration" element={<NewApplicantDeclaration />} /> */}
           </Route>
           <Route
             path="waitlisted"

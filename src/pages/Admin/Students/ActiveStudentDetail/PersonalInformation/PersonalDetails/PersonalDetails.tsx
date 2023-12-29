@@ -100,7 +100,7 @@ function PersonalDetails() {
       ) : activeStudentData?.personalDetails ? (
         <>
           <div>
-            <div className="px-4 sm:px-0 flex justify-between gap-x-4 lg:mt-4">
+            <div className="px-4 sm:px-0 flex justify-between gap-x-4 lg:mt-2">
               <div className="flex flex-col sm:flex sm:flex-row gap-x-4">
                 <h3 className="text-base font-semibold leading-7 text-gray-900 ">
                   Applicant Information

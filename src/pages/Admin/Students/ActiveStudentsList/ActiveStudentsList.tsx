@@ -29,6 +29,7 @@ function ActiveStudentsList() {
     ],
     queryFn: api.admin.term.currentTerm.findCurrentTermAdministration.query,
   })
+
   const {
     data: allStudentData,
     isLoading: allStudentDataLoading,
