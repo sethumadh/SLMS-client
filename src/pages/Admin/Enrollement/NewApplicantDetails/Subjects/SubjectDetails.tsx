@@ -259,61 +259,65 @@ function NewApplicantSubjectDetails() {
               </dl>
             </div>
           </ul>
-          <div className="px-8 py-4 shadow-md rounded-lg ">
-            <div className="border-b border-gray-200 pb-5 mt-8">
-              <h3 className=" text-base sm:text-lg font-bold leading-6 text-gray-900">
-                Enroll and Approve Applicant to the advertised / published term
-                or to Current Term
-              </h3>
+          {pageLoad ? (
+            <div className="h-[600px] font-medium text-lg flex justify-center items-center">
+              <div>
+                <OverlayLoadingspinner />
+              </div>
             </div>
-            <FormProvider {...methods}>
-              <form onSubmit={methods.handleSubmit(onSubmit)} noValidate>
-                <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 py-4  mb-16">
-                  <div className="space-y-12">
-                    <div className="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">
-                      <div>
-                        <h2 className="text-base font-semibold leading-7 text-gray-900">
-                          Choose Term to enroll Applicant
-                        </h2>
-                        <p className="mt-1 text-sm leading-6 text-gray-600">
-                          {term == "publishedTerm"
-                            ? "By Default the option is advertised or published term"
-                            : "This is current term"}
-                        </p>
-                      </div>
+          ) : (
+            <div className="px-8 py-4 shadow-md rounded-lg">
+              <div className="border-b border-gray-200 pb-5 mt-8">
+                <h3 className=" text-base sm:text-lg font-bold leading-6 text-gray-900">
+                  Enroll and Approve Applicant to the advertised / published
+                  term or to Current Term
+                </h3>
+              </div>
+              <FormProvider {...methods}>
+                <form onSubmit={methods.handleSubmit(onSubmit)} noValidate>
+                  <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 py-4  mb-16">
+                    <div className="space-y-12">
+                      <div className=" grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">
+                        <div>
+                          <h2 className="text-base font-semibold leading-7 text-gray-900">
+                            Choose Term to enroll Applicant
+                          </h2>
+                          <p className="mt-1 text-sm leading-6 text-gray-600">
+                            {term == "publishedTerm"
+                              ? "By Default the option is advertised or published term"
+                              : "This is current term"}
+                          </p>
+                        </div>
 
-                      <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
-                        <div className="sm:col-span-4">
-                          <label
-                            htmlFor="termName"
-                            className="block text-sm font-medium leading-6 text-gray-900"
-                          >
-                            Select term
-                          </label>
-                          <div className="mt-2">
-                            <Select
-                              options={options}
-                              onChange={(
-                                val: SingleValue<{
-                                  value: string
-                                  label: string
-                                }>
-                              ) => handleTermChange(val)}
-                              defaultValue={options.filter(
-                                (option) => option.value == term
-                              )}
-                            />
+                        <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
+                          <div className="sm:col-span-4">
+                            <label
+                              htmlFor="termName"
+                              className="block text-sm font-medium leading-6 text-gray-900"
+                            >
+                              Select term
+                            </label>
+                            <div className="mt-2">
+                              <Select
+                                options={options}
+                                onChange={(
+                                  val: SingleValue<{
+                                    value: string
+                                    label: string
+                                  }>
+                                ) => handleTermChange(val)}
+                                defaultValue={options.filter(
+                                  (option) => option.value == term
+                                )}
+                              />
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                    {pageLoad ? (
-                      <div className="h-[500px]">
-                        <OverlayLoadingspinner />
-                      </div>
-                    ) : (
+
                       <>
-                        <div className="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">
+                        {/* first red */}
+                        <div className="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3 ">
                           <div>
                             <h2 className="text-base font-semibold leading-7 text-gray-900">
                               Term Details
@@ -399,7 +403,7 @@ function NewApplicantSubjectDetails() {
                             </div>
                           </div>
                         </div>
-
+                        {/* 2nd red */}
                         <div className="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">
                           <div>
                             <h2 className="text-base font-semibold leading-7 text-gray-900">
@@ -456,10 +460,9 @@ function NewApplicantSubjectDetails() {
                           </div>
                         </div>
                       </>
-                    )}
+                    </div>
                   </div>
-                </div>
-                {!pageLoad && (
+                  {/* 3rd button */}
                   <button
                     type="submit"
                     className="inline-flex items-center gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
@@ -473,11 +476,12 @@ function NewApplicantSubjectDetails() {
                       aria-hidden="true"
                     />
                   </button>
-                )}
-              </form>
-            </FormProvider>
-            {/* <IsCurrentTermModal /> */}
-          </div>
+                </form>
+              </FormProvider>
+              {/* <IsCurrentTermModal /> */}
+            </div>
+          )}
+
           <div className="mt-4" />
           <div className="flex justify-center mb-12 py-12">
             <span className="isolate inline-flex rounded-md shadow-sm  mt-4">
@@ -511,158 +515,3 @@ function NewApplicantSubjectDetails() {
 }
 
 export default NewApplicantSubjectDetails
-
-// /* <div className="px-8 py-4 border shadow-md rounded-lg mb-16">
-//             <div className="border-b border-gray-200 pb-5 mt-8">
-//               <h3 className="text-lg font-semibold leading-6 text-gray-900">
-//                 De-Enroll Applicant
-//               </h3>
-//             </div>
-//             <FormProvider {...deEnrollMethods}>
-//               <form
-//                 onSubmit={deEnrollMethods.handleSubmit(onDeEnrollSubmit)}
-//                 noValidate
-//               >
-//                 <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 py-4  mb-16">
-//                   <div className="space-y-12">
-//                     <div className="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">
-//                       <div>
-//                         <h2 className="text-base font-semibold leading-7 text-gray-900">
-//                           Term Details
-//                         </h2>
-//                         <p className="mt-1 text-sm leading-6 text-gray-600">
-//                           This is the upcoming term for you school where you
-//                           will choose subject groups and related subjects to
-//                           de-enroll
-//                         </p>
-//                       </div>
-
-//                       <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
-//                         <div className="sm:col-span-4">
-//                           <label
-//                             htmlFor="termName"
-//                             className="block text-sm font-medium leading-6 text-gray-900"
-//                           >
-//                             Term Name
-//                           </label>
-//                           <div className="mt-2">
-//                             <div className="bg-slate-100 flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-//                               <div className="disabled:bg-slate-50 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6">
-//                                 {termToEnrollData?.name &&
-//                                   capitalizeFirstCharacter(
-//                                     termToEnrollData?.name
-//                                   )}{" "}
-//                               </div>
-//                             </div>
-//                           </div>
-//                         </div>
-
-//                         <div className="col-span-full">
-//                           <label
-//                             htmlFor="about"
-//                             className="block text-sm font-medium leading-6 text-gray-900"
-//                           >
-//                             Term Period
-//                           </label>
-//                           <div className="mt-2">
-//                             <div className="bg-slate-100 flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-//                               <div className="disabled:bg-slate-50 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6">
-//                                 <span className="font-medium">
-//                                   {termToEnrollData?.startDate &&
-//                                     formatDate(termToEnrollData.startDate)}
-//                                 </span>
-//                                 <span> to </span>
-//                                 <span className="font-medium">
-//                                   {termToEnrollData?.endDate &&
-//                                     formatDate(termToEnrollData?.endDate)}
-//                                 </span>
-//                               </div>
-//                             </div>
-//                           </div>
-//                           <p className="mt-3 text-sm leading-6 text-gray-600">
-//                             {/* to do. enable link to term list */}
-//                             To see more details of this term see term list in
-//                             Administration tab or click{" "}
-//                             <Link
-//                               to={"/admin/administration/manage-term/all-terms"}
-//                               className="text-blue-500"
-//                             >
-//                               {" "}
-//                               here
-//                             </Link>
-//                             .
-//                           </p>
-//                         </div>
-//                       </div>
-//                     </div>
-
-//                     <div className="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">
-//                       <div>
-//                         <h2 className="text-base font-semibold leading-7 text-gray-900">
-//                           Subject Details
-//                         </h2>
-//                         <p className="mt-1 text-sm leading-6 text-gray-600">
-//                           Choose multiple subjects to enroll.
-//                         </p>
-//                       </div>
-
-//                       <div className="flex flex-col gap-4 py-2 rounded-lg">
-//                         <label
-//                           htmlFor="group"
-//                           className="block text-sm font-medium leading-6 text-gray-900"
-//                         >
-//                           Subjects<span className="text-red-600">*</span>
-//                         </label>
-//                         <Controller
-//                           name="enrolledSubjects"
-//                           control={deEnrollConrol}
-//                           rules={{ required: true }}
-//                           render={({ field }) => (
-//                             <Select
-//                               isMulti
-//                               options={subjectOptions}
-//                               value={subjectOptions?.filter((option) =>
-//                                 field?.value?.includes(option?.value)
-//                               )}
-//                               onChange={(
-//                                 options: MultiValue<{
-//                                   value: string
-//                                   label: string
-//                                 }>
-//                               ) => {
-//                                 field.onChange(
-//                                   options && options.length > 0
-//                                     ? options.map((option) => option.value)
-//                                     : [""] // Pass a non-empty array to trigger Zod validation
-//                                 )
-//                               }}
-//                             />
-//                           )}
-//                         />
-//                         <div className="">
-//                           {deEnrollFormstate.errors?.enrolledSubjects && (
-//                             <span className="text-xs text-red-600">
-//                               {
-//                                 deEnrollFormstate.errors?.enrolledSubjects[0]
-//                                   ?.message
-//                               }
-//                             </span>
-//                           )}
-//                         </div>
-//                       </div>
-//                     </div>
-//                   </div>
-//                 </div>
-//                 <button
-//                   type="submit"
-//                   className="inline-flex items-center gap-x-2 rounded-md bg-red-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-//                 >
-//                   De-Enroll
-//                   <Icons.CheckCircleIcon
-//                     className="-mr-0.5 h-5 w-5"
-//                     aria-hidden="true"
-//                   />
-//                 </button>
-//               </form>
-//             </FormProvider>
-//           </div>*/
