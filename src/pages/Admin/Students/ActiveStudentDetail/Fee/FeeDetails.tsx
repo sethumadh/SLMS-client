@@ -5,26 +5,7 @@ import { useParams } from "react-router-dom"
 import { cn } from "@/lib/utils"
 import { capitalizeFirstCharacter } from "@/helpers/capitalizeFirstCharacter"
 
-const locations = [
-  {
-    name: "Edinburgh",
-    people: [
-      {
-        name: "Lindsay Walton",
-        title: "Front-end Developer",
-        email: "lindsay.walton@example.com",
-        role: "Member",
-      },
-      {
-        name: "Courtney Henry",
-        title: "Designer",
-        email: "courtney.henry@example.com",
-        role: "Admin",
-      },
-    ],
-  },
-  // More people...
-]
+
 export default function FeeDetails() {
   const params = useParams()
   const { data: currentTerm } = useQuery({
@@ -143,7 +124,7 @@ export default function FeeDetails() {
                           )}
                       </th>
                     </tr>
-                    {feeData.feePayment.map((fee, feeIdx) => (
+                    {feeData.feePayment.map((_fee, feeIdx) => (
                       <tr
                         key={feeIdx}
                         className={cn(

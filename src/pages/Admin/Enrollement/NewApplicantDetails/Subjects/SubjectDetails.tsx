@@ -291,7 +291,8 @@ function NewApplicantSubjectDetails() {
                     : ""}
                 </span>
                 <span className="text-red-400 text-md font-semibold italic">
-                  {publishedTerm?.id===currentTerm?.id && "**Published Term and Current term are the same"}
+                  {publishedTerm?.id === currentTerm?.id &&
+                    "**Published Term and Current term are the same"}
                 </span>
               </div>
               <FormProvider {...methods}>
@@ -379,7 +380,7 @@ function NewApplicantSubjectDetails() {
                                       ? capitalizeFirstCharacter(
                                           termToEnrollData?.name
                                         )
-                                      : "Not Applicable - No published/advertised term"}{" "}
+                                      : `Not Applicable - No ${term} term availabe`}{" "}
                                   </div>
                                 </div>
                               </div>
@@ -398,7 +399,7 @@ function NewApplicantSubjectDetails() {
                                     <span className="font-medium">
                                       {termToEnrollData?.startDate
                                         ? formatDate(termToEnrollData.startDate)
-                                        : "Not Applicable - No published/advertised term"}
+                                        : `Not Applicable - No ${term} term availabe`}{" "}
                                     </span>
                                     <span>
                                       {" "}

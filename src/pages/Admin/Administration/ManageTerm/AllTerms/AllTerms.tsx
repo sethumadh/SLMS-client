@@ -101,73 +101,90 @@ export default function AllTerms() {
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200 bg-white">
-                  {allTermData?.map((term) => (
-                    <tr key={term.name}>
-                      <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
-                        <div className="flex items-center">
-                          <div className="">
-                            <div className="font-medium text-gray-900">
-                              {term.name}
+                {allTermData?.length === 0 ? (
+                  <>
+                    {" "}
+                    <tbody className="divide-y divide-gray-200 bg-white">
+                      {allTermData?.map((term) => (
+                        <tr key={term.name}>
+                          <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
+                            <div className="flex items-center">
+                              <div className="">
+                                <div className="font-medium text-gray-900">
+                                  {term.name}
+                                </div>
+                                <div className="mt-1 text-gray-500">
+                                  {/* {term.endDate} */}
+                                </div>
+                              </div>
                             </div>
-                            <div className="mt-1 text-gray-500">
-                              {/* {term.endDate} */}
+                          </td>
+                          <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                            <div className="text-gray-900">
+                              {term.startDate && formatDate(term.startDate)}{" "}
                             </div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                        <div className="text-gray-900">
-                          {term.startDate && formatDate(term.startDate)}{" "}
-                        </div>
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-900">
-                        {term.endDate && formatDate(term.endDate)}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                        <span
-                          className={`inline-flex items-center rounded-md ${
-                            term.currentTerm ? "bg-green-50" : "bg-red-300"
-                          } bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20`}
-                        >
-                          {term.currentTerm ? "Current term" : "Not Current"}
-                        </span>
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                        <span
-                          className={`inline-flex items-center rounded-md ${
-                            term.endDate && new Date(term.endDate) > new Date()
-                              ? "bg-blue-50"
-                              : "bg-red-300"
-                          } bg-green-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-600/20`}
-                        >
-                          {term.endDate && new Date(term.endDate) > new Date()
-                            ? "Active"
-                            : "Expired"}
-                        </span>
-                      </td>
+                          </td>
+                          <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-900">
+                            {term.endDate && formatDate(term.endDate)}
+                          </td>
+                          <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                            <span
+                              className={`inline-flex items-center rounded-md ${
+                                term.currentTerm ? "bg-green-50" : "bg-red-300"
+                              } bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20`}
+                            >
+                              {term.currentTerm
+                                ? "Current term"
+                                : "Not Current"}
+                            </span>
+                          </td>
+                          <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                            <span
+                              className={`inline-flex items-center rounded-md ${
+                                term.endDate &&
+                                new Date(term.endDate) > new Date()
+                                  ? "bg-blue-50"
+                                  : "bg-red-300"
+                              } bg-green-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-600/20`}
+                            >
+                              {term.endDate &&
+                              new Date(term.endDate) > new Date()
+                                ? "Active"
+                                : "Expired"}
+                            </span>
+                          </td>
 
-                      <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                        <span
-                          className={`inline-flex items-center rounded-md ${
-                            term.isPublish ? "bg-yellow-50" : "bg-red-300"
-                          } bg-green-50 px-2 py-1 text-xs font-medium text-yellow-700 ring-1 ring-inset ring-yellow-600/20`}
-                        >
-                          {term.isPublish ? "Published" : "No"}
-                        </span>
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                        <Link
-                          to={`term-details/${term.id}`}
-                          className="text-indigo-600 hover:text-indigo-900"
-                        >
-                          Details
-                          <span className="sr-only">, {term.name}</span>
-                        </Link>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
+                          <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                            <span
+                              className={`inline-flex items-center rounded-md ${
+                                term.isPublish ? "bg-yellow-50" : "bg-red-300"
+                              } bg-green-50 px-2 py-1 text-xs font-medium text-yellow-700 ring-1 ring-inset ring-yellow-600/20`}
+                            >
+                              {term.isPublish ? "Published" : "No"}
+                            </span>
+                          </td>
+                          <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                            <Link
+                              to={`term-details/${term.id}`}
+                              className="text-indigo-600 hover:text-indigo-900"
+                            >
+                              Details
+                              <span className="sr-only">, {term.name}</span>
+                            </Link>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </>
+                ) : (
+                  <>
+                    <div className="flex flex-col items-center justify-center h-[500px] w-full">
+                      <p className="text-lg text-gray-700">
+                        No data available.
+                      </p>
+                    </div>
+                  </>
+                )}
               </table>
             </div>
           </div>

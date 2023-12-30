@@ -21,7 +21,7 @@ export const useEnrollToActiveStudentMutation = (
       api.students.lateEnrolledStudent.enrollLateEnrolledStudentToCurrentTerm.mutation(
         { id, termId }
       ),
-    onSuccess: (data) => {
+    onSuccess: () => {
 
       queryClient.invalidateQueries({
         queryKey: [
