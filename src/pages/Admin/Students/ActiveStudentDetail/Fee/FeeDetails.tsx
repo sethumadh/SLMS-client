@@ -3,14 +3,24 @@ import { useQuery } from "@tanstack/react-query"
 import { Fragment } from "react"
 import { useParams } from "react-router-dom"
 import { cn } from "@/lib/utils"
-
+import { capitalizeFirstCharacter } from "@/helpers/capitalizeFirstCharacter"
 
 const locations = [
   {
-    name: 'Edinburgh',
+    name: "Edinburgh",
     people: [
-      { name: 'Lindsay Walton', title: 'Front-end Developer', email: 'lindsay.walton@example.com', role: 'Member' },
-      { name: 'Courtney Henry', title: 'Designer', email: 'courtney.henry@example.com', role: 'Admin' },
+      {
+        name: "Lindsay Walton",
+        title: "Front-end Developer",
+        email: "lindsay.walton@example.com",
+        role: "Member",
+      },
+      {
+        name: "Courtney Henry",
+        title: "Designer",
+        email: "courtney.henry@example.com",
+        role: "Admin",
+      },
     ],
   },
   // More people...
@@ -117,32 +127,51 @@ export default function FeeDetails() {
                 </tr>
               </thead>
               <tbody className="bg-white">
-                {locations.map((location) => (
-                  <Fragment key={location.name}>
+                {activeStudentFeeData?.map((feeData) => (
+                  <Fragment
+                    key={feeData.termSubjectGroup.subjectGroup.groupName}
+                  >
                     <tr className="border-t border-gray-200">
                       <th
                         colSpan={7}
                         scope="colgroup"
                         className="bg-gray-50 py-2 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3"
                       >
-                        {location.name}
+                        {feeData.termSubjectGroup.subjectGroup.groupName &&
+                          capitalizeFirstCharacter(
+                            feeData.termSubjectGroup.subjectGroup.groupName
+                          )}
                       </th>
                     </tr>
-                    {location.people.map((person, personIdx) => (
+                    {feeData.feePayment.map((fee, feeIdx) => (
                       <tr
-                        key={person.email}
-                        className={cn(personIdx === 0 ? 'border-gray-300' : 'border-gray-200', 'border-t')}
+                        key={feeIdx}
+                        className={cn(
+                          feeIdx === 0 ? "border-gray-300" : "border-gray-200",
+                          "border-t"
+                        )}
                       >
                         <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">
-                          {person.name}
+                          dum
                         </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{person.title}</td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{person.email}</td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{person.role}</td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{person.role}</td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{person.role}</td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{person.role}</td>
-                        
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          title
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          email
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          role
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          role
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          role
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          role
+                        </td>
                       </tr>
                     ))}
                   </Fragment>

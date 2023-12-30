@@ -106,75 +106,72 @@ const enrollDataSchema = z.object({
     })
   ),
 })
+
 // fee
+const subjectEnrollmentSchema = z.object({
+  id: z.number(),
+  enrollmentId: z.number(),
+  termSubjectId: z.number(),
+  // grade: z.string(),
+  // attendance: z.array(z.any()) // or a more specific type if you know the structure of attendance
+})
 
+const enrollmentSchema = z.object({
+  dueDate: z.string(), // or z.date() if you want to parse it as a Date object
+  subjectEnrollment: subjectEnrollmentSchema,
+})
 
-// const subjectEnrollmentSchema = z.object({
-//     id: z.number(),
-//     enrollmentId: z.number(),
-//     termSubjectId: z.number(),
-//     // grade: z.string(),
-//     // attendance: z.array(z.any()) // or a more specific type if you know the structure of attendance
-// });
+const subjectSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  isActive: z.boolean(),
+})
 
-// const enrollmentSchema = z.object({
-//     dueDate: z.string(), // or z.date() if you want to parse it as a Date object
-//     subjectEnrollment: subjectEnrollmentSchema
-// });
+const subjectGroupSchema = z.object({
+  id: z.number(),
+  isActive: z.boolean(),
+  groupName: z.string(),
+})
 
-// const subjectSchema = z.object({
-//     id: z.number(),
-//     name: z.string(),
-//     isActive: z.boolean()
-// });
+const feeSchema = z.object({
+  id: z.number(),
+  amount: z.number(),
+  paymentType: z.string(), // you might want to use z.enum(["TERM", "MONTHLY"]) for stricter validation
+})
 
-// const subjectGroupSchema = z.object({
-//     id: z.number(),
-//     isActive: z.boolean(),
-//     groupName: z.string()
-// });
+const termSubjectGroupSchema = z.object({
+  id: z.number(),
+  termId: z.number(),
+  feeId: z.number(),
+  subjectGroupId: z.number(),
+  fee: feeSchema,
+  subjectGroup: subjectGroupSchema,
+  subject: z.array(subjectSchema),
+  enrollment: z.array(enrollmentSchema),
+})
 
-// const feeSchema = z.object({
-//     id: z.number(),
-//     amount: z.number(),
-//     paymentType: z.string() // you might want to use z.enum(["TERM", "MONTHLY"]) for stricter validation
-// });
+const feePaymentSchema = z.object({
+  id: z.number(),
+  feeId: z.number(),
+  dueDate: z.string(), // or z.date()
+  paidDate: z.string().nullable(), // or z.date().nullable()
+  amount: z.number(),
+  dueAmount: z.number(),
+  studentTermFeeId: z.number(),
+  status: z.string(),
+  method: z.string(),
+})
 
-// const termSubjectGroupSchema = z.object({
-//     id: z.number(),
-//     termId: z.number(),
-//     feeId: z.number(),
-//     subjectGroupId: z.number(),
-//     fee: feeSchema,
-//     subjectGroup: subjectGroupSchema,
-//     subject: z.array(subjectSchema),
-//     enrollment: z.array(enrollmentSchema)
-// });
+const feeDetailSchema = z.object({
+  id: z.number(),
+  studentId: z.number(),
+  termSubjectGroupId: z.number(),
+  termId: z.number(),
+  termSubjectGroup: termSubjectGroupSchema,
+  feePayment: z.array(feePaymentSchema),
+})
 
-// const feePaymentSchema = z.object({
-//     id: z.number(),
-//     feeId: z.number(),
-//     dueDate: z.string(), // or z.date()
-//     paidDate: z.string().nullable(), // or z.date().nullable()
-//     amount: z.number(),
-//     dueAmount: z.number(),
-//     studentTermFeeId: z.number(),
-//     status: z.string(),
-//     method: z.string()
-// });
-
-// const feeDetailSchema = z.object({
-//     id: z.number(),
-//     studentId: z.number(),
-//     termSubjectGroupId: z.number(),
-//     termId: z.number(),
-//     termSubjectGroup: termSubjectGroupSchema,
-//     feePayments: z.array(feePaymentSchema)
-// });
-
-// const feeDetailsArraySchema = z.array(feeDetailSchema);
-
-
+const feeDetailsArraySchema = z.array(feeDetailSchema)
 
 // fee
 export type EnrollDataSchema = z.infer<typeof enrollDataSchema>
@@ -249,7 +246,6 @@ export const activeStudent = {
         const response = await axios.get(
           `${route.activeStudents.findActiveStudentById}/${id}`
         )
-console.log(response.data)
         return activeStudentSchema.parse(response.data)
       } catch (error) {
         if (error instanceof z.ZodError) {
@@ -265,7 +261,7 @@ console.log(response.data)
   },
   findActiveStudentFeeDetailsById: {
     querykey: "findActiveStudentFeeDetailsById",
-    schema: activeStudentSchema,
+    schema: feeDetailsArraySchema,
     query: async (studentId: string, termId: number) => {
       try {
         const response = await axios.get(
@@ -273,7 +269,7 @@ console.log(response.data)
           { params: { termId } }
         )
         console.log(response.data)
-        return response.data
+        return feeDetailsArraySchema.parse(response.data)
       } catch (error) {
         if (error instanceof z.ZodError) {
           // Handle Zod validation error
