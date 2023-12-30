@@ -94,17 +94,21 @@ const termSubjectSchema = z.array(
   })
 )
 
-const termToEnrollSchema = z.object({
-  id: z.number(),
-  name: z.string(),
-  isPublish: z.boolean(),
-  currentTerm: z.boolean(),
-  startDate: z.string(),
-  endDate: z.string(),
-  createdAt: z.string(),
-  updatedAt: z.string(),
-  termSubject: termSubjectSchema,
-})
+const termToEnrollSchema = z.union([
+  z.object({
+    id: z.number(),
+    name: z.string(),
+    isPublish: z.boolean(),
+    currentTerm: z.boolean(),
+    startDate: z.string(),
+    endDate: z.string(),
+    createdAt: z.string(),
+    updatedAt: z.string(),
+    termSubject: termSubjectSchema,
+  }),
+  z.null(),
+  z.undefined(),
+])
 
 export type TermToEnrollSchema = z.infer<typeof termToEnrollSchema>
 /* term to enroll schema*/

@@ -12,6 +12,7 @@ import { api } from "@/api/api"
 import { capitalizeFirstCharacter } from "@/helpers/capitalizeFirstCharacter"
 
 
+
 const subjectOptions = [
   { value: "maths", label: "Maths" },
   { value: "science", label: "Science" },
@@ -61,7 +62,7 @@ function EnrolledStudentList() {
           )
       }
     },
-    enabled: !!PublishedTerm?.id,
+    enabled: !!PublishedTerm?.id && !(PublishedTerm?.currentTerm && PublishedTerm?.isPublish),
   })
 
   const nPages = Math.ceil((allStudentData?.count ?? 0) / recordsPerPage)

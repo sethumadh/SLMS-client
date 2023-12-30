@@ -203,6 +203,11 @@ export const term = {
       await axios.patch(`${route.admin.makePublishTerm}/${id}`)
     },
   },
+  unPublishTerm: {
+    mutation: async ({ id }: { id: number }) => {
+      await axios.patch(`${route.admin.unPublishTerm}/${id}`)
+    },
+  },
   deleteTerm: {
     mutation: async ({ id }: { id: number }) => {
       await axios.delete(`${route.admin.deleteTerm}/${id}`)

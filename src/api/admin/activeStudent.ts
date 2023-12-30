@@ -106,6 +106,77 @@ const enrollDataSchema = z.object({
     })
   ),
 })
+// fee
+
+
+// const subjectEnrollmentSchema = z.object({
+//     id: z.number(),
+//     enrollmentId: z.number(),
+//     termSubjectId: z.number(),
+//     // grade: z.string(),
+//     // attendance: z.array(z.any()) // or a more specific type if you know the structure of attendance
+// });
+
+// const enrollmentSchema = z.object({
+//     dueDate: z.string(), // or z.date() if you want to parse it as a Date object
+//     subjectEnrollment: subjectEnrollmentSchema
+// });
+
+// const subjectSchema = z.object({
+//     id: z.number(),
+//     name: z.string(),
+//     isActive: z.boolean()
+// });
+
+// const subjectGroupSchema = z.object({
+//     id: z.number(),
+//     isActive: z.boolean(),
+//     groupName: z.string()
+// });
+
+// const feeSchema = z.object({
+//     id: z.number(),
+//     amount: z.number(),
+//     paymentType: z.string() // you might want to use z.enum(["TERM", "MONTHLY"]) for stricter validation
+// });
+
+// const termSubjectGroupSchema = z.object({
+//     id: z.number(),
+//     termId: z.number(),
+//     feeId: z.number(),
+//     subjectGroupId: z.number(),
+//     fee: feeSchema,
+//     subjectGroup: subjectGroupSchema,
+//     subject: z.array(subjectSchema),
+//     enrollment: z.array(enrollmentSchema)
+// });
+
+// const feePaymentSchema = z.object({
+//     id: z.number(),
+//     feeId: z.number(),
+//     dueDate: z.string(), // or z.date()
+//     paidDate: z.string().nullable(), // or z.date().nullable()
+//     amount: z.number(),
+//     dueAmount: z.number(),
+//     studentTermFeeId: z.number(),
+//     status: z.string(),
+//     method: z.string()
+// });
+
+// const feeDetailSchema = z.object({
+//     id: z.number(),
+//     studentId: z.number(),
+//     termSubjectGroupId: z.number(),
+//     termId: z.number(),
+//     termSubjectGroup: termSubjectGroupSchema,
+//     feePayments: z.array(feePaymentSchema)
+// });
+
+// const feeDetailsArraySchema = z.array(feeDetailSchema);
+
+
+
+// fee
 export type EnrollDataSchema = z.infer<typeof enrollDataSchema>
 export const activeStudent = {
   findAllActiveStudents: {
@@ -178,7 +249,7 @@ export const activeStudent = {
         const response = await axios.get(
           `${route.activeStudents.findActiveStudentById}/${id}`
         )
-
+console.log(response.data)
         return activeStudentSchema.parse(response.data)
       } catch (error) {
         if (error instanceof z.ZodError) {

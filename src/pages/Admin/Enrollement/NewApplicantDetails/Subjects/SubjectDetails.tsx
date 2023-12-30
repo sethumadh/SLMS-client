@@ -15,7 +15,6 @@ import EnrollApplicantModal from "@/components/Modal/EnrollApplicantModal"
 import { setOpenModal } from "@/redux/slice/modalSlice"
 import { useAppDispatch } from "@/redux/store"
 import OverlayLoadingspinner from "@/components/OverlayLoadingspinner"
-import EnrollApplicantToStudentModal from "@/components/Modal/EnrollToActiveStudentModal"
 
 type applicantEnrollData = {
   applicantId: number
@@ -32,10 +31,6 @@ export type EnrollStudentToTermSchema = z.infer<
   typeof enrollStudentToTermSchema
 >
 function NewApplicantSubjectDetails() {
-  const options = [
-    { label: "Current Term", value: "currentTerm" },
-    { label: "Published/Advertised Term", value: "publishedTerm" },
-  ]
   const [term, setTerm] = useState<string | null>("publishedTerm")
   const [pageLoad, setPageLoad] = useState(false)
   const params = useParams()
@@ -43,7 +38,18 @@ function NewApplicantSubjectDetails() {
   const [subjectOptions, setSubjectOptions] = useState<
     { label: string; value: string }[]
   >([])
-
+  const { data: currentTerm } = useQuery({
+    queryKey: [
+      api.admin.term.currentTerm.findCurrentTermAdministration.queryKey,
+    ],
+    queryFn: api.admin.term.currentTerm.findCurrentTermAdministration.query,
+  })
+  const { data: publishedTerm } = useQuery({
+    queryKey: [
+      api.admin.term.publishedTerm.findPublishedTermAdministration.queryKey,
+    ],
+    queryFn: api.admin.term.publishedTerm.findPublishedTermAdministration.query,
+  })
   // Enroll
   const methods = useForm<EnrollStudentToTermSchema>({
     resolver: zodResolver(enrollStudentToTermSchema),
@@ -89,6 +95,11 @@ function NewApplicantSubjectDetails() {
       }
     },
   })
+  console.log(termToEnrollData)
+  const options = [
+    { label: "Current Term", value: "currentTerm" },
+    { label: "Published/Advertised Term", value: "publishedTerm" },
+  ]
 
   const {
     data: applicantEnrolledData,
@@ -272,6 +283,16 @@ function NewApplicantSubjectDetails() {
                   Enroll and Approve Applicant to the advertised / published
                   term or to Current Term
                 </h3>
+                <span className="text-red-400 text-sm italic">
+                  {term === "publishedTerm" && !termToEnrollData
+                    ? "*Attention . There is no publish term"
+                    : term === "currentTerm" && !termToEnrollData
+                    ? "*Attention . There is no current term"
+                    : ""}
+                </span>
+                <span className="text-red-400 text-md font-semibold italic">
+                  {publishedTerm?.id===currentTerm?.id && "**Published Term and Current term are the same"}
+                </span>
               </div>
               <FormProvider {...methods}>
                 <form onSubmit={methods.handleSubmit(onSubmit)} noValidate>
@@ -343,7 +364,7 @@ function NewApplicantSubjectDetails() {
                             )}
                           </div>
 
-                          <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
+                          <div className=" grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
                             <div className="sm:col-span-4">
                               <label
                                 htmlFor="termName"
@@ -354,10 +375,11 @@ function NewApplicantSubjectDetails() {
                               <div className="mt-2">
                                 <div className="bg-slate-100 flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
                                   <div className="disabled:bg-slate-50 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6">
-                                    {termToEnrollData?.name &&
-                                      capitalizeFirstCharacter(
-                                        termToEnrollData?.name
-                                      )}{" "}
+                                    {termToEnrollData?.name
+                                      ? capitalizeFirstCharacter(
+                                          termToEnrollData?.name
+                                        )
+                                      : "Not Applicable - No published/advertised term"}{" "}
                                   </div>
                                 </div>
                               </div>
@@ -374,10 +396,14 @@ function NewApplicantSubjectDetails() {
                                 <div className="bg-slate-100 flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
                                   <div className="disabled:bg-slate-50 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6">
                                     <span className="font-medium">
-                                      {termToEnrollData?.startDate &&
-                                        formatDate(termToEnrollData.startDate)}
+                                      {termToEnrollData?.startDate
+                                        ? formatDate(termToEnrollData.startDate)
+                                        : "Not Applicable - No published/advertised term"}
                                     </span>
-                                    <span> to </span>
+                                    <span>
+                                      {" "}
+                                      {termToEnrollData?.startDate && "to"}{" "}
+                                    </span>
                                     <span className="font-medium">
                                       {termToEnrollData?.endDate &&
                                         formatDate(termToEnrollData?.endDate)}
@@ -421,42 +447,51 @@ function NewApplicantSubjectDetails() {
                             >
                               Subjects<span className="text-red-600">*</span>
                             </label>
-                            <Controller
-                              name="enrolledSubjects"
-                              control={control}
-                              rules={{ required: true }}
-                              render={({ field }) => (
-                                <Select
-                                  isMulti
-                                  options={subjectOptions}
-                                  value={subjectOptions?.filter((option) =>
-                                    field?.value?.includes(option?.value)
+                            {termToEnrollData ? (
+                              <>
+                                {" "}
+                                <Controller
+                                  name="enrolledSubjects"
+                                  control={control}
+                                  rules={{ required: true }}
+                                  render={({ field }) => (
+                                    <Select
+                                      isMulti
+                                      options={subjectOptions}
+                                      value={subjectOptions?.filter((option) =>
+                                        field?.value?.includes(option?.value)
+                                      )}
+                                      onChange={(
+                                        options: MultiValue<{
+                                          value: string
+                                          label: string
+                                        }>
+                                      ) => {
+                                        field.onChange(
+                                          options && options.length > 0
+                                            ? options.map(
+                                                (option) => option.value
+                                              )
+                                            : [""] // Pass a non-empty array to trigger Zod validation
+                                        )
+                                      }}
+                                    />
                                   )}
-                                  onChange={(
-                                    options: MultiValue<{
-                                      value: string
-                                      label: string
-                                    }>
-                                  ) => {
-                                    field.onChange(
-                                      options && options.length > 0
-                                        ? options.map((option) => option.value)
-                                        : [""] // Pass a non-empty array to trigger Zod validation
-                                    )
-                                  }}
                                 />
-                              )}
-                            />
-                            <div className="">
-                              {formState.errors?.enrolledSubjects && (
-                                <span className="text-xs text-red-600">
-                                  {
-                                    formState.errors?.enrolledSubjects[0]
-                                      ?.message
-                                  }
-                                </span>
-                              )}
-                            </div>
+                                <div className="">
+                                  {formState.errors?.enrolledSubjects && (
+                                    <span className="text-xs text-red-600">
+                                      {
+                                        formState.errors?.enrolledSubjects[0]
+                                          ?.message
+                                      }
+                                    </span>
+                                  )}
+                                </div>
+                              </>
+                            ) : (
+                              "No Subjects available to enroll"
+                            )}
                           </div>
                         </div>
                       </>
@@ -464,8 +499,12 @@ function NewApplicantSubjectDetails() {
                   </div>
                   {/* 3rd button */}
                   <button
+                    disabled={
+                      (term === "publishedTerm" && !termToEnrollData) ||
+                      (term === "currentTerm" && !termToEnrollData)
+                    }
                     type="submit"
-                    className="inline-flex items-center gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    className="disabled:bg-slate-300 disabled:cursor-not-allowed inline-flex items-center gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                   >
                     {term === "publishedTerm"
                       ? "Enroll and Approve Applicant to Published term"
@@ -509,7 +548,6 @@ function NewApplicantSubjectDetails() {
       )}
 
       <EnrollApplicantModal />
-      <EnrollApplicantToStudentModal />
     </div>
   )
 }

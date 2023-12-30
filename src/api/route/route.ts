@@ -9,6 +9,7 @@ export const route = {
     extendCurrentTerm: `${baseURL}/api/v1/admin/administration/update/extend-term`,
     makeCurrentTerm: `${baseURL}/api/v1/admin/administration/update/make-current-term`,
     makePublishTerm: `${baseURL}/api/v1/admin/administration/update/make-publish-term`,
+    unPublishTerm: `${baseURL}/api/v1/admin/administration/update/un-publish-term`,
     createTermWithSubjectsSetup: `${baseURL}/api/v1/admin/administration/create-new-term-setup`,
     findAllTerms: `${baseURL}/api/v1/admin/administration/find-all-terms`,
     findCurrentTerm: `${baseURL}/api/v1/admin/administration/find-current-term`,

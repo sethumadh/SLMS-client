@@ -13,7 +13,6 @@ function NewStudentApplications() {
   const [query, setQuery] = useState("")
   const [_isLoading, setIsLoading] = useState(false)
   const [currentPage, setCurrentPage] = useState(0)
-  console.log(currentPage)
   const [recordsPerPage, _setRecordPerPage] = useState(10)
   const {
     data: allApplicantData,

@@ -18,6 +18,7 @@ import { formatDate } from "@/helpers/dateFormatter"
 import UpdateTimetableModal from "@/components/Modal/UpdateTimetableModal"
 import { capitalizeFirstCharacter } from "@/helpers/capitalizeFirstCharacter"
 import Icons from "@/constants/icons"
+import { Link } from "react-router-dom"
 
 const teacherOptions = [
   { label: "Ms. Davis", value: "Ms. Davis" },
@@ -157,12 +158,14 @@ export default function EditTimeTable() {
                     isEditMode
                       ? "bg-red-500 text-white hover:bg-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                       : "bg-slate-200 text-black hover:bg-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                  }  px-3 py-2 text-center text-sm font-semibold shadow-sm `}
+                  }  px-3 py-2 text-center text-sm font-semibold shadow-sm ${
+                    !timetableData ? "hidden" : ""
+                  }`}
                 >
                   {isEditMode ? "Cancel" : "Edit Timetable"}
                 </button>
               </div>
-              <div className=" sm:flex-none">
+              <div className={`sm:flex-none ${!timetableData ? "hidden" : ""}`}>
                 <button
                   disabled={!isEditMode}
                   className={`disabled:cursor-not-allowed disabled:bg-slate-300 block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
@@ -171,240 +174,252 @@ export default function EditTimeTable() {
                 </button>
               </div>
             </div>
-            <div className="-mx-4 mt-10 ring-1 ring-gray-300 sm:mx-0 sm:rounded-lg ">
-              <table className="min-w-full divide-y divide-gray-800 border">
-                <thead>
-                  <tr className="">
-                    <th className="px-3 py-3.5 text-left text-lg leading-7 tracking-wider font-semibold text-gray-900 border-4 bg-slate-100">
-                      Time/ Rooms
-                    </th>
-                    {Array.from({ length: NUM_ROOMS }, (_, index) => (
-                      <>
-                        <th
-                          key={index}
-                          className="py-3.5 pl-4 pr-3 text-left text-lg font-semibold text-gray-900 sm:pl-6 border-4 bg-slate-100"
-                        >
-                          Room {index + 1}
+            {timetableData ? (
+              <>
+                {" "}
+                <div className="-mx-4 mt-10 ring-1 ring-gray-300 sm:mx-0 sm:rounded-lg ">
+                  <table className="min-w-full divide-y divide-gray-800 border">
+                    <thead>
+                      <tr className="">
+                        <th className="px-3 py-3.5 text-left text-lg leading-7 tracking-wider font-semibold text-gray-900 border-4 bg-slate-100">
+                          Time/ Rooms
                         </th>
-                      </>
-                    ))}
-                  </tr>
-                </thead>
+                        {Array.from({ length: NUM_ROOMS }, (_, index) => (
+                          <>
+                            <th
+                              key={index}
+                              className="py-3.5 pl-4 pr-3 text-left text-lg font-semibold text-gray-900 sm:pl-6 border-4 bg-slate-100"
+                            >
+                              Room {index + 1}
+                            </th>
+                          </>
+                        ))}
+                      </tr>
+                    </thead>
 
-                <tbody className="mt-8">
-                  {fields.map((field, index) => {
-                    return (
-                      <>
-                        <tr
-                          key={field.id}
-                          className="border border-slate-200  "
-                        >
-                          <td
-                            className="relative py-4 pl-4 pr-3 text-sm sm:pl-6 bg-blue-300 border-4"
-                            style={{ width: "128px", height: "80px" }}
-                          >
-                            {isEditMode ? (
-                              <div className="w-full h-full flex justify-center items-center gap-2">
-                                <input
-                                  type="text"
-                                  defaultValue={field.name}
-                                  {...register(`data.${index}.name` as const)}
-                                  className="w-full flex-1 text-center text-xs rounded-md border-gray-300 shadow-sm"
-                                />
-                                <td col-span-4 className="">
-                                  <button
-                                    disabled={index == 0 || !isEditMode}
-                                    className="flex justify-center gap-4 items-center text-md disabled:cursor-not-allowed disabled:text-slate-500 w-full"
-                                    type="button"
-                                    onClick={() => {
-                                      remove(index)
-                                    }}
-                                  >
-                                    {index == 0 ? (
-                                      <Icons.Trash2 className="text-slate-300" />
-                                    ) : (
-                                      <span className="w-full flex justify-center items-center">
-                                        <span>
-                                          <Icons.Trash2 className="text-red-500 w-4 h-4" />
-                                        </span>
-                                      </span>
-                                    )}
-                                  </button>
-                                </td>
-                                <div className="h-4">
-                                  {errors?.data?.[index]?.rooms?.[0]?.root
-                                    ?.message && (
-                                    <p className="text-red-500 font-bold py-4">
-                                      {
-                                        errors?.data?.[index]?.rooms?.[0]?.root
-                                          ?.message
-                                      }
-                                    </p>
-                                  )}
-                                </div>
-                              </div>
-                            ) : (
-                              <div className="font-medium text-gray-900 text-center w-full h-full flex items-center justify-center">
-                                {field.name}
-                              </div>
-                            )}
-                          </td>
-
-                          {field.rooms.map((room, roomIndex) => {
-                            const teacherKeyPart = room.teacherName || "empty"
-                            const cellKey = `cell-${field.name}-${teacherKeyPart}-${roomIndex}`
-                            return (
-                              <>
-                                <td
-                                  key={cellKey}
-                                  className={`px-3 py-3.5 text-sm text-gray-500 border-4 shadow-sm w-32 h-20 ${
-                                    !room.teacherName &&
-                                    !room.subjectName &&
-                                    !isEditMode
-                                      ? "bg-red-300"
-                                      : ""
-                                  } ${
-                                    room.teacherName &&
-                                    room.subjectName &&
-                                    !isEditMode
-                                      ? "bg-green-300"
-                                      : ""
-                                  }`}
-                                >
-                                  {isEditMode ? (
-                                    <div>
-                                      <Controller
-                                        name={`data.${index}.rooms.${roomIndex}.teacherName`}
-                                        control={control}
-                                        defaultValue={room.teacherName}
-                                        render={({ field }) => (
-                                          <Select
-                                            className=""
-                                            {...field}
-                                            isClearable
-                                            isSearchable
-                                            options={teacherOptions}
-                                            value={teacherOptions.find(
-                                              (option) =>
-                                                option.value === field.value
-                                            )}
-                                            onChange={(selectedOption) =>
-                                              field.onChange(
-                                                selectedOption
-                                                  ? selectedOption.value
-                                                  : ""
-                                              )
-                                            }
-                                            styles={{
-                                              control: (provided) => ({
-                                                ...provided,
-                                                // Add your custom styles here
-                                                backgroundColor: "white",
-                                                borderColor: "lightgray",
-                                                boxShadow: "none",
-                                                "&:hover": {
-                                                  borderColor: "gray",
-                                                },
-                                              }),
-                                              option: (provided, state) => ({
-                                                ...provided,
-                                                // Add your custom styles for options here
-                                                backgroundColor:
-                                                  state.isSelected
-                                                    ? "blue"
-                                                    : "white",
-                                                color: state.isSelected
-                                                  ? "white"
-                                                  : "black",
-                                                "&:hover": {
-                                                  backgroundColor: "lightblue",
-                                                },
-                                              }),
-
-                                              // Add other parts you want to customize like menu, multiValue, etc.
-                                            }}
-                                          />
-                                        )}
-                                      />
-
-                                      <Controller
-                                        name={`data.${index}.rooms.${roomIndex}.subjectName`}
-                                        control={control}
-                                        defaultValue={room.subjectName}
-                                        render={({ field }) => (
-                                          <Select
-                                            {...field}
-                                            isClearable
-                                            isSearchable
-                                            options={subjectOptions}
-                                            value={subjectOptions.find(
-                                              (
-                                                option: SingleValue<{
-                                                  value: string
-                                                  label: string
-                                                }>
-                                              ) => option?.value === field.value
-                                            )}
-                                            onChange={(selectedOption) =>
-                                              field.onChange(
-                                                selectedOption
-                                                  ? selectedOption.value
-                                                  : ""
-                                              )
-                                            }
-                                          />
-                                        )}
-                                      />
-                                      <div>
-                                        {errors.data?.[index]?.rooms?.root
-                                          ?.message && (
-                                          <p className="text-red-500 text-xs">
-                                            {
-                                              errors.data?.[index]?.rooms?.root
-                                                ?.message
-                                            }
-                                          </p>
-                                        )}
-                                      </div>
-                                    </div>
-                                  ) : (
-                                    <>
-                                      <ul
-                                        role="list"
-                                        className="border-blue-500 flex flex-col space-y-8"
+                    <tbody className="mt-8">
+                      {fields.map((field, index) => {
+                        return (
+                          <>
+                            <tr
+                              key={field.id}
+                              className="border border-slate-200  "
+                            >
+                              <td
+                                className="relative py-4 pl-4 pr-3 text-sm sm:pl-6 bg-blue-300 border-4"
+                                style={{ width: "128px", height: "80px" }}
+                              >
+                                {isEditMode ? (
+                                  <div className="w-full h-full flex justify-center items-center gap-2">
+                                    <input
+                                      type="text"
+                                      defaultValue={field.name}
+                                      {...register(
+                                        `data.${index}.name` as const
+                                      )}
+                                      className="w-full flex-1 text-center text-xs rounded-md border-gray-300 shadow-sm"
+                                    />
+                                    <td col-span-4 className="">
+                                      <button
+                                        disabled={index == 0 || !isEditMode}
+                                        className="flex justify-center gap-4 items-center text-md disabled:cursor-not-allowed disabled:text-slate-500 w-full"
+                                        type="button"
+                                        onClick={() => {
+                                          remove(index)
+                                        }}
                                       >
-                                        {!room.teacherName &&
-                                          !room.subjectName && (
-                                            <span className="flex justify-center items-center">
-                                              <span className="text-center text-lg font-light italic">
-                                                No classes Scheduled
-                                              </span>
+                                        {index == 0 ? (
+                                          <Icons.Trash2 className="text-slate-300" />
+                                        ) : (
+                                          <span className="w-full flex justify-center items-center">
+                                            <span>
+                                              <Icons.Trash2 className="text-red-500 w-4 h-4" />
                                             </span>
-                                          )}
-                                        {room.teacherName &&
-                                          room.subjectName && (
-                                            <div>
-                                              <li className="text-black">
-                                                {room.teacherName}
-                                              </li>
-                                              <li className="text-black">
-                                                {room.subjectName &&
-                                                  formatString(
-                                                    room.subjectName
-                                                  )}
-                                              </li>
-                                            </div>
-                                          )}
-                                      </ul>
-                                    </>
-                                  )}
-                                </td>
-                              </>
-                            )
-                          })}
-                        </tr>
-                        {/* add remove */}
-                        {/* <td col-span-4 className="">
+                                          </span>
+                                        )}
+                                      </button>
+                                    </td>
+                                    <div className="h-4">
+                                      {errors?.data?.[index]?.rooms?.[0]?.root
+                                        ?.message && (
+                                        <p className="text-red-500 font-bold py-4">
+                                          {
+                                            errors?.data?.[index]?.rooms?.[0]
+                                              ?.root?.message
+                                          }
+                                        </p>
+                                      )}
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <div className="font-medium text-gray-900 text-center w-full h-full flex items-center justify-center">
+                                    {field.name}
+                                  </div>
+                                )}
+                              </td>
+
+                              {field.rooms.map((room, roomIndex) => {
+                                const teacherKeyPart =
+                                  room.teacherName || "empty"
+                                const cellKey = `cell-${field.name}-${teacherKeyPart}-${roomIndex}`
+                                return (
+                                  <>
+                                    <td
+                                      key={cellKey}
+                                      className={`px-3 py-3.5 text-sm text-gray-500 border-4 shadow-sm w-32 h-20 ${
+                                        !room.teacherName &&
+                                        !room.subjectName &&
+                                        !isEditMode
+                                          ? "bg-red-300"
+                                          : ""
+                                      } ${
+                                        room.teacherName &&
+                                        room.subjectName &&
+                                        !isEditMode
+                                          ? "bg-green-300"
+                                          : ""
+                                      }`}
+                                    >
+                                      {isEditMode ? (
+                                        <div>
+                                          <Controller
+                                            name={`data.${index}.rooms.${roomIndex}.teacherName`}
+                                            control={control}
+                                            defaultValue={room.teacherName}
+                                            render={({ field }) => (
+                                              <Select
+                                                className=""
+                                                {...field}
+                                                isClearable
+                                                isSearchable
+                                                options={teacherOptions}
+                                                value={teacherOptions.find(
+                                                  (option) =>
+                                                    option.value === field.value
+                                                )}
+                                                onChange={(selectedOption) =>
+                                                  field.onChange(
+                                                    selectedOption
+                                                      ? selectedOption.value
+                                                      : ""
+                                                  )
+                                                }
+                                                styles={{
+                                                  control: (provided) => ({
+                                                    ...provided,
+                                                    // Add your custom styles here
+                                                    backgroundColor: "white",
+                                                    borderColor: "lightgray",
+                                                    boxShadow: "none",
+                                                    "&:hover": {
+                                                      borderColor: "gray",
+                                                    },
+                                                  }),
+                                                  option: (
+                                                    provided,
+                                                    state
+                                                  ) => ({
+                                                    ...provided,
+                                                    // Add your custom styles for options here
+                                                    backgroundColor:
+                                                      state.isSelected
+                                                        ? "blue"
+                                                        : "white",
+                                                    color: state.isSelected
+                                                      ? "white"
+                                                      : "black",
+                                                    "&:hover": {
+                                                      backgroundColor:
+                                                        "lightblue",
+                                                    },
+                                                  }),
+
+                                                  // Add other parts you want to customize like menu, multiValue, etc.
+                                                }}
+                                              />
+                                            )}
+                                          />
+
+                                          <Controller
+                                            name={`data.${index}.rooms.${roomIndex}.subjectName`}
+                                            control={control}
+                                            defaultValue={room.subjectName}
+                                            render={({ field }) => (
+                                              <Select
+                                                {...field}
+                                                isClearable
+                                                isSearchable
+                                                options={subjectOptions}
+                                                value={subjectOptions.find(
+                                                  (
+                                                    option: SingleValue<{
+                                                      value: string
+                                                      label: string
+                                                    }>
+                                                  ) =>
+                                                    option?.value ===
+                                                    field.value
+                                                )}
+                                                onChange={(selectedOption) =>
+                                                  field.onChange(
+                                                    selectedOption
+                                                      ? selectedOption.value
+                                                      : ""
+                                                  )
+                                                }
+                                              />
+                                            )}
+                                          />
+                                          <div>
+                                            {errors.data?.[index]?.rooms?.root
+                                              ?.message && (
+                                              <p className="text-red-500 text-xs">
+                                                {
+                                                  errors.data?.[index]?.rooms
+                                                    ?.root?.message
+                                                }
+                                              </p>
+                                            )}
+                                          </div>
+                                        </div>
+                                      ) : (
+                                        <>
+                                          <ul
+                                            role="list"
+                                            className="border-blue-500 flex flex-col space-y-8"
+                                          >
+                                            {!room.teacherName &&
+                                              !room.subjectName && (
+                                                <span className="flex justify-center items-center">
+                                                  <span className="text-center text-lg font-light italic">
+                                                    No classes Scheduled
+                                                  </span>
+                                                </span>
+                                              )}
+                                            {room.teacherName &&
+                                              room.subjectName && (
+                                                <div>
+                                                  <li className="text-black">
+                                                    {room.teacherName}
+                                                  </li>
+                                                  <li className="text-black">
+                                                    {room.subjectName &&
+                                                      formatString(
+                                                        room.subjectName
+                                                      )}
+                                                  </li>
+                                                </div>
+                                              )}
+                                          </ul>
+                                        </>
+                                      )}
+                                    </td>
+                                  </>
+                                )
+                              })}
+                            </tr>
+                            {/* add remove */}
+                            {/* <td col-span-4 className="">
                           <button
                             disabled={index == 0 || !isEditMode}
                             className="flex justify-center gap-4 items-center text-md disabled:bg-slate-200 disabled:cursor-not-allowed disabled:text-slate-500 bg-red-400 h-12 w-full"
@@ -423,35 +438,51 @@ export default function EditTimeTable() {
                             )}
                           </button>
                         </td> */}
-                      </>
-                    )
-                  })}
-                </tbody>
-              </table>
-            </div>
-            <div className="w-full flex justify-center items-center">
-              <button
-                type="button"
-                disabled={!isEditMode}
-                className="rounded-md disabled:bg-slate-200 disabled:cursor-not-allowed disabled:text-black/50 mt-8 bg-indigo-600 p-2 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                onClick={() => {
-                  append({
-                    name: "",
-                    rooms: [
-                      { subjectName: "", teacherName: "" },
-                      { subjectName: "", teacherName: "" },
-                      { subjectName: "", teacherName: "" },
-                      { subjectName: "", teacherName: "" },
-                      { subjectName: "", teacherName: "" },
-                      { subjectName: "", teacherName: "" },
-                    ],
-                  })
-                }}
-              >
-                Add a new Timeslot
-                {/* <Icons.PlusIcon className="h-5 w-5" aria-hidden="true" /> */}
-              </button>
-            </div>
+                          </>
+                        )
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+                <div className="w-full flex justify-center items-center">
+                  <button
+                    type="button"
+                    disabled={!isEditMode}
+                    className="rounded-md disabled:bg-slate-200 disabled:cursor-not-allowed disabled:text-black/50 mt-8 bg-indigo-600 p-2 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    onClick={() => {
+                      append({
+                        name: "",
+                        rooms: [
+                          { subjectName: "", teacherName: "" },
+                          { subjectName: "", teacherName: "" },
+                          { subjectName: "", teacherName: "" },
+                          { subjectName: "", teacherName: "" },
+                          { subjectName: "", teacherName: "" },
+                          { subjectName: "", teacherName: "" },
+                        ],
+                      })
+                    }}
+                  >
+                    Add a new Timeslot
+                    {/* <Icons.PlusIcon className="h-5 w-5" aria-hidden="true" /> */}
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <>
+                  <div className="w-full h-full text-center text-lg font-semibold">
+                    There is no timetable to Edit. Please create a timetable at{" "}
+                    <Link
+                      className="text-sm text-blue-400 underline underline-offset-4"
+                      to={"/admin/timetable/create-timetable"}
+                    >
+                      Create Timetable
+                    </Link>
+                  </div>
+                </>
+              </>
+            )}
           </div>
         </form>
       )}

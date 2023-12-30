@@ -27,6 +27,7 @@ import TermDateModal from "@/components/Modal/TermDateModal"
 import { useTermExtendmutation } from "@/hooks/Admin.Administration.Term/mutation/useTermExtendMutation"
 import { useTermNameChangeMutation } from "@/hooks/Admin.Administration.Term/mutation/useTermNameChangeMutation"
 import MakeCurrentTermModal from "@/components/Modal/MakeCurrentTermModal"
+import UnPublishTermModal from "@/components/Modal/UnPublishTermModal"
 
 export type ChangePublishedTermNameSchema = z.infer<
   typeof changePublishedTermNameSchema
@@ -126,6 +127,7 @@ function PublishedTerm() {
       </div>
     )
   }
+
   return (
     <div className="container">
       <div className="px-4 sm:px-0 flex justify-between gap-x-4 lg:mt-4">
@@ -463,6 +465,38 @@ function PublishedTerm() {
                   </span>
                 </dd>
               </div>
+              <div className="px-4 py-2 sm:grid sm:grid-cols-4 sm:gap-4 sm:px-0">
+                <dt className="text-sm font-medium leading-6 text-gray-900">
+                  Remove the term from published term
+                </dt>
+                <dd className="mt-1 flex text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                  <span className="flex-shrink-0 flex justify-center items-end gap-4 italic">
+                    <button
+                      disabled={!PublishedTerm?.isPublish}
+                      type="button"
+                      className="disabled:bg-slate-200 disabled:text-gray-400  px-2 border border-indigo-300 rounded-md bg-white font-medium text-red-600 hover:text-red-500"
+                      onClick={() => {
+                        dispatch(
+                          setOpenModal({
+                            isOpen: true,
+                            type: "unPublishTerm",
+                            data: {
+                              id: PublishedTerm?.id,
+                              value: PublishedTerm?.name,
+                            },
+                          })
+                        )
+                      }}
+                    >
+                      Unpublish term
+                    </button>
+                    <p className="text-xs">
+                      This action will remove this term from being
+                      advertised/published on the application page
+                    </p>
+                  </span>
+                </dd>
+              </div>
               {PublishedTerm && (
                 <>
                   <TermDetails
@@ -487,6 +521,7 @@ function PublishedTerm() {
       <TermNameModal ref={saveTermNameRef} />
       <TermDateModal ref={saveTermDateRef} />
       <MakeCurrentTermModal />
+      <UnPublishTermModal/>
     </div>
   )
 }
