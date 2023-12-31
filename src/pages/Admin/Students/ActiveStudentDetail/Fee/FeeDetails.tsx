@@ -5,7 +5,6 @@ import { useParams } from "react-router-dom"
 import { cn } from "@/lib/utils"
 import { capitalizeFirstCharacter } from "@/helpers/capitalizeFirstCharacter"
 
-
 export default function FeeDetails() {
   const params = useParams()
   const { data: currentTerm } = useQuery({
@@ -17,7 +16,7 @@ export default function FeeDetails() {
   // console.log(currentTerm)
   const {
     data: activeStudentFeeData,
-    // isLoading: activeStudentDataIsLoading,
+    isLoading: activeStudentDataIsLoading,
     // isError: activeStudentDataIsError,
   } = useQuery({
     queryKey: [
@@ -57,111 +56,142 @@ export default function FeeDetails() {
           </button>
         </div> */}
       </div>
-      <div className="mt-8 flow-root">
-        <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-          <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-            <table className="min-w-full divide-y divide-gray-300">
-              <thead>
-                <tr>
-                  <th
-                    scope="col"
-                    className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
-                  >
-                    Subject Group
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                  >
-                    Type
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                  >
-                    Due Date
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                  >
-                    Due Amount
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                  >
-                    Paid date
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                  >
-                    Method
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                  >
-                    Manage fee
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white">
-                {activeStudentFeeData?.map((feeData) => (
-                  <Fragment
-                    key={feeData.termSubjectGroup.subjectGroup.groupName}
-                  >
-                    <tr className="border-t border-gray-200">
+      {activeStudentDataIsLoading ? (
+        <>
+          <div className="flex flex-col items-center justify-center h-[500px] w-ful">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"
+                opacity=".25"
+              />
+              <path d="M10.14,1.16a11,11,0,0,0-9,8.92A1.59,1.59,0,0,0,2.46,12,1.52,1.52,0,0,0,4.11,10.7a8,8,0,0,1,6.66-6.61A1.42,1.42,0,0,0,12,2.69h0A1.57,1.57,0,0,0,10.14,1.16Z">
+                <animateTransform
+                  attributeName="transform"
+                  type="rotate"
+                  dur="0.75s"
+                  values="0 12 12;360 12 12"
+                  repeatCount="indefinite"
+                />
+              </path>
+            </svg>
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="mt-8 flow-root">
+            <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+              <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                <table className="min-w-full divide-y divide-gray-300">
+                  <thead>
+                    <tr>
                       <th
-                        colSpan={7}
-                        scope="colgroup"
-                        className="bg-gray-50 py-2 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3"
+                        scope="col"
+                        className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
                       >
-                        {feeData.termSubjectGroup.subjectGroup.groupName &&
-                          capitalizeFirstCharacter(
-                            feeData.termSubjectGroup.subjectGroup.groupName
-                          )}
+                        Subject Group
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      >
+                        Type
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      >
+                        Due Date
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      >
+                        Due Amount
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      >
+                        Paid date
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      >
+                        Method
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      >
+                        Manage fee
                       </th>
                     </tr>
-                    {feeData.feePayment.map((_fee, feeIdx) => (
-                      <tr
-                        key={feeIdx}
-                        className={cn(
-                          feeIdx === 0 ? "border-gray-300" : "border-gray-200",
-                          "border-t"
-                        )}
+                  </thead>
+                  <tbody className="bg-white">
+                    {activeStudentFeeData?.map((feeData) => (
+                      <Fragment
+                        key={feeData.termSubjectGroup.subjectGroup.groupName}
                       >
-                        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">
-                          dum
-                        </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          title
-                        </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          email
-                        </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          role
-                        </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          role
-                        </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          role
-                        </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          role
-                        </td>
-                      </tr>
+                        <tr className="border-t border-gray-200">
+                          <th
+                            colSpan={7}
+                            scope="colgroup"
+                            className="bg-gray-50 py-2 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3"
+                          >
+                            {feeData.termSubjectGroup.subjectGroup.groupName &&
+                              capitalizeFirstCharacter(
+                                feeData.termSubjectGroup.subjectGroup.groupName
+                              )}
+                          </th>
+                        </tr>
+                        {feeData.feePayment.map((_fee, feeIdx) => (
+                          <tr
+                            key={feeIdx}
+                            className={cn(
+                              feeIdx === 0
+                                ? "border-gray-300"
+                                : "border-gray-200",
+                              "border-t"
+                            )}
+                          >
+                            <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3 truncate max-w-[100px]">
+                              dum
+                            </td>
+                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                              title
+                            </td>
+                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                              email
+                            </td>
+                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                              role
+                            </td>
+                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                              role
+                            </td>
+                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                              role
+                            </td>
+                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                              role
+                            </td>
+                          </tr>
+                        ))}
+                      </Fragment>
                     ))}
-                  </Fragment>
-                ))}
-              </tbody>
-            </table>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        </>
+      )}
     </div>
   )
 }
