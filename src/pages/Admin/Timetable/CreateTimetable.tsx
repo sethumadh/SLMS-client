@@ -16,6 +16,7 @@ import { setOpenModal } from "@/redux/slice/modalSlice"
 import { capitalizeFirstCharacter } from "@/helpers/capitalizeFirstCharacter"
 import CreateTimetableModal from "@/components/Modal/CreateTimetableModal"
 import Icons from "@/constants/icons"
+import { Link } from "react-router-dom"
 
 const teacherOptions = [
   { label: "Ms. Davis", value: "Ms. Davis" },
@@ -38,7 +39,13 @@ export default function CreateTimeTable() {
     queryKey: [api.timetable.timetable.findActiveTimetable.querykey],
     queryFn: api.timetable.timetable.findActiveTimetable.query,
   })
-
+  const { data: currentTerm, isLoading } = useQuery({
+    queryKey: [
+      api.admin.term.currentTerm.findCurrentTermAdministration.queryKey,
+    ],
+    queryFn: api.admin.term.currentTerm.findCurrentTermAdministration.query,
+  })
+  console.log(currentTerm)
   const {
     register,
     handleSubmit,
@@ -93,7 +100,7 @@ export default function CreateTimeTable() {
 
     return data
   }, [currentTermClassesData])
-
+  console.log(currentTermClassesData)
   const onSubmit = (data: TimetableSchema) => {
     // settimetableData(data)
     setEditMode(false)
@@ -112,7 +119,10 @@ export default function CreateTimeTable() {
 
   return (
     <div>
-      {currentTermClassesLoading || timetableDataLoading || pageLoad ? (
+      {currentTermClassesLoading ||
+      timetableDataLoading ||
+      pageLoad ||
+      isLoading ? (
         <>
           <div className="h-[800px] flex justify-center items-center">
             <LoadingSpinner className="w-20 h-20" />
@@ -123,7 +133,7 @@ export default function CreateTimeTable() {
           <div className="px-4 sm:px-6 lg:px-20 lg:py-12">
             <div className="border-b-2 border-gray-200 pb-5 ">
               <h3 className="text-2xl font-semibold leading-6 text-gray-900">
-                Timetable for{" "}
+                You can create a new Timetable for{" "}
                 {timetableData?.name &&
                   capitalizeFirstCharacter(timetableData?.name)}
               </h3>
@@ -131,6 +141,10 @@ export default function CreateTimeTable() {
             <div className="sm:flex sm:items-center mt-8 gap-20">
               <div className="sm:flex-none">
                 <button
+                  disabled={
+                    currentTermClassesData?.termSubjectLevel.length == 0 ||
+                    !currentTermClassesData
+                  }
                   type="button"
                   onClick={() => {
                     setPageLoad(true)
@@ -142,8 +156,8 @@ export default function CreateTimeTable() {
                   className={`block rounded-md ${
                     isEditMode
                       ? "bg-red-500 text-white hover:bg-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                      : "bg-slate-200 text-black hover:bg-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                  }  px-3 py-2 text-center text-sm font-semibold shadow-sm `}
+                      : "bg-indigo-500 text-white hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  }  px-3 py-2 text-center text-sm font-semibold shadow-sm disabled:cursor-not-allowed disabled:bg-slate-300 disabled:text-white`}
                 >
                   {isEditMode ? "Cancel" : "Create Timetable"}
                 </button>
@@ -157,6 +171,22 @@ export default function CreateTimeTable() {
                 </button>
               </div>
             </div>
+            {currentTermClassesData?.termSubjectLevel.length == 0 ? (
+              <p className="mt-4 text-red-400 font-bold">
+                **You must create sections for levels and subject for the
+                current term to create timetable. If you have not created a
+                current term please make one and create sections. Create section
+                at{" "}
+                <Link
+                  className="text-blue-400 textsm underline underline-offset-4 font-semibold"
+                  to={`/admin/administration/manage-class`}
+                >
+                  create sections page
+                </Link>
+              </p>
+            ) : (
+              <p className="text-xs mt-2">*You have sections available to create classes and timetable</p>
+            )}
             <div className="-mx-4 mt-10 ring-1 ring-gray-300 sm:mx-0 sm:rounded-lg ">
               <table className="min-w-full divide-y divide-gray-800 border">
                 <thead>
@@ -197,7 +227,7 @@ export default function CreateTimeTable() {
                                   {...register(`data.${index}.name` as const)}
                                   className="w-full flex-1 text-center text-xs rounded-md border-gray-300 shadow-sm"
                                 />
-                                <td col-span-4 className="">
+                                <div col-span-4 className="">
                                   <button
                                     disabled={index == 0 || !isEditMode}
                                     className="flex justify-center gap-4 items-center text-md disabled:cursor-not-allowed disabled:text-slate-500 w-full"
@@ -216,7 +246,7 @@ export default function CreateTimeTable() {
                                       </span>
                                     )}
                                   </button>
-                                </td>
+                                </div>
                                 <div className="h-4">
                                   {errors?.data?.[index]?.rooms?.[0]?.root
                                     ?.message && (

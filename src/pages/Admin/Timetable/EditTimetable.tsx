@@ -41,7 +41,12 @@ export default function EditTimeTable() {
     queryKey: [api.timetable.timetable.findActiveTimetable.querykey],
     queryFn: api.timetable.timetable.findActiveTimetable.query,
   })
-
+  const { data: currentTerm, isLoading } = useQuery({
+    queryKey: [
+      api.admin.term.currentTerm.findCurrentTermAdministration.queryKey,
+    ],
+    queryFn: api.admin.term.currentTerm.findCurrentTermAdministration.query,
+  })
   const {
     register,
     handleSubmit,
@@ -109,11 +114,13 @@ export default function EditTimeTable() {
       })
     )
   }
-  console.log(timetableData)
 
   return (
     <div>
-      {currentTermClassesLoading || timetableDataLoading || pageLoad ? (
+      {currentTermClassesLoading ||
+      timetableDataLoading ||
+      pageLoad ||
+      isLoading ? (
         <>
           <div className="h-[800px] flex justify-center items-center">
             <LoadingSpinner className="w-20 h-20" />
@@ -124,22 +131,59 @@ export default function EditTimeTable() {
           <div className="px-4 sm:px-6 lg:px-20 lg:py-12">
             <div className="border-b-2 border-gray-200 pb-5 ">
               <h3 className="text-2xl font-semibold leading-6 text-gray-900">
-                Timetable for current Term{" "}
-                <span className="underline underline-offset-4 text-blue-300 italic">
+                <span className="underline">
                   {timetableData?.name &&
-                    capitalizeFirstCharacter(timetableData?.name)}
+                    currentTermClassesData?.termSubjectLevel.length != 0 &&
+                    timetableData?.isActive &&
+                    currentTerm?.id ===
+                      timetableData?.termId &&(
+                        <span>
+                          {" "}
+                          Timetable for{" "}
+                          {capitalizeFirstCharacter(timetableData?.name)}
+                        </span>
+                      )}
                 </span>
               </h3>
+              {timetableData?.isActive &&
+                currentTerm?.id === timetableData?.termId && (
+                  <p className="text-sm text-blue-400 font-semibold italic mt-2">
+                    *This is the timetable for the current term for your
+                    organisation.
+                  </p>
+                )}
               <div className="flex flex-col gap-1 mt-4">
-                <p className="mt-2 max-w-4xl text-sm text-gray-500">
-                  Created on -{" "}
+              <p className="mt-2 max-w-4xl text-sm text-gray-500">
                   {timetableData?.createdAt &&
-                    formatDate(timetableData?.createdAt)}
+                    currentTermClassesData?.termSubjectLevel.length != 0 &&
+                    timetableData?.isActive &&
+                    currentTerm?.id === timetableData?.termId && (
+                      <span>
+                        Created on -{" "}
+                        {currentTermClassesData?.termSubjectLevel.length != 0 &&
+                        timetableData?.isActive &&
+                        currentTerm?.id === timetableData?.termId
+                          ? formatDate(timetableData?.createdAt)
+                          : "NA"}
+                      </span>
+                    )}
                 </p>
                 <p className="mt-2 max-w-4xl text-sm text-gray-500">
-                  Last updated on -{" "}
                   {timetableData?.updatedAt &&
-                    formatDate(timetableData?.updatedAt)}
+                    currentTermClassesData?.termSubjectLevel.length != 0 &&
+                    timetableData?.isActive &&
+                    currentTerm?.id === timetableData?.termId && (
+                      <span>
+                        {" "}
+                        Last updated on -{" "}
+                        {currentTermClassesData?.termSubjectLevel.length != 0 &&
+                        timetableData?.isActive &&
+                        currentTerm?.id === timetableData?.termId
+                          ? formatDate(timetableData?.updatedAt)
+                          : "NA"}
+                      </span>
+                    )}
+
                 </p>
               </div>
             </div>
@@ -159,13 +203,25 @@ export default function EditTimeTable() {
                       ? "bg-red-500 text-white hover:bg-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                       : "bg-slate-200 text-black hover:bg-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                   }  px-3 py-2 text-center text-sm font-semibold shadow-sm ${
-                    !timetableData ? "hidden" : ""
+                    timetableData?.isActive ||
+                    currentTermClassesData?.termSubjectLevel.length == 0 ||
+                    currentTerm?.id === timetableData?.termId
+                      ? "hidden"
+                      : ""
                   }`}
                 >
                   {isEditMode ? "Cancel" : "Edit Timetable"}
                 </button>
               </div>
-              <div className={`sm:flex-none ${!timetableData ? "hidden" : ""}`}>
+              <div
+                className={`sm:flex-none ${
+                  timetableData?.isActive ||
+                  currentTermClassesData?.termSubjectLevel.length == 0 ||
+                  currentTerm?.id === timetableData?.termId
+                    ? "hidden"
+                    : ""
+                }`}
+              >
                 <button
                   disabled={!isEditMode}
                   className={`disabled:cursor-not-allowed disabled:bg-slate-300 block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
@@ -174,7 +230,9 @@ export default function EditTimeTable() {
                 </button>
               </div>
             </div>
-            {timetableData ? (
+            {currentTermClassesData?.termSubjectLevel.length != 0 &&
+            timetableData?.isActive &&
+            currentTerm?.id === timetableData?.termId ? (
               <>
                 {" "}
                 <div className="-mx-4 mt-10 ring-1 ring-gray-300 sm:mx-0 sm:rounded-lg ">
@@ -418,26 +476,6 @@ export default function EditTimeTable() {
                                 )
                               })}
                             </tr>
-                            {/* add remove */}
-                            {/* <td col-span-4 className="">
-                          <button
-                            disabled={index == 0 || !isEditMode}
-                            className="flex justify-center gap-4 items-center text-md disabled:bg-slate-200 disabled:cursor-not-allowed disabled:text-slate-500 bg-red-400 h-12 w-full"
-                            type="button"
-                            onClick={() => {
-                              remove(index)
-                            }}
-                          >
-                            {index == 0 ? (
-                              <Icons.Trash2 className="text-slate-300" />
-                            ) : (
-                              <>
-                                <Icons.Trash2 />
-                                {field.name}
-                              </>
-                            )}
-                          </button>
-                        </td> */}
                           </>
                         )
                       })}

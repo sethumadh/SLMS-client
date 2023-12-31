@@ -20,6 +20,7 @@ const timetableDataSchema = z.array(timeSlotSchema)
 const fullTimetableSchema = z.object({
   id: z.number(),
   name: z.string().optional(),
+  termId: z.number(),
   isActive: z.boolean(),
   data: timetableDataSchema,
   updatedAt: z.string(),

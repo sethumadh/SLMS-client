@@ -17,6 +17,7 @@ import { setOpenModal } from "@/redux/slice/modalSlice"
 import { formatDate } from "@/helpers/dateFormatter"
 import UpdateTimetableModal from "@/components/Modal/UpdateTimetableModal"
 import { capitalizeFirstCharacter } from "@/helpers/capitalizeFirstCharacter"
+import { Link } from "react-router-dom"
 
 const teacherOptions = [
   { label: "Ms. Davis", value: "Ms. Davis" },
@@ -37,6 +38,12 @@ export default function ViewTimeTable() {
   const { data: timetableData, isLoading: timetableDataLoading } = useQuery({
     queryKey: [api.timetable.timetable.findActiveTimetable.querykey],
     queryFn: api.timetable.timetable.findActiveTimetable.query,
+  })
+  const { data: currentTerm, isLoading } = useQuery({
+    queryKey: [
+      api.admin.term.currentTerm.findCurrentTermAdministration.queryKey,
+    ],
+    queryFn: api.admin.term.currentTerm.findCurrentTermAdministration.query,
   })
 
   const {
@@ -106,10 +113,11 @@ export default function ViewTimeTable() {
       })
     )
   }
-
+  console.log(timetableData)
+  console.log(currentTermClassesData)
   return (
     <div>
-      {currentTermClassesLoading || timetableDataLoading ? (
+      {currentTermClassesLoading || timetableDataLoading || isLoading ? (
         <>
           <div className="h-[600px] flex justify-center items-center">
             <LoadingSpinner className="w-24 h-24" />
@@ -120,24 +128,61 @@ export default function ViewTimeTable() {
           <div className="px-4 sm:px-6 lg:px-20 lg:py-12">
             <div className="border-b-2 border-gray-200 pb-5 ">
               <h3 className="text-2xl font-semibold leading-6 text-gray-900">
-                Timetable for{" "}
-                {timetableData?.name &&
-                  capitalizeFirstCharacter(timetableData?.name)}
+                {timetableData?.name && (
+                  <span>
+                    {" "}
+                    Timetable for{" "}
+                    {capitalizeFirstCharacter(timetableData?.name)}
+                  </span>
+                )}
               </h3>
+              {timetableData?.isActive &&
+                currentTerm?.id === timetableData?.termId && (
+                  <p className="text-sm text-blue-400 font-semibold italic mt-2">
+                    *This is the timetable for the current term for your
+                    organisation.
+                  </p>
+                )}
+
               <div className="flex flex-col gap-1 mt-4">
                 <p className="mt-2 max-w-4xl text-sm text-gray-500">
-                  Created on -{" "}
                   {timetableData?.createdAt &&
-                    formatDate(timetableData?.createdAt)}
+                    currentTermClassesData?.termSubjectLevel.length != 0 &&
+                    timetableData?.isActive &&
+                    currentTerm?.id === timetableData?.termId && (
+                      <span>
+                        Created on -{" "}
+                        {currentTermClassesData?.termSubjectLevel.length != 0 &&
+                        timetableData?.isActive &&
+                        currentTerm?.id === timetableData?.termId
+                          ? formatDate(timetableData?.createdAt)
+                          : "NA"}
+                      </span>
+                    )}
                 </p>
                 <p className="mt-2 max-w-4xl text-sm text-gray-500">
-                  Last updated on -{" "}
                   {timetableData?.updatedAt &&
-                    formatDate(timetableData?.updatedAt)}
+                    currentTermClassesData?.termSubjectLevel.length != 0 &&
+                    timetableData?.isActive &&
+                    currentTerm?.id === timetableData?.termId && (
+                      <span>
+                        {" "}
+                        Last updated on -{" "}
+                        {currentTermClassesData?.termSubjectLevel.length != 0 &&
+                        timetableData?.isActive &&
+                        currentTerm?.id === timetableData?.termId
+                          ? formatDate(timetableData?.updatedAt)
+                          : "NA"}
+                      </span>
+                    )}
                 </p>
               </div>
             </div>
-            <div className="sm:flex sm:items-center mt-8 gap-20">
+            <div
+              className="sm:flex sm:items-center mt-8 gap-20
+
+            "
+            >
               <div className="sm:flex-none">
                 <button
                   type="button"
@@ -160,7 +205,10 @@ export default function ViewTimeTable() {
                 </button>
               </div>
             </div>
-            {timetableData ? (
+
+            {currentTermClassesData?.termSubjectLevel.length != 0 &&
+            timetableData?.isActive &&
+            currentTerm?.id === timetableData?.termId ? (
               <>
                 {" "}
                 <div className="-mx-4 mt-10 ring-1 ring-gray-300 sm:mx-0 sm:rounded-lg ">
@@ -391,7 +439,13 @@ export default function ViewTimeTable() {
             ) : (
               <>
                 <div className="w-full h-full text-center text-lg font-semibold">
-                  There is no timetable to view
+                  There is no timetable to view. Please create new time table at{" "}
+                  <Link
+                    className="text-sm text-blue-400 underline underline-offset-4"
+                    to={"/admin/timetable/create-timetable"}
+                  >
+                    Create Timetable
+                  </Link>
                 </div>
               </>
             )}
