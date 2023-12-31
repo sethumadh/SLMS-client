@@ -8,6 +8,7 @@ export default function AllTerms() {
     queryKey: [api.admin.term.findAllTerms.queryKey],
     queryFn: api.admin.term.findAllTerms.query,
   })
+
   return (
     <div className="px-4 sm:px-6 lg:px-8 mt-4">
       <div className="sm:flex sm:items-center">
@@ -101,7 +102,7 @@ export default function AllTerms() {
                     </th>
                   </tr>
                 </thead>
-                {allTermData?.length === 0 ? (
+                {allTermData?.length != 0 ? (
                   <>
                     {" "}
                     <tbody className="divide-y divide-gray-200 bg-white">
