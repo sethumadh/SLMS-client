@@ -21,6 +21,12 @@ export const useMakeCurrentTermMutation = (loadingToastId: string | null) => {
           ],
         })
         queryClient.invalidateQueries({
+          queryKey: [
+            api.admin.term.publishedTerm.findPublishedTermAdministration
+              .queryKey,
+          ],
+        })
+        queryClient.invalidateQueries({
           queryKey: [api.application.publishedTerm.getPublishedTerm.queryKey],
         })
         queryClient.invalidateQueries({

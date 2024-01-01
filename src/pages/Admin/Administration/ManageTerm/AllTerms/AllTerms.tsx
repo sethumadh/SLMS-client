@@ -104,25 +104,19 @@ export default function AllTerms() {
                 </thead>
                 {allTermData?.length != 0 ? (
                   <>
-                    {" "}
                     <tbody className="divide-y divide-gray-200 bg-white">
                       {allTermData?.map((term) => (
                         <tr key={term.name}>
                           <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                             <div className="flex items-center">
-                              <div className="">
-                                <div className="font-medium text-gray-900">
-                                  {term.name}
-                                </div>
-                                <div className="mt-1 text-gray-500">
-                                  {/* {term.endDate} */}
-                                </div>
+                              <div className="font-medium text-gray-900">
+                                {term.name}
                               </div>
                             </div>
                           </td>
                           <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
                             <div className="text-gray-900">
-                              {term.startDate && formatDate(term.startDate)}{" "}
+                              {term.startDate && formatDate(term.startDate)}
                             </div>
                           </td>
                           <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-900">

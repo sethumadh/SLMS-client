@@ -87,7 +87,7 @@ const MakeCurrentTermModal = () => {
                       confirm.
                     </Dialog.Title>
                     <div className="mt-2 flex w-full justify-between items-center">
-                      <p className="text-lg font-semibold text-gray-800 flex flex-col items-start">
+                      <div className="text-lg font-semibold text-gray-800 flex flex-col items-start">
                         <span className="flex items-center justify-center">
                           <span className="text-red-600">*</span>
                           <span>Do you want to make this term current ?</span>
@@ -97,7 +97,7 @@ const MakeCurrentTermModal = () => {
                           This will replace the existing current term with
                           published term.
                         </p>
-                      </p>
+                      </div>
                       <div className="w-12">
                         <Toggle
                           enabled={currentEnabled}

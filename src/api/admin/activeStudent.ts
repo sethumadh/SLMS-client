@@ -112,6 +112,11 @@ const subjectEnrollmentSchema = z.object({
   id: z.number(),
   enrollmentId: z.number(),
   termSubjectId: z.number(),
+  termSubject: z.object({
+    subject: z.object({
+      name: z.string(),
+    }),
+  }),
   // grade: z.string(),
   // attendance: z.array(z.any()) // or a more specific type if you know the structure of attendance
 })
@@ -155,7 +160,7 @@ const feePaymentSchema = z.object({
   feeId: z.number(),
   dueDate: z.string(), // or z.date()
   paidDate: z.string().nullable(), // or z.date().nullable()
-  amount: z.number(),
+  amountPaid: z.number(),
   dueAmount: z.number(),
   studentTermFeeId: z.number(),
   status: z.string(),
@@ -174,6 +179,12 @@ const feeDetailSchema = z.object({
 const feeDetailsArraySchema = z.array(feeDetailSchema)
 
 // fee
+// find subject enrolled by student per term subject group
+const enrolledSubjectSchema = z.object({
+  subjectId: z.number(),
+  subjectName: z.string(),
+})
+// find subject enrolled by student per term subject group
 export type EnrollDataSchema = z.infer<typeof enrollDataSchema>
 export const activeStudent = {
   findAllActiveStudents: {
@@ -223,7 +234,6 @@ export const activeStudent = {
             },
           }
         )
-        console.log(response.data)
 
         return activeStudentsDataSchema.parse(response.data)
       } catch (error) {
@@ -246,6 +256,7 @@ export const activeStudent = {
         const response = await axios.get(
           `${route.activeStudents.findActiveStudentById}/${id}`
         )
+        console.log(response.data)
         return activeStudentSchema.parse(response.data)
       } catch (error) {
         if (error instanceof z.ZodError) {
@@ -270,6 +281,29 @@ export const activeStudent = {
         )
         console.log(response.data)
         return feeDetailsArraySchema.parse(response.data)
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          // Handle Zod validation error
+          console.error("Zod validation error:", error.issues)
+        } else {
+          // Handle other types of errors (e.g., network errors)
+          console.error("Error:", error)
+        }
+        throw error // Re-throw the error if you want to propagate it
+      }
+    },
+  },
+  findTermSubjectGroupIdEnrolledSubjects: {
+    querykey: "findTermSubjectGroupIdEnrolledSubjects",
+    schema: enrolledSubjectSchema,
+    query: async (id: string, termSubjectGroupId: number) => {
+      try {
+        const response = await axios.get(
+          `${route.activeStudents.findTermSubjectGroupIdEnrolledSubjects}/${id}`,
+          { params: { termSubjectGroupId } }
+        )
+
+        return enrolledSubjectSchema.parse(response.data)
       } catch (error) {
         if (error instanceof z.ZodError) {
           // Handle Zod validation error

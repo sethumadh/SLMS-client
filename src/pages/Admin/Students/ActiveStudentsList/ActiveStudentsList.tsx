@@ -95,7 +95,7 @@ function ActiveStudentsList() {
   ) => {
     console.log(selectedClass)
   }
-  console.log(subjectOption)
+
   const transformedSubjectOptions = useMemo(() => {
     return (
       currentTerm?.termSubject?.map((item) => {

@@ -288,7 +288,6 @@ export const lateEnrolledStudent = {
   enrollLateEnrolledStudentToCurrentTerm: {
     queryKey: "enrollLateEnrolledStudentToCurrentTerm",
     mutation: async ({ id, termId }: { id: string; termId: number }) => {
-      console.log(id, termId)
       try {
         const response = await axios.post(
           `${route.lateEnrolledStudents.enrollLateStudentToActive}`,

@@ -4,6 +4,7 @@ import { Fragment } from "react"
 import { useParams } from "react-router-dom"
 import { cn } from "@/lib/utils"
 import { capitalizeFirstCharacter } from "@/helpers/capitalizeFirstCharacter"
+import { formatDate } from "@/helpers/dateFormatter"
 
 export default function FeeDetails() {
   const params = useParams()
@@ -13,7 +14,7 @@ export default function FeeDetails() {
     ],
     queryFn: api.admin.term.currentTerm.findCurrentTermAdministration.query,
   })
-  // console.log(currentTerm)
+
   const {
     data: activeStudentFeeData,
     isLoading: activeStudentDataIsLoading,
@@ -34,6 +35,7 @@ export default function FeeDetails() {
     },
     enabled: !!params.id && !!currentTerm?.id,
   })
+
   console.log(activeStudentFeeData)
 
   return (
@@ -88,7 +90,7 @@ export default function FeeDetails() {
               <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
                 <table className="min-w-full divide-y divide-gray-300">
                   <thead>
-                    <tr>
+                    <tr className="">
                       <th
                         scope="col"
                         className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
@@ -117,7 +119,7 @@ export default function FeeDetails() {
                         scope="col"
                         className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                       >
-                        Paid date
+                        Paid Date
                       </th>
                       <th
                         scope="col"
@@ -150,7 +152,7 @@ export default function FeeDetails() {
                               )}
                           </th>
                         </tr>
-                        {feeData.feePayment.map((_fee, feeIdx) => (
+                        {feeData.feePayment.map((fee, feeIdx) => (
                           <tr
                             key={feeIdx}
                             className={cn(
@@ -161,22 +163,34 @@ export default function FeeDetails() {
                             )}
                           >
                             <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3 truncate max-w-[100px]">
-                              dum
+                              {feeData.termSubjectGroup.enrollment
+                                .map(
+                                  (en) =>
+                                    en.subjectEnrollment.termSubject.subject
+                                      .name &&
+                                    capitalizeFirstCharacter(
+                                      en.subjectEnrollment.termSubject.subject
+                                        .name
+                                    )
+                                )
+                                .join(",")}
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                              title
+                              {feeData.termSubjectGroup.fee.paymentType.toLowerCase()}
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                              email
+                              {fee.dueDate && formatDate(fee.dueDate)}
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                              role
+                              {fee.dueAmount}
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                              role
+
+                              {fee.paidDate? formatDate(fee.paidDate):"Not paid"}
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                              role
+                              {fee.method}
+
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                               role

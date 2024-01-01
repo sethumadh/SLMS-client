@@ -95,7 +95,7 @@ function NewApplicantSubjectDetails() {
       }
     },
   })
-  console.log(termToEnrollData)
+
   const options = [
     { label: "Current Term", value: "currentTerm" },
     { label: "Published/Advertised Term", value: "publishedTerm" },

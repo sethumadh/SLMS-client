@@ -6,23 +6,25 @@ import { useAppDispatch } from "@/redux/store"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { toast } from "react-toastify"
 
-export const useDeEnrollStudentMutation= (loadingToastId: string | null) => {
+export const useDeEnrollStudentMutation = (loadingToastId: string | null) => {
   const dispatch = useAppDispatch()
   const queryClient = useQueryClient()
   const { mutateAsync: deEnrollStudent, isPending: deEnrollStudentPending } =
     useMutation({
-      mutationFn: api.students.enrolledStudent.deEnrollEnrolledStudent.mutation,
+      // mutationFn: api.students.enrolledStudent.deEnrollEnrolledStudent.mutation,
+      mutationFn:
+        api.students.lateEnrolledStudent.deEnrollLateEnrolledStudent.mutation,
       onSuccess: () => {
         queryClient.invalidateQueries({
           queryKey: [
             api.students.enrolledStudent.findEnrolledStudentEnrolledSubjects
-            .queryKey,
+              .queryKey,
           ],
         })
         queryClient.invalidateQueries({
           queryKey: [
-            api.students.lateEnrolledStudent.findLateEnrolledStudentEnrolledSubjects
-            .queryKey,
+            api.students.lateEnrolledStudent
+              .findLateEnrolledStudentEnrolledSubjects.queryKey,
           ],
         })
         if (loadingToastId) toast.dismiss(loadingToastId)
@@ -40,5 +42,5 @@ export const useDeEnrollStudentMutation= (loadingToastId: string | null) => {
         handleAxiosError(error)
       },
     })
-  return {deEnrollStudent, deEnrollStudentPending }
+  return { deEnrollStudent, deEnrollStudentPending }
 }
