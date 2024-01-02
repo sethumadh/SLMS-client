@@ -165,6 +165,8 @@ const feePaymentSchema = z.object({
   studentTermFeeId: z.number(),
   status: z.string(),
   method: z.string(),
+  feeAmount: z.number(),
+  creditAmount: z.number(),
 })
 
 const feeDetailSchema = z.object({
@@ -179,6 +181,7 @@ const feeDetailSchema = z.object({
 const feeDetailsArraySchema = z.array(feeDetailSchema)
 
 // fee
+
 // find subject enrolled by student per term subject group
 const enrolledSubjectSchema = z.object({
   subjectId: z.number(),
@@ -256,7 +259,6 @@ export const activeStudent = {
         const response = await axios.get(
           `${route.activeStudents.findActiveStudentById}/${id}`
         )
-        console.log(response.data)
         return activeStudentSchema.parse(response.data)
       } catch (error) {
         if (error instanceof z.ZodError) {
@@ -279,7 +281,7 @@ export const activeStudent = {
           `${route.activeStudents.findActiveStudentFeeDetailsById}/${studentId}`,
           { params: { termId } }
         )
-        console.log(response.data)
+
         return feeDetailsArraySchema.parse(response.data)
       } catch (error) {
         if (error instanceof z.ZodError) {
@@ -304,6 +306,63 @@ export const activeStudent = {
         )
 
         return enrolledSubjectSchema.parse(response.data)
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          // Handle Zod validation error
+          console.error("Zod validation error:", error.issues)
+        } else {
+          // Handle other types of errors (e.g., network errors)
+          console.error("Error:", error)
+        }
+        throw error // Re-throw the error if you want to propagate it
+      }
+    },
+  },
+  findFeePaymentById: {
+    querykey: "findFeePaymentById",
+    schema: feePaymentSchema,
+    query: async (id: string) => {
+      try {
+        const response = await axios.get(
+          `${route.activeStudents.findFeePaymentById}/${id}`
+        )
+        console.log(response.data)
+        return feePaymentSchema.parse(response.data)
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          // Handle Zod validation error
+          console.error("Zod validation error:", error.issues)
+        } else {
+          // Handle other types of errors (e.g., network errors)
+          console.error("Error:", error)
+        }
+        throw error // Re-throw the error if you want to propagate it
+      }
+    },
+  },
+  updateAmountPaid: {
+    querykey: "updateAmountPaid",
+    schema: feePaymentSchema,
+    mutation: async ({
+      id,
+      amountPaid,
+      remarks,
+    }: {
+      id: string
+      amountPaid: string
+      remarks: string
+    }) => {
+      try {
+        const response = await axios.patch(
+          `${route.activeStudents.updateAmountPaid}/${id}`,
+          { remarks },
+          {
+            params: {
+              amountPaid,
+            },
+          }
+        )
+        return feePaymentSchema.parse(response.data)
       } catch (error) {
         if (error instanceof z.ZodError) {
           // Handle Zod validation error

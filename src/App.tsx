@@ -66,6 +66,7 @@ import LateEnrollmentHealthDetails from "./pages/Admin/Students/LateEnrollmentDe
 import LateEnrolledDeclaration from "./pages/Admin/Students/LateEnrollmentDetail/Declaration/Declaration"
 import ManageAndEnroll from "./pages/Admin/Students/LateEnrollmentDetail/Subjects/ManageAndEnroll"
 import FeeDetails from "./pages/Admin/Students/ActiveStudentDetail/Fee/FeeDetails"
+import ManageFee from "./pages/Admin/Students/ActiveStudentDetail/Fee/ManageFee"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -89,7 +90,8 @@ const router = createBrowserRouter(
             element={<ActiveStudentDetailLayout />}
           >
             <Route index element={<PersonalInformation />} />
-            <Route path="manage-fee-details" element={<FeeDetails/>}/>
+            <Route path="view-fee-details" element={<FeeDetails />} />
+            <Route path="view-fee-details/manage-fee/:feePaymentId" element={<ManageFee />} />
           </Route>
           <Route
             path="late-enrolled-students"

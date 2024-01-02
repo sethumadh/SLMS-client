@@ -21,7 +21,10 @@ type initialStateProps = {
     | "createClass"
     | "updateTimetable"
     | "createTimetable"
-    | "enrollStudentToCurrentTerm"|"enrollToActiveStudent"|"unPublishTerm"
+    | "enrollStudentToCurrentTerm"
+    | "enrollToActiveStudent"
+    | "unPublishTerm"
+    | "updateAmountPaid"
   data?: {
     id?: number
     value?: any

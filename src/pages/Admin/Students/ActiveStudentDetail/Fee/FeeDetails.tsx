@@ -1,10 +1,11 @@
 import { api } from "@/api/api"
 import { useQuery } from "@tanstack/react-query"
 import { Fragment } from "react"
-import { useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import { cn } from "@/lib/utils"
 import { capitalizeFirstCharacter } from "@/helpers/capitalizeFirstCharacter"
 import { formatDate } from "@/helpers/dateFormatter"
+import Icons from "@/constants/icons"
 
 export default function FeeDetails() {
   const params = useParams()
@@ -35,9 +36,7 @@ export default function FeeDetails() {
     },
     enabled: !!params.id && !!currentTerm?.id,
   })
-
   console.log(activeStudentFeeData)
-
   return (
     <div className="px-4 sm:px-6 lg:px-8 mt-2">
       <div className="sm:flex sm:items-center">
@@ -49,14 +48,15 @@ export default function FeeDetails() {
             The student fee details for the currently enrolled term.
           </p>
         </div>
-        {/* <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-          <button
-            type="button"
-            className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          >
-            Add user
-          </button>
-        </div> */}
+        <Link
+          to=".."
+          className="text-blue-300 italic text-sm flex justify-center items-center"
+        >
+          <span>
+            <Icons.ArrowBigLeft className="w-4 h-4" />
+          </span>
+          <p className="hidden sm:block sm:text-sm">Go Back</p>
+        </Link>
       </div>
       {activeStudentDataIsLoading ? (
         <>
@@ -107,14 +107,15 @@ export default function FeeDetails() {
                         scope="col"
                         className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                       >
-                        Due Date
+                        Fee
                       </th>
                       <th
                         scope="col"
                         className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                       >
-                        Due Amount
+                        Due Date
                       </th>
+
                       <th
                         scope="col"
                         className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
@@ -131,6 +132,18 @@ export default function FeeDetails() {
                         scope="col"
                         className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                       >
+                        Status
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      >
+                        Due
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      >
                         Manage fee
                       </th>
                     </tr>
@@ -142,7 +155,7 @@ export default function FeeDetails() {
                       >
                         <tr className="border-t border-gray-200">
                           <th
-                            colSpan={7}
+                            colSpan={9}
                             scope="colgroup"
                             className="bg-gray-50 py-2 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3"
                           >
@@ -179,21 +192,33 @@ export default function FeeDetails() {
                               {feeData.termSubjectGroup.fee.paymentType.toLowerCase()}
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                              {fee.feeAmount}
+                            </td>
+                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                               {fee.dueDate && formatDate(fee.dueDate)}
+                            </td>
+
+                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                              {fee.paidDate
+                                ? formatDate(fee.paidDate)
+                                : "Not paid"}
+                            </td>
+                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                              {fee.method}
+                            </td>
+                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                              {fee.status}
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                               {fee.dueAmount}
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-
-                              {fee.paidDate? formatDate(fee.paidDate):"Not paid"}
-                            </td>
-                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                              {fee.method}
-
-                            </td>
-                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                              role
+                              <Link
+                                className="text-blue-500 font-medium"
+                                to={`manage-fee/${fee.id}`}
+                              >
+                                Manage
+                              </Link>
                             </td>
                           </tr>
                         ))}

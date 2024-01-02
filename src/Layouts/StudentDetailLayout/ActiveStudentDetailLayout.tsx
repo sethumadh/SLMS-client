@@ -7,7 +7,7 @@ const tabs = [
   {
     name: "Fees",
     smName: "Fees",
-    href: "manage-fee-details",
+    href: "view-fee-details",
     current: false,
   },
   {

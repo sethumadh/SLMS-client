@@ -26,9 +26,11 @@ import {
   Trash2,
   PlusIcon,
   CheckCircleIcon,
+  ArrowBigLeft,
 } from "lucide-react"
 
 export default {
+  ArrowBigLeft,
   Cog6ToothIcon,
   PlusIcon,
   PowerIcon,

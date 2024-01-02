@@ -77,5 +77,7 @@ export const route = {
     findActiveStudentById: `${baseURL}/api/v1/admin/student/active/active-student-detail`,
     findActiveStudentFeeDetailsById: `${baseURL}/api/v1/admin/student/active/active-student-fee-detail`,
     findTermSubjectGroupIdEnrolledSubjects: `${baseURL}/api/v1/admin/student/active/find-enrolled-subjects-term-subject-group`,
+    findFeePaymentById: `${baseURL}/api/v1/admin/student/active/fee-payment-detail`,
+    updateAmountPaid: `${baseURL}/api/v1/admin/student/active/fee-payment-update-amountPaid`,
   },
 }
