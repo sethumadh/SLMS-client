@@ -22,7 +22,7 @@ const AssignClassModal = () => {
   const levelName: AssignClassData["levelName"] = data?.value?.levelName ?? {}
   const sectionName: AssignClassData["sectionName"] =
     data?.value?.sectionName ?? {}
-  console.log(studentId, subjectName, sectionName, levelName, termId)
+
   const { assignClass, assignClassPending } =
     useAssignClassMutation(loadingToastId)
 

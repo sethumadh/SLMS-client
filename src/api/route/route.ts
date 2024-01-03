@@ -82,6 +82,8 @@ export const route = {
     findActiveStudentEnrolledSubjects: `${baseURL}/api/v1/admin/student/active/find-enrolled-subjects-active-student`,
     findCurrentTermToAssignClass: `${baseURL}/api/v1/admin/student/active/find-current-term-to-assign-class`,
     assignClassToStudent: `${baseURL}/api/v1/admin/student/active/assign-class-active-student`,
+    findUniqueStudentClassDetails: `${baseURL}/api/v1/admin/student/active/find-assigned-classes-for-active-student`,
+    manageClasses: `${baseURL}/api/v1/admin/student/active/manage-toggle-active-class`,
   },
 }
-//assign-class-active-student
+//manage-toggle-active-class

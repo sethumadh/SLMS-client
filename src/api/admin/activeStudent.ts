@@ -224,6 +224,50 @@ const enrolledSubjectSchema = z.object({
 const subjectsArraySchema = z.array(enrolledSubjectSchema)
 // find subject enrolled by student
 export type EnrollDataSchema = z.infer<typeof enrollDataSchema>
+
+/****** assigned classes for student**/
+const subjectAssignedClassSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  isActive: z.boolean(),
+})
+
+const levelAssignedClassSchema = z.object({
+  id: z.number(),
+  isActive: z.boolean(),
+  name: z.string(),
+})
+
+const termSubjectLevelAssignedClassSchema = z.object({
+  id: z.number(),
+  termId: z.number(),
+  subjectId: z.number(),
+  levelId: z.number(),
+  subject: subjectSchema,
+  level: levelAssignedClassSchema,
+})
+
+const sectionAssignedClassSchema = z.object({
+  name: z.string(),
+})
+
+const studentClassHistorySchema = z.object({
+  id: z.number(),
+  enrollmentId: z.number(),
+  studentId: z.number(),
+  termSubjectLevelId: z.number(),
+  sectionId: z.number(),
+  isCurrentlyAssigned: z.boolean(),
+  changeDate: z.string(), // Assuming ISO date string format
+  note: z.string().nullable(),
+  termSubjectLevel: termSubjectLevelAssignedClassSchema,
+  section: sectionAssignedClassSchema,
+})
+
+const studentClassHistoriesSchema = z.array(studentClassHistorySchema)
+
+/****** assigned classes for student**/
+
 export const activeStudent = {
   findAllActiveStudents: {
     querykey: "findAllActiveStudents",
@@ -359,7 +403,7 @@ export const activeStudent = {
         const response = await axios.get(
           `${route.activeStudents.findFeePaymentById}/${id}`
         )
-        console.log(response.data)
+
         return feePaymentSchema.parse(response.data)
       } catch (error) {
         if (error instanceof z.ZodError) {
@@ -415,7 +459,7 @@ export const activeStudent = {
       const response = await axios.get(
         route.activeStudents.findCurrentTermToAssignClass
       )
-      console.log(response.data)
+
       return termAssignToClassSchema.parse(response.data)
     },
   },
@@ -445,4 +489,49 @@ export const activeStudent = {
       return response.data
     },
   },
+  findUniqueStudentClassDetails: {
+    querykey: "findUniqueStudentClassDetails",
+    schema: feePaymentSchema,
+    query: async (id: string) => {
+      try {
+        const response = await axios.get(
+          `${route.activeStudents.findUniqueStudentClassDetails}/${id}`
+        )
+        console.log(response.data)
+        return studentClassHistoriesSchema.parse(response.data)
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          // Handle Zod validation error
+          console.error("Zod validation error:", error.issues)
+        } else {
+          // Handle other types of errors (e.g., network errors)
+          console.error("Error:", error)
+        }
+        throw error // Re-throw the error if you want to propagate it
+      }
+    },
+  },
+  manageClasses: {
+    querykey: "manageClasses",
+    schema: "",
+    query: async (id: string) => {
+      try {
+        const response = await axios.patch(
+          `${route.activeStudents.manageClasses}/${id}`
+        )
+        console.log(response.data)
+        return response.data
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          // Handle Zod validation error
+          console.error("Zod validation error:", error.issues)
+        } else {
+          // Handle other types of errors (e.g., network errors)
+          console.error("Error:", error)
+        }
+        throw error // Re-throw the error if you want to propagate it
+      }
+    },
+  },
 }
+// findUniqueStudentClassDetails

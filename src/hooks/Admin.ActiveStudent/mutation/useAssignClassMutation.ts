@@ -17,7 +17,9 @@ export const useAssignClassMutation = (loadingToastId: string | null) => {
       mutationFn: api.students.activeStudent.assignClassToStudent.mutation,
       onSuccess: () => {
         queryClient.invalidateQueries({
-          queryKey: [api.students.activeStudent.findFeePaymentById.querykey],
+          queryKey: [
+            api.students.activeStudent.findUniqueStudentClassDetails.querykey,
+          ],
         })
 
         dispatch(
