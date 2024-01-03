@@ -63,31 +63,63 @@ const activeStudentSchema = z.object({
   updatedAt: z.string(),
 })
 
-/* term to enroll schema*/
-// const subjectSchema = z.object({
-//   id: z.number(),
-//   name: z.string(),
-//   isActive: z.boolean(),
-// })
+// current term to assign class to students
+const subjectAssignToClassSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  isActive: z.boolean(),
+})
 
-// const termSubjectGroupSchema = z.object({
-//   id: z.number(),
-//   termId: z.number(),
-//   feeId: z.number(),
-//   subjectGroupId: z.number(),
-// })
+const levelAssignToClassSchema = z.object({
+  id: z.number(),
+  isActive: z.boolean(),
+  name: z.string(),
+})
 
-// const termSubjectSchema = z.array(
-//   z.object({
-//     id: z.number(),
-//     subject: subjectSchema,
-//     termSubjectGroup: termSubjectGroupSchema,
-//   })
-// )
-// const enrolledSubjectSchema = z.object({
-//   subjectId: z.number(),
-//   subjectName: z.string(),
-// })
+const termSubjectGroupAssignToClassSchema = z.object({
+  id: z.number(),
+  termId: z.number(),
+  feeId: z.number(),
+  subjectGroupId: z.number(),
+})
+
+const termSubjectAssignToClassSchema = z.object({
+  id: z.number(),
+  subject: subjectAssignToClassSchema,
+  level: z.array(levelAssignToClassSchema),
+  termSubjectGroup: termSubjectGroupAssignToClassSchema,
+})
+
+const sectionAssignToClassSchema = z.object({
+  name: z.string(),
+})
+
+const termSubjectLevelAssignToClassSchema = z.object({
+  id: z.number(),
+  termId: z.number(),
+  subjectId: z.number(),
+  levelId: z.number(),
+  sections: z.array(sectionAssignToClassSchema),
+  level: z.object({
+    name: z.string(),
+  }),
+  subject: z.object({
+    name: z.string(),
+  }),
+})
+
+const termAssignToClassSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  isPublish: z.boolean(),
+  currentTerm: z.boolean(),
+  startDate: z.string(), // Assuming ISO date string format
+  endDate: z.string(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
+  termSubject: z.array(termSubjectAssignToClassSchema),
+  termSubjectLevel: z.array(termSubjectLevelAssignToClassSchema),
+})
 
 const activeStudentsDataSchema = z.object({
   activeStudents: z.array(activeStudentSchema),
@@ -182,12 +214,15 @@ const feeDetailsArraySchema = z.array(feeDetailSchema)
 
 // fee
 
-// find subject enrolled by student per term subject group
+// find subject enrolled by student
 const enrolledSubjectSchema = z.object({
   subjectId: z.number(),
   subjectName: z.string(),
 })
-// find subject enrolled by student per term subject group
+
+// Schema for the array of objects
+const subjectsArraySchema = z.array(enrolledSubjectSchema)
+// find subject enrolled by student
 export type EnrollDataSchema = z.infer<typeof enrollDataSchema>
 export const activeStudent = {
   findAllActiveStudents: {
@@ -295,17 +330,15 @@ export const activeStudent = {
       }
     },
   },
-  findTermSubjectGroupIdEnrolledSubjects: {
-    querykey: "findTermSubjectGroupIdEnrolledSubjects",
-    schema: enrolledSubjectSchema,
-    query: async (id: string, termSubjectGroupId: number) => {
+  findActiveStudentEnrolledSubjects: {
+    querykey: "findActiveStudentEnrolledSubjects",
+    schema: subjectsArraySchema,
+    query: async (studentId: string, termId: number) => {
       try {
         const response = await axios.get(
-          `${route.activeStudents.findTermSubjectGroupIdEnrolledSubjects}/${id}`,
-          { params: { termSubjectGroupId } }
+          `${route.activeStudents.findActiveStudentEnrolledSubjects}/${studentId}/${termId}`
         )
-
-        return enrolledSubjectSchema.parse(response.data)
+        return subjectsArraySchema.parse(response.data)
       } catch (error) {
         if (error instanceof z.ZodError) {
           // Handle Zod validation error
@@ -373,6 +406,43 @@ export const activeStudent = {
         }
         throw error // Re-throw the error if you want to propagate it
       }
+    },
+  },
+  findCurrentTermToAssignClassClass: {
+    querykey: "findCurrentTermToAssignClassClass",
+    schema: termAssignToClassSchema,
+    query: async () => {
+      const response = await axios.get(
+        route.activeStudents.findCurrentTermToAssignClass
+      )
+      console.log(response.data)
+      return termAssignToClassSchema.parse(response.data)
+    },
+  },
+  assignClassToStudent: {
+    querykey: "assignClassToStudent",
+    schema: "",
+    mutation: async ({
+      studentId,
+      termId,
+      subjectName,
+      levelName,
+      sectionName,
+    }: {
+      studentId: string
+      termId: string
+      subjectName: string
+      levelName: string
+      sectionName: string
+    }) => {
+      const response = await axios.post(
+        `
+        ${route.activeStudents.assignClassToStudent}/${studentId}/${termId}
+        `,
+        { subjectName, levelName, sectionName }
+      )
+
+      return response.data
     },
   },
 }

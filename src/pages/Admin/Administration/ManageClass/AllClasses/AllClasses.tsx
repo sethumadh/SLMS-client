@@ -21,7 +21,7 @@ function AllClass() {
             <LoadingSpinner />
           </div>
         </div>
-      ) : (
+      ) : currentTermClassesData?.termSubjectLevel.length != 0 ? (
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="sm:flex sm:items-center">
             <div className="sm:flex-auto">
@@ -71,6 +71,7 @@ function AllClass() {
                       </th>
                     </tr>
                   </thead>
+
                   <tbody className="bg-white">
                     {currentTermClassesData?.termSubjectLevel.map((classes) => (
                       <Fragment key={classes.id}>
@@ -121,6 +122,10 @@ function AllClass() {
               </div>
             </div>
           </div>
+        </div>
+      ) : (
+        <div className="h-[600px] font-medium text-lg flex justify-center items-center">
+          <p>No data to show</p>
         </div>
       )}
     </>

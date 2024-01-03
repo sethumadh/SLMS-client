@@ -6,21 +6,25 @@ import { setOpenModal } from "@/redux/slice/modalSlice"
 import Icons from "@/constants/icons"
 import { toast } from "react-toastify"
 import LoadingIcon from "../LoadingIcon"
-import { useUpdateAmountPaidMutation } from "@/hooks/Admin.ActiveStudent/mutation/useUpdateAmountPaidMutation"
-import { DueAmountModifySchema } from "@/pages/Admin/Students/ActiveStudentDetail/Fee/ManageFee"
+import { AssignClassData } from "@/pages/Admin/Students/ActiveStudentDetail/ManageClass/ManageClass"
+import { useAssignClassMutation } from "@/hooks/Admin.ActiveStudent/mutation/useAssignClassMutation"
 
-const UpdateAmountPaidModal = () => {
+const AssignClassModal = () => {
   const [loadingToastId, setLoadingToastId] = useState<string | null>(null)
   const dispatch = useAppDispatch()
   const { isOpen, type, data } = useAppSelector((state) => state.modal)
   const cancelButtonRef = useRef(null)
-  const IsModalOpen = isOpen && type === "updateAmountPaid"
-  const amountPaid: DueAmountModifySchema["fee"] = data?.value?.fee ?? {}
-  const remarks: DueAmountModifySchema["remarks"] = data?.value?.remarks ?? {}
-  const id = data?.id?.toString()
-
-  const { updateAmountPaid, updateAmountPaidPending } =
-    useUpdateAmountPaidMutation(loadingToastId)
+  const IsModalOpen = isOpen && type === "assignClass"
+  const studentId: AssignClassData["studentId"] = data?.value?.studentId ?? {}
+  const termId: AssignClassData["termId"] = data?.value?.termId ?? {}
+  const subjectName: AssignClassData["subjectName"] =
+    data?.value?.subjectName ?? {}
+  const levelName: AssignClassData["levelName"] = data?.value?.levelName ?? {}
+  const sectionName: AssignClassData["sectionName"] =
+    data?.value?.sectionName ?? {}
+  console.log(studentId, subjectName, sectionName, levelName, termId)
+  const { assignClass, assignClassPending } =
+    useAssignClassMutation(loadingToastId)
 
   return (
     <Transition.Root show={IsModalOpen} as={Fragment}>
@@ -73,7 +77,7 @@ const UpdateAmountPaidModal = () => {
                       as="h3"
                       className="text-base font-semibold leading-6 text-gray-900"
                     >
-                      Confirm amount payment.
+                      Confirm Class Assign
                     </Dialog.Title>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">
@@ -95,20 +99,32 @@ const UpdateAmountPaidModal = () => {
                       )
                       const toastId = toast.loading(`Updating, please wait...`)
                       setLoadingToastId(toastId.toString())
-                      if (id)
-                        await updateAmountPaid({ id, amountPaid, remarks })
+                      if (
+                        termId &&
+                        studentId &&
+                        subjectName &&
+                        sectionName &&
+                        levelName
+                      )
+                        await assignClass({
+                          studentId,
+                          termId,
+                          subjectName,
+                          levelName,
+                          sectionName,
+                        })
                     }}
                   >
-                    {updateAmountPaidPending ? (
+                    {assignClassPending ? (
                       <>
                         <LoadingIcon />
                       </>
                     ) : (
-                      <p>Update amount paid now</p>
+                      <p>Confirm</p>
                     )}
                   </button>
                   <button
-                    disabled={updateAmountPaidPending}
+                    disabled={assignClassPending}
                     type="button"
                     className="disabled:bg-slate-300 mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
                     onClick={() => {
@@ -132,4 +148,4 @@ const UpdateAmountPaidModal = () => {
     </Transition.Root>
   )
 }
-export default UpdateAmountPaidModal
+export default AssignClassModal

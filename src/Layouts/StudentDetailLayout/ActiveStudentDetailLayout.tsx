@@ -23,9 +23,15 @@ const tabs = [
     current: false,
   },
   {
-    name: "Manage & Assign",
+    name: "Manage Classes",
     smName: "Terms",
-    href: "manage-assign",
+    href: "manage-class",
+    current: false,
+  },
+  {
+    name: "Manage Subjects",
+    smName: "Terms",
+    href: "manage-subjects",
     current: false,
   },
 ]
