@@ -8,8 +8,11 @@ import { toast } from "react-toastify"
 import LoadingIcon from "../LoadingIcon"
 import { useUpdateAmountPaidMutation } from "@/hooks/Admin.ActiveStudent/mutation/useUpdateAmountPaidMutation"
 import { DueAmountModifySchema } from "@/pages/Admin/Students/ActiveStudentDetail/Fee/ManageFee"
+import { useNavigate, useParams } from "react-router-dom"
 
 const UpdateAmountPaidModal = () => {
+  const params = useParams()
+  const navigate = useNavigate()
   const [loadingToastId, setLoadingToastId] = useState<string | null>(null)
   const dispatch = useAppDispatch()
   const { isOpen, type, data } = useAppSelector((state) => state.modal)
@@ -95,8 +98,11 @@ const UpdateAmountPaidModal = () => {
                       )
                       const toastId = toast.loading(`Updating, please wait...`)
                       setLoadingToastId(toastId.toString())
-                      if (id)
+                      if (id && params.id)
                         await updateAmountPaid({ id, amountPaid, remarks })
+                      navigate(
+                        `/admin/students/student-detail/${params.id}/view-fee-details`
+                      )
                     }}
                   >
                     {updateAmountPaidPending ? (

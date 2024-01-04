@@ -3,7 +3,7 @@
 import { api } from "@/api/api"
 import { handleAxiosError } from "@/helpers/errorhandler"
 import { setOpenModal } from "@/redux/slice/modalSlice"
-import { useAppDispatch } from "@/redux/store"
+import { useAppDispatch} from "@/redux/store"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { toast } from "react-toastify"
 
@@ -32,6 +32,7 @@ export const useUpdateAmountPaidMutation = (loadingToastId: string | null) => {
         // add inavlidate for getting all terms
         if (loadingToastId) toast.dismiss(loadingToastId)
         toast.success(`Amount Paid is updated 👌`)
+
       },
       onError: (error: unknown) => {
         if (loadingToastId) toast.dismiss(loadingToastId)
