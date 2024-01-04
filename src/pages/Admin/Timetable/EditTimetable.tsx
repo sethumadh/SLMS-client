@@ -135,14 +135,13 @@ export default function EditTimeTable() {
                   {timetableData?.name &&
                     currentTermClassesData?.termSubjectLevel.length != 0 &&
                     timetableData?.isActive &&
-                    currentTerm?.id ===
-                      timetableData?.termId &&(
-                        <span>
-                          {" "}
-                          Timetable for{" "}
-                          {capitalizeFirstCharacter(timetableData?.name)}
-                        </span>
-                      )}
+                    currentTerm?.id === timetableData?.termId && (
+                      <span>
+                        {" "}
+                        Timetable for{" "}
+                        {capitalizeFirstCharacter(timetableData?.name)}
+                      </span>
+                    )}
                 </span>
               </h3>
               {timetableData?.isActive &&
@@ -153,7 +152,7 @@ export default function EditTimeTable() {
                   </p>
                 )}
               <div className="flex flex-col gap-1 mt-4">
-              <p className="mt-2 max-w-4xl text-sm text-gray-500">
+                <p className="mt-2 max-w-4xl text-sm text-gray-500">
                   {timetableData?.createdAt &&
                     currentTermClassesData?.termSubjectLevel.length != 0 &&
                     timetableData?.isActive &&
@@ -183,7 +182,6 @@ export default function EditTimeTable() {
                           : "NA"}
                       </span>
                     )}
-
                 </p>
               </div>
             </div>
@@ -203,11 +201,11 @@ export default function EditTimeTable() {
                       ? "bg-red-500 text-white hover:bg-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                       : "bg-slate-200 text-black hover:bg-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                   }  px-3 py-2 text-center text-sm font-semibold shadow-sm ${
-                    timetableData?.isActive ||
-                    currentTermClassesData?.termSubjectLevel.length == 0 ||
+                    currentTermClassesData?.termSubjectLevel.length != 0 &&
+                    timetableData?.isActive &&
                     currentTerm?.id === timetableData?.termId
-                      ? "hidden"
-                      : ""
+                      ? ""
+                      : "hidden"
                   }`}
                 >
                   {isEditMode ? "Cancel" : "Edit Timetable"}
@@ -215,11 +213,11 @@ export default function EditTimeTable() {
               </div>
               <div
                 className={`sm:flex-none ${
-                  timetableData?.isActive ||
-                  currentTermClassesData?.termSubjectLevel.length == 0 ||
+                  currentTermClassesData?.termSubjectLevel.length != 0 &&
+                  timetableData?.isActive &&
                   currentTerm?.id === timetableData?.termId
-                    ? "hidden"
-                    : ""
+                    ? ""
+                    : "hidden"
                 }`}
               >
                 <button
