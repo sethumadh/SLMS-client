@@ -338,6 +338,7 @@ export const activeStudent = {
         const response = await axios.get(
           `${route.activeStudents.findActiveStudentById}/${id}`
         )
+        console.log(response.data)
         return activeStudentSchema.parse(response.data)
       } catch (error) {
         if (error instanceof z.ZodError) {

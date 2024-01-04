@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom"
 
 function Hero() {
@@ -23,22 +22,6 @@ function Hero() {
               className="bg-blue-500 hover:bg-blue-500/80 duration-300 transition-colors border-2 border-blue-400 rounded px-6 block text-center py-3 uppercase text-sm font-bold leading-4 tracking-widest text-white"
             >
               Enroll Now
-            </Link>
-
-            <Link
-              to="#"
-              className="border-2 text-sm duration-300 transition-colors hover:bg-blue-500 hover:text-white font-bold leading-4 mt-4 sm:mt-0 tracking-widest text-blue-500 sm:mx-4 border-blue-400 rounded px-6 block text-center py-3 uppercase"
-            >
-              Learn More
-            </Link>
-          </div>
-          <div className="mt-6 sm:flex sm:items-center">
-            <Link
-              to="/application"
-              className="items-center bg-blue-500 hover:bg-blue-500/80 duration-300 transition-colors border-2 border-blue-400 rounded px-6 block text-center py-3 uppercase text-sm font-bold leading-4 tracking-widest text-white"
-            >
-              <p>Work for us</p>
-              {/* <Icons.ChevronRight/> */}
             </Link>
 
             <Link
