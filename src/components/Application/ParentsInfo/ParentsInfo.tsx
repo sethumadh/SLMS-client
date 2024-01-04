@@ -1,5 +1,5 @@
 import { useFormContext } from "react-hook-form"
-import { ApplicantSchema } from "@/pages/Application/Application"
+import { ApplicantSchema } from "@/pages/Application/Student/Application"
 
 function ParentsInfo() {
   const { formState, register } = useFormContext<ApplicantSchema>()

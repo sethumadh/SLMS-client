@@ -1,4 +1,4 @@
-import { ApplicantSchema } from "@/pages/Application/Application"
+import { ApplicantSchema } from "@/pages/Application/Student/Application"
 import { PhotoIcon } from "@heroicons/react/24/solid"
 import { useState } from "react"
 import ReactDatePicker from "react-datepicker"
@@ -12,8 +12,7 @@ const options = [
 ]
 
 function ApplicantInfo() {
-  const { formState, control, register } =
-    useFormContext<ApplicantSchema>()
+  const { formState, control, register } = useFormContext<ApplicantSchema>()
   const [imagePreview, setImagePreview] = useState<string | null>()
 
   return (
@@ -66,7 +65,7 @@ function ApplicantInfo() {
                   Last name<span className="text-red-600">*</span>
                   <div className="mt-2">
                     <input
-                    id="last-name"
+                      id="last-name"
                       {...register("personalDetails.lastName")}
                       type="text"
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -205,7 +204,8 @@ function ApplicantInfo() {
                   htmlFor="email"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Father's Contact number<span className="text-red-600">*</span>-
+                  Father's Contact number<span className="text-red-600">*</span>
+                  -
                   <span className="italic text-xs bg-slate-200 text-gray-500">
                     ਇਸ ਮੋਬਾਇਲ ਨੰਬਰ ਤੇ ਆਪ ਜੀ ਨੂੰ ਵਿਦਿਆਰਥੀ ਨਾਲ ਸੰਬੰਧਿਤ ਤਸਵੀਰਾਂ,
                     ਵੀਡੀਉ ਅਤੇ ਸੰਦੇਸ਼ ਭੇਜੇ ਜਾਣਗੇ । You will be receiving videos ,

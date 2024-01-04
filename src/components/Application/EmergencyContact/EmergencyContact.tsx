@@ -1,5 +1,5 @@
 import { useFormContext } from "react-hook-form"
-import { ApplicantSchema } from "@/pages/Application/Application"
+import { ApplicantSchema } from "@/pages/Application/Student/Application"
 
 function EmergencyContact() {
   const { formState, register } = useFormContext<ApplicantSchema>()
@@ -24,7 +24,8 @@ function EmergencyContact() {
                   htmlFor="contact-person"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Emergency Contact Person<span className="text-red-600">*</span> - Name
+                  Emergency Contact Person
+                  <span className="text-red-600">*</span> - Name
                 </label>
                 <div className="mt-2">
                   <input

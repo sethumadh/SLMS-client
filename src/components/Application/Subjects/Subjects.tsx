@@ -1,5 +1,5 @@
 import { useFormContext } from "react-hook-form"
-import { ApplicantSchema } from "@/pages/Application/Application"
+import { ApplicantSchema } from "@/pages/Application/Student/Application"
 import { useQuery } from "@tanstack/react-query"
 import { api } from "@/api/api"
 
@@ -27,7 +27,6 @@ function Subjects() {
     queryKey: [api.application.publishedTerm.getPublishedTerm.queryKey],
     queryFn: api.application.publishedTerm.getPublishedTerm.query,
   })
-
 
   return (
     <div className="space-y-10 divide-y divide-gray-900/10 container">

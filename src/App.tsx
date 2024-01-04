@@ -12,7 +12,7 @@ import { PersistGate } from "redux-persist/integration/react"
 import { ToastContainer } from "react-toastify"
 
 import Home from "@/pages/Home/Home"
-import Application from "@/pages/Application/Application"
+import Application from "@/pages/Application/Student/Application"
 import Navbar from "@/Layouts/Navbar/Navbar"
 import SubmitPage from "@/pages/SubmitPage/SubmitPage"
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout/AdminDashboardLayout"
@@ -92,8 +92,11 @@ const router = createBrowserRouter(
           >
             <Route index element={<PersonalInformation />} />
             <Route path="view-fee-details" element={<FeeDetails />} />
-            <Route path="manage-class" element={<ManageClass/>} />
-            <Route path="view-fee-details/manage-fee/:feePaymentId" element={<ManageFee />} />
+            <Route path="manage-class" element={<ManageClass />} />
+            <Route
+              path="view-fee-details/manage-fee/:feePaymentId"
+              element={<ManageFee />}
+            />
           </Route>
           <Route
             path="late-enrolled-students"
