@@ -20,7 +20,7 @@ export const publishedTerm = {
 
 /* CRUD Applicants*/
 
-/*create applicant*/
+/*create applicant for student*/
 export const PersonalSchema = z.object({
   id: z.number().optional(),
   firstName: z
@@ -139,3 +139,27 @@ export const create = {
     },
   },
 }
+/*****************Teacher****************/
+
+const allSubjectSchema = z.object({
+  name: z.string(),
+  isActive: z.boolean(),
+})
+
+const allSubjectsArraySchema = z.array(allSubjectSchema)
+export const allSubjects = {
+  findAllSubjects: {
+    queryKey: "allSubjects",
+    schema: allSubjectsArraySchema,
+    query: async () => {
+      const response = await axios.get(
+        `${route.application.teacher.allSubjects}`
+      )
+      console.log(response.data)
+
+      return allSubjectsArraySchema.parse(response.data)
+    },
+  },
+}
+
+/*****************Teacher****************/

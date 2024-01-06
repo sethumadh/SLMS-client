@@ -23,7 +23,7 @@ const subjectSchema = z.object({
   isActive: z.boolean().optional(),
 })
 
-// TermSubject Schema (Combining both versions)
+
 const termSubjectSchema = z.object({
   id: z.number(),
   subject: subjectSchema,
@@ -48,7 +48,7 @@ const termSubjectGroupSchema = z.object({
   subject: z.array(subjectSchema).optional(), // Making the subject array optional
 })
 
-// Main Term Schema (Combining both versions)
+
 export const termSchema = z.object({
   id: z.number(),
   name: z.string(),

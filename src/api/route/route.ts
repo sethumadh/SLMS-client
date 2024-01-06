@@ -3,6 +3,9 @@ export const route = {
   application: {
     getPublishedTerm: `${baseURL}/api/v1/application/find-published-term`,
     createApplicant: `${baseURL}/api/v1/application/create-applicant`,
+    teacher: {
+      allSubjects: `${baseURL}/api/v1/application-teacher/find-all-subjects`,
+    },
   },
   admin: {
     changeCurrentTermName: `${baseURL}/api/v1/admin/administration/update/term-name`,

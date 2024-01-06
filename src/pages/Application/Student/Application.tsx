@@ -3,13 +3,13 @@ import { FormProvider, useForm } from "react-hook-form"
 import { z } from "zod"
 import { useState } from "react"
 
-import { StepperFooterSection } from "@/components/Application/StepperFooterSection/StepperFooterSection"
-import ApplicantInfo from "@/components/Application/ApplicantInfo/ApplicantInfo"
-import ParentsInfo from "@/components/Application/ParentsInfo/ParentsInfo"
-import EmergencyContact from "@/components/Application/EmergencyContact/EmergencyContact"
-import HealthInformation from "@/components/Application/HealthInformation/HealthInformation"
-import Subjects from "@/components/Application/Subjects/Subjects"
-import OtherInfo from "@/components/Application/OtherInfo/OtherInfo"
+import { StepperFooterSection } from "@/components/StudentApplication/StepperFooterSection/StepperFooterSection"
+import ApplicantInfo from "@/components/StudentApplication/ApplicantInfo/ApplicantInfo"
+import ParentsInfo from "@/components/StudentApplication/ParentsInfo/ParentsInfo"
+import EmergencyContact from "@/components/StudentApplication/EmergencyContact/EmergencyContact"
+import HealthInformation from "@/components/StudentApplication/HealthInformation/HealthInformation"
+import Subjects from "@/components/StudentApplication/Subjects/Subjects"
+import OtherInfo from "@/components/StudentApplication/OtherInfo/OtherInfo"
 import { applicantSchema } from "@/types/Application/applicantSchema"
 import { useAppDispatch } from "@/redux/store"
 import { setOpenModal } from "@/redux/slice/modalSlice"
@@ -133,6 +133,7 @@ function Application() {
         shouldFocus: true,
       })
       if (validateStep) setStep(4)
+      setNextPage(false)
     } else if (step == 4) {
       const validateStep = await trigger(["subjectInterest"], {
         shouldFocus: true,
@@ -148,24 +149,22 @@ function Application() {
   }
 
   const onSubmit = async (values: ApplicantSchema) => {
-
-      const formattedValues: NewApplicantSchema = {
-        ...values,
-        personalDetails: {
-          ...values.personalDetails,
-          DOB: values.personalDetails.DOB.toISOString(),
+    const formattedValues: NewApplicantSchema = {
+      ...values,
+      personalDetails: {
+        ...values.personalDetails,
+        DOB: values.personalDetails.DOB.toISOString(),
+      },
+    }
+    dispatch(
+      setOpenModal({
+        isOpen: true,
+        type: "submitApplicant",
+        data: {
+          value: formattedValues,
         },
-      }
-      dispatch(
-        setOpenModal({
-          isOpen: true,
-          type: "submitApplicant",
-          data: {
-            value: formattedValues,
-          },
-        })
-      )
-
+      })
+    )
   }
   return (
     <div>

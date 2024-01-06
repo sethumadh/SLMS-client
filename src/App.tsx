@@ -68,6 +68,7 @@ import ManageAndEnroll from "./pages/Admin/Students/LateEnrollmentDetail/Subject
 import FeeDetails from "./pages/Admin/Students/ActiveStudentDetail/Fee/FeeDetails"
 import ManageFee from "./pages/Admin/Students/ActiveStudentDetail/Fee/ManageFee"
 import ManageClass from "./pages/Admin/Students/ActiveStudentDetail/ManageClass/ManageClass"
+import TeacherApplication from "./pages/Application/Teacher/TeacherApplication"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -77,6 +78,7 @@ const router = createBrowserRouter(
         <Route index element={<Home />} />
         <Route path="classes" element={<ClassesAndEvents />} />
         <Route path="application" element={<Application />} />
+        <Route path="teacher-application" element={<TeacherApplication/>}/>
         <Route path="application-submit" element={<SubmitPage />} />
       </Route>
 

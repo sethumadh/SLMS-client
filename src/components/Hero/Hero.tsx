@@ -28,7 +28,22 @@ function Hero() {
               to="#"
               className="border-2 text-sm duration-300 transition-colors hover:bg-blue-500 hover:text-white font-bold leading-4 mt-4 sm:mt-0 tracking-widest text-blue-500 sm:mx-4 border-blue-400 rounded px-6 block text-center py-3 uppercase"
             >
-              Learn More
+              Know More
+            </Link>
+          </div>
+          <div className="mt-6 sm:flex sm:items-center">
+            <Link
+              to="/teacher-application"
+              className="bg-blue-500 hover:bg-blue-500/80 duration-300 transition-colors border-2 border-blue-400 rounded px-6 block text-center py-3 uppercase text-sm font-bold leading-4 tracking-widest text-white"
+            >
+              Apply Now
+            </Link>
+
+            <Link
+              to="#"
+              className="border-2 text-sm duration-300 transition-colors hover:bg-blue-500 hover:text-white font-bold leading-4 mt-4 sm:mt-0 tracking-widest text-blue-500 sm:mx-4 border-blue-400 rounded px-6 block text-center py-3 uppercase"
+            >
+              Work for us
             </Link>
           </div>
         </div>
