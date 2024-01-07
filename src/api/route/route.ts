@@ -5,6 +5,7 @@ export const route = {
     createApplicant: `${baseURL}/api/v1/application/create-applicant`,
     teacher: {
       allSubjects: `${baseURL}/api/v1/application-teacher/find-all-subjects`,
+      createApplicant: `${baseURL}/api/v1/application-teacher/create-applicant`,
     },
   },
   admin: {
@@ -35,6 +36,11 @@ export const route = {
       findPublishTermForManageClass: `${baseURL}/api/v1/admin/administration/class/find-publish-term-manage-class`,
       findSectionsForManageClass: `${baseURL}/api/v1/admin/administration/class/find-sections-manage-class`,
       createClass: `${baseURL}/api/v1/admin/administration/class/create-class`,
+    },
+    teacher: {
+      findAllTeacherApplicants: `${baseURL}/api/v1/admin/administration/teacher/get-all-applicants`,
+      searchTeacherApplicants: `${baseURL}/api/v1/admin/administration/teacher/search-applicants`,
+      findTeacherApplicantById: `${baseURL}/api/v1/admin/administration/teacher/applicant-detail`,
     },
     timetable: {
       createTimetable: `${baseURL}/api/v1/admin/timetable/create-new-timetable`,

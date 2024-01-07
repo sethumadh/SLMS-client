@@ -14,7 +14,7 @@ export const useSubmitApplicantMutation = (loadingToastId: string | null) => {
   const navigate = useNavigate()
   const { mutateAsync: createApplicant, isPending: createApplicantPending } =
   useMutation({
-    mutationFn: api.application.create.createApplicant.query,
+    mutationFn: api.application.create.createApplicant.mutation,
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [

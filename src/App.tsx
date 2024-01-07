@@ -69,6 +69,10 @@ import FeeDetails from "./pages/Admin/Students/ActiveStudentDetail/Fee/FeeDetail
 import ManageFee from "./pages/Admin/Students/ActiveStudentDetail/Fee/ManageFee"
 import ManageClass from "./pages/Admin/Students/ActiveStudentDetail/ManageClass/ManageClass"
 import TeacherApplication from "./pages/Application/Teacher/TeacherApplication"
+import ManageTeacherLayout from "./Layouts/AdministrationLayout/ManageTeacherLayout/ManageTeacherLayout"
+import Assign from "./pages/Admin/Administration/ManageTeacher/Manage/Assign"
+import Teacher from "./pages/Admin/Administration/ManageTeacher/Teacher/Teacher"
+import NewTeachersApplications from "./pages/Admin/Administration/ManageTeacher/NewApplication/NewTeachersApplications"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -190,6 +194,17 @@ const router = createBrowserRouter(
             <Route path="all-classes">
               <Route index element={<AllClass />} />
               <Route path="class-details/:id" element={<TermDetails />} />
+            </Route>
+          </Route>
+          <Route path="manage-teacher" element={<ManageTeacherLayout/>}>
+            <Route index element={<Assign/>} />
+            <Route path="all-teachers">
+              <Route index element={<Teacher />} />
+              {/* <Route path="class-details/:id" element={<TermDetails />} /> */}
+            </Route>
+            <Route path="new-applications">
+              <Route index element={<NewTeachersApplications/>} />
+              {/* <Route path="class-details/:id" element={<TermDetails />} /> */}
             </Route>
           </Route>
         </Route>

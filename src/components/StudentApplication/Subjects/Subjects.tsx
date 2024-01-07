@@ -2,6 +2,8 @@ import { useFormContext } from "react-hook-form"
 import { ApplicantSchema } from "@/pages/Application/Student/Application"
 import { useQuery } from "@tanstack/react-query"
 import { api } from "@/api/api"
+import { useMemo } from "react"
+import { capitalizeFirstCharacter } from "@/helpers/capitalizeFirstCharacter"
 
 // const subjects = [
 //   "Math",
@@ -27,7 +29,16 @@ function Subjects() {
     queryKey: [api.application.publishedTerm.getPublishedTerm.queryKey],
     queryFn: api.application.publishedTerm.getPublishedTerm.query,
   })
-
+  const updatedSubjects = useMemo(() => {
+    const updatedName = currentTerm.data?.termSubject?.map((l) => {
+      return {
+        name: capitalizeFirstCharacter(l.subject.name),
+        isActive: l.subject.isActive,
+      }
+    })
+    return updatedName
+  }, [currentTerm.data])
+  console.log(updatedSubjects)
   return (
     <div className="space-y-10 divide-y divide-gray-900/10 container">
       <div className="grid grid-cols-1 gap-x-8 gap-y-8 pt-10 md:grid-cols-3">
@@ -54,13 +65,13 @@ function Subjects() {
                   Subjects<span className="text-red-600">*</span>
                 </label>
                 <div className="mt-2">
-                  {currentTerm.data?.termSubject?.map((subject) => (
-                    <div key={subject.id}>
+                  {updatedSubjects?.map((subject, id) => (
+                    <div key={id}>
                       <div className="relative flex gap-x-3">
                         <div className="flex h-6 items-center">
                           <input
-                            id={subject.id.toString()}
-                            value={subject.subject.name}
+                            id={id.toString()}
+                            value={subject.name}
                             {...register("subjectInterest.subjectsChosen", {
                               required: {
                                 value: true,
@@ -73,10 +84,10 @@ function Subjects() {
                         </div>
                         <div className="text-sm leading-6">
                           <label
-                            htmlFor={subject.subject.name}
+                            htmlFor={subject.name}
                             className="font-medium text-gray-900"
                           >
-                            {subject.subject.name}
+                            {subject.name}
                           </label>
                         </div>
                       </div>

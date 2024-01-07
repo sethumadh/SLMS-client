@@ -24,7 +24,7 @@ type initialStateProps = {
     | "enrollStudentToCurrentTerm"
     | "enrollToActiveStudent"
     | "unPublishTerm"
-    | "updateAmountPaid"|"assignClass"
+    | "updateAmountPaid"|"assignClass"|"submitTeacherApplicant"
   data?: {
     id?: number
     value?: any

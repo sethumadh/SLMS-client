@@ -1,4 +1,4 @@
-import { create, publishedTerm, allSubjects } from "./application/application"
+import { create, publishedTerm, allSubjects ,createTeacher} from "./application/application"
 import { term, levels, subjects, groups, classes } from "./admin/admin"
 import { applicantEnrollment } from "./admin/enrollment"
 import { enrolledStudent } from "./admin/enrolledStudent"
@@ -11,6 +11,7 @@ export const api = {
     create,
     publishedTerm,
     teacher: { allSubjects },
+    createTeacher
   },
   admin: {
     term,

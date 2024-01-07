@@ -22,8 +22,8 @@ const actionPanels = [
   {
     id: 3,
     title: "Manage Teacher Information",
-    href: "#",
-    buttonLabel: "Manage Teacher info",
+    href: "manage-teacher",
+    buttonLabel: "Manage Teacher",
     description:
       "Create a new teacher or manage an existing one",
   },

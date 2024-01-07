@@ -6,16 +6,16 @@ import { useState } from "react"
 import { StepperFooterSection } from "@/components/StudentApplication/StepperFooterSection/StepperFooterSection"
 import { useAppDispatch } from "@/redux/store"
 import { setOpenModal } from "@/redux/slice/modalSlice"
-import SubmitApplicantModal from "@/components/Modal/SubmitApplicantModal"
+
 import { teacherApplicantSchema } from "@/types/Application/teacherApplicantSchema"
 import TeacherApplicantInfo from "@/components/TeacherApplication/TeacherApplicantInfo/TeacherApplicantInfo"
 import TeacherEmergencyContact from "@/components/TeacherApplication/TeacherEmergencyContact/TeacherEmergencyContact"
-
 import TeacherWorkRights from "@/components/TeacherApplication/TeacherWorkRights/TeacherWorkRights"
 import TeacherBankDetails from "@/components/TeacherApplication/TeacherBankDetails/TeacherBankDetails"
 import TeacherWWCHealthInformation from "@/components/TeacherApplication/TeacherHealthInformation/TeacherHealthInformation"
 import TeacherQualificationAvailability from "@/components/TeacherApplication/TeacherQualificationAvailability/TeacherQualificationAvailability"
 import TeacherOtherInfo from "@/components/TeacherApplication/TeacherOtherInfo/TeacherOtherInfo"
+import SubmitTeacherApplicantModal from "@/components/Modal/SubmitTeacherApplicantModal"
 
 export type TeacherApplicantSchema = z.infer<typeof teacherApplicantSchema>
 
@@ -100,51 +100,9 @@ function TeacherApplication() {
         // experience: "",
       },
       teacherOtherInformation: {
-        otherInfo:""
-
+        otherInfo: "",
       },
     },
-    // defaultValues: {
-    //   personalDetails: {
-    //     firstName: "sethu",
-    //     lastName: "sethu",
-    //     DOB: new Date("01-01-2010"),
-    //     gender: "Male",
-    //     email: "s@s.com",
-    //     contact: "0999999999",
-    //     address: "sethu",
-    //     suburb: "sethu",
-    //     state: "Victoria",
-    //     country: "Australia",
-    //     postcode: "1234",
-    //     image: "",
-    //   },
-    //   parentsDetails: {
-    //     fatherName: "sethu",
-    //     motherName: "sethu",
-    //     parentContact: "0999999999",
-    //     parentEmail: "b@b.com",
-    //   },
-    //   emergencyContact: {
-    //     contactPerson: "sethu",
-    //     contactNumber: "0999999999",
-    //     relationship: "friend",
-    //   },
-    //   healthInformation: {
-    //     medicareNumber: "1111111111",
-    //     ambulanceMembershipNumber: "2222",
-    //     medicalCondition: "sssss",
-    //     allergy: "ssssss",
-    //   },
-    //   subjectInterest: {
-    //     subjectsChosen: [],
-    //     subjectRelated: [],
-    //   },
-    //   otherInformation: {
-    //     otherInfo: "",
-    //     declaration: [],
-    //   },
-    // },
   })
   console.log(methods.formState.errors)
   const { trigger } = methods
@@ -196,23 +154,27 @@ function TeacherApplication() {
   }
 
   const onSubmit: SubmitHandler<TeacherApplicantSchema> = async (values) => {
-    // const formattedValues: NewApplicantSchema = {
-    //   ...values,
-    //   personalDetails: {
-    //     ...values.personalDetails,
-    //     DOB: values.personalDetails.DOB.toISOString(),
-    //   },
-    // }
-    // dispatch(
-    //   setOpenModal({
-    //     isOpen: true,
-    //     type: "submitApplicant",
-    //     data: {
-    //       value: formattedValues,
-    //     },
-    //   })
-    // )
-    console.log(values)
+    const formattedValues = {
+      ...values,
+      teacherPersonalDetails: {
+        ...values.teacherPersonalDetails,
+        DOB: values.teacherPersonalDetails.DOB.toISOString(),
+      },
+      teacherWWCHealthInformation: {
+        ...values.teacherWWCHealthInformation,
+        workingWithChildrenCheckExpiry:
+          values.teacherWWCHealthInformation.workingWithChildrenCheckExpiry.toISOString(),
+      },
+    }
+    dispatch(
+      setOpenModal({
+        isOpen: true,
+        type: "submitTeacherApplicant",
+        data: {
+          value: formattedValues,
+        },
+      })
+    )
   }
   return (
     <div>
@@ -250,7 +212,7 @@ function TeacherApplication() {
           </form>
         </FormProvider>
       </div>
-      <SubmitApplicantModal />
+      <SubmitTeacherApplicantModal />
     </div>
   )
 }
