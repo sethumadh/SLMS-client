@@ -38,7 +38,6 @@ import NewStudentApplications from "./pages/Admin/Enrollement/NewApplications/Ne
 import NewApplicatantDetailsLayout from "./Layouts/NewApplicationsDetailLayout/NewApplicationsDetailLayout"
 import NewApplicantSubjectDetails from "./pages/Admin/Enrollement/NewApplicantDetails/Subjects/SubjectDetails"
 import StudentsNavbarLayout from "./Layouts/StudentsNavbarLayout/StudentsNavbarLayout"
-import AdministrationLayout from "./Layouts/AdministrationLayout/AdministrationLayout"
 import ManageTermLayout from "./Layouts/AdministrationLayout/ManageTermLayout/ManageTermLayout"
 import CurrentTerm from "./pages/Admin/Administration/ManageTerm/CurrentTerm/CurrentTerm"
 import CreateTerm from "./pages/Admin/Administration/ManageTerm/CreateTerm/CreateTerm"
@@ -70,9 +69,11 @@ import ManageFee from "./pages/Admin/Students/ActiveStudentDetail/Fee/ManageFee"
 import ManageClass from "./pages/Admin/Students/ActiveStudentDetail/ManageClass/ManageClass"
 import TeacherApplication from "./pages/Application/Teacher/TeacherApplication"
 import ManageTeacherLayout from "./Layouts/AdministrationLayout/ManageTeacherLayout/ManageTeacherLayout"
-import Assign from "./pages/Admin/Administration/ManageTeacher/Manage/Assign"
 import Teacher from "./pages/Admin/Administration/ManageTeacher/Teacher/Teacher"
 import NewTeachersApplications from "./pages/Admin/Administration/ManageTeacher/NewApplication/NewTeachersApplications"
+import NewTeacherApplicantDetailsLayout from "./Layouts/NewTeacherApplicantLayout/NewTeacherApplicantLayout"
+import NewTeacherApplicationDetail from "./pages/Admin/Administration/ManageTeacher/NewApplication/NewTeacherApplicationDetail/NewTeacherApplicationDetail"
+import ApproveApplicant from "./pages/Admin/Administration/ManageTeacher/NewApplication/ApproveApplicant/ApproveApplicant"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -82,7 +83,7 @@ const router = createBrowserRouter(
         <Route index element={<Home />} />
         <Route path="classes" element={<ClassesAndEvents />} />
         <Route path="application" element={<Application />} />
-        <Route path="teacher-application" element={<TeacherApplication/>}/>
+        <Route path="teacher-application" element={<TeacherApplication />} />
         <Route path="application-submit" element={<SubmitPage />} />
       </Route>
 
@@ -175,7 +176,7 @@ const router = createBrowserRouter(
         <Route path="finance" element={<Finance />} />
         <Route path="attendance" element={<Attendance />} />
         <Route path="communication" element={<Communication />} />
-        <Route path="administration" element={<AdministrationLayout />}>
+        <Route path="administration">
           <Route index element={<Administration />} />
           <Route path="manage-term" element={<ManageTermLayout />}>
             <Route index element={<CurrentTerm />} />
@@ -196,15 +197,20 @@ const router = createBrowserRouter(
               <Route path="class-details/:id" element={<TermDetails />} />
             </Route>
           </Route>
-          <Route path="manage-teacher" element={<ManageTeacherLayout/>}>
-            <Route index element={<Assign/>} />
-            <Route path="all-teachers">
-              <Route index element={<Teacher />} />
-              {/* <Route path="class-details/:id" element={<TermDetails />} /> */}
-            </Route>
+          <Route path="manage-teacher" element={<ManageTeacherLayout />}>
+            <Route index element={<Teacher />} />
             <Route path="new-applications">
-              <Route index element={<NewTeachersApplications/>} />
-              {/* <Route path="class-details/:id" element={<TermDetails />} /> */}
+              <Route index element={<NewTeachersApplications />} />
+              <Route
+                path="applicant-details/:id"
+                element={<NewTeacherApplicantDetailsLayout />}
+              >
+                <Route index element={<NewTeacherApplicationDetail />} />
+                <Route
+                  path="approve"
+                  element={<ApproveApplicant/>}
+                />
+              </Route>
             </Route>
           </Route>
         </Route>

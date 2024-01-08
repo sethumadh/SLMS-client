@@ -1,57 +1,58 @@
-import { NavLink, Outlet, useLocation } from "react-router-dom"
-
 import { cn } from "@/lib/utils"
+import { NavLink, Outlet, useLocation } from "react-router-dom"
 
 const tabs = [
   {
-    name: "Assign",
-    smName: "Assign",
-    href: ".",
-    current: true,
-  },
-  {
-    name: "Teachers",
-    smName: "Teachers",
-    href: "all-teachers",
+    name: "Teacher",
+    href: "/teacher",
+    to: "/admin/administration/manage-teacher",
     current: false,
+    end: true,
   },
   {
     name: "New Applications",
-    smName: "New Applications",
-    href: "new-applications",
+    href: "new",
+    to: "/admin/administration/manage-teacher/new-applications",
     current: false,
+    end: false,
+  },
+  {
+    name: "Assign",
+    href: "Assign",
+    to: "/admin/administration/manage-teacher/assign",
+    current: false,
+    end: false,
   },
 ]
 
-export default function ManageTeacherLayout() {
+export default function EnrollmentNavbarLayout() {
+  // const [setActiveLink]
   const location = useLocation()
   const activeLink = location.pathname
 
   return (
     <div className="">
-      <div className="sm:block">
+      <div className="bg-slate-50 border-b">
         <nav
-          className="isolate flex divide-x divide-gray-200 rounded-lg shadow "
+          className="-mb-px flex  border-gray-200 container"
           aria-label="Tabs"
         >
           {tabs.map((tab) => (
             <NavLink
               end
               key={tab.name}
-              to={tab.href}
-              className={({ isActive }) =>
-                cn(
-                  "bg-slate-50 m:text-xs lg:text-sm",
-                  isActive || activeLink.includes(tab.href)
-                    ? "text-indigo-500  border-b-2 bg-white text-base"
-                    : "",
-                  " sm:flex-1 overflow-hidden  py-4 px-4 text-center font-medium hover:bg-gray-50 focus:z-10 "
+              to={tab.to}
+              className={({ isActive }) => {
+                return cn(
+                  activeLink.includes(tab.href) || isActive
+                    ? "border-indigo-500 text-indigo-600"
+                    : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
+                  "w-1/4 border-b-2 py-4 px-1 text-center text-lg font-medium"
                 )
-              }
+              }}
               aria-current={tab.current ? "page" : undefined}
             >
-              <span className="hidden sm:block ">{tab.name}</span>
-              <span className="text-xs sm:hidden ">{tab.smName}</span>
+              {tab.name}
             </NavLink>
           ))}
         </nav>

@@ -2,7 +2,7 @@ import axios from "axios"
 import { route } from "../route/route"
 import { z } from "zod"
 
-const personalDetailsSchema = z.object({
+export const teacherPersonalDetailsSchema = z.object({
   id: z.number(),
   firstName: z.string(),
   lastName: z.string(),
@@ -18,14 +18,14 @@ const personalDetailsSchema = z.object({
   image: z.string().optional(),
 })
 
-const emergencyContactSchema = z.object({
+export const teacherEmergencyContactSchema = z.object({
   id: z.number(),
   contactPerson: z.string(),
   contactNumber: z.string(),
   relationship: z.string(),
 })
 
-const healthInformationSchema = z.object({
+export const teacherHealthInformationSchema = z.object({
   id: z.number(),
   medicareNumber: z.string(),
   medicalCondition: z.string(),
@@ -34,45 +34,45 @@ const healthInformationSchema = z.object({
   workingWithChildrenCheckExpiry: z.string(),
 })
 
-const workRightsSchema = z.object({
+export const teacherWorkRightsSchema = z.object({
   immigrationStatus: z.string(),
   workRights: z.boolean(),
 })
 
-const qualificationAvailabilitySchema = z.object({
+export const teacherQualificationAvailabilitySchema = z.object({
   experience: z.string(),
   qualification: z.string(),
   subjectsChosen: z.array(z.string()),
   timeSlotsChosen: z.array(z.string()),
 })
 
-const bankDetailsSchema = z.object({
+export const teacherBankDetailsSchema = z.object({
   ABN: z.string(),
   accountNumber: z.string(),
   bankAccountName: z.string(),
   BSB: z.string(),
 })
 
-const otherInformationSchema = z.object({
+export const teacherOtherInformationSchema = z.object({
   id: z.number(),
   otherInfo: z.string(),
 })
 
-const applicantSchema = z.object({
+export const teacherApplicantSchema = z.object({
   id: z.number(),
   role: z.enum(["APPLICANT"]),
   createdAt: z.string(),
-  teacherPersonalDetails: personalDetailsSchema,
-  teacherEmergencyContact: emergencyContactSchema,
-  teacherWWCHealthInformation: healthInformationSchema,
-  teacherWorkRights: workRightsSchema,
-  teacherQualificationAvailability: qualificationAvailabilitySchema,
-  teacherBankDetails: bankDetailsSchema,
-  teacherOtherInformation: otherInformationSchema,
+  teacherPersonalDetails: teacherPersonalDetailsSchema,
+  teacherEmergencyContact: teacherEmergencyContactSchema,
+  teacherWWCHealthInformation: teacherHealthInformationSchema,
+  teacherWorkRights: teacherWorkRightsSchema,
+  teacherQualificationAvailability: teacherQualificationAvailabilitySchema,
+  teacherBankDetails: teacherBankDetailsSchema,
+  teacherOtherInformation: teacherOtherInformationSchema,
 })
 
 const allTeachersSchema = z.object({
-  applicants: z.array(applicantSchema),
+  applicants: z.array(teacherApplicantSchema),
   count: z.number(),
 })
 export const teacherApprove = {
@@ -87,7 +87,6 @@ export const teacherApprove = {
             params: { page },
           }
         )
-        console.log(response.data)
         return allTeachersSchema.parse(response.data)
       } catch (error) {
         if (error instanceof z.ZodError) {
@@ -134,7 +133,7 @@ export const teacherApprove = {
         `${route.admin.teacher.findTeacherApplicantById}/${id}`
       )
 
-      return response.data
+      return teacherApplicantSchema.parse(response.data)
     },
   },
 }

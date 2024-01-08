@@ -5,27 +5,14 @@ import { cn } from "@/lib/utils"
 const tabs = [
   { name: "Applicant Details", smName: "Personal", href: ".", current: true },
   {
-    name: "Enrol Applicant",
-    smName: "Classes",
-    href: "manage-subjects-classes",
-    current: false,
+    name: "Approve Applicant",
+    smName: "Approve",
+    href: "approve",
+    current: true,
   },
-  // {
-  //   name: "Parents Details",
-  //   smName: "Parents",
-  //   href: "parent",
-  //   current: false,
-  // },
-  // {
-  //   name: "Emergency and Health",
-  //   smName: "Health",
-  //   href: "health",
-  //   current: false,
-  // },
-  // { name: "Declaration", smName: "Terms", href: "declaration", current: false },
 ]
 
-export default function NewApplicatantDetailsLayout() {
+export default function NewTeacherApplicantDetailsLayout() {
   const location = useLocation()
   const activeLink = location.pathname
 
