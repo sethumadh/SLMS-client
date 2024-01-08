@@ -159,7 +159,6 @@ export const allSubjects = {
       const response = await axios.get(
         `${route.application.teacher.allSubjects}`
       )
-      console.log(response.data)
 
       return allSubjectsArraySchema.parse(response.data)
     },

@@ -65,11 +65,7 @@ const ApplicantSchema = z.object({
 
 const applicantsDataSchema = z.object({
   applicants: z.array(ApplicantSchema),
-  count: z.object({
-    _count: z.object({
-      id: z.number(),
-    }),
-  }),
+  count: z.number()
 })
 
 /* term to enroll schema*/

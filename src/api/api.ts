@@ -4,7 +4,9 @@ import { applicantEnrollment } from "./admin/enrollment"
 import { enrolledStudent } from "./admin/enrolledStudent"
 import { activeStudent } from "./admin/activeStudent"
 import { timetable } from "./admin/timetable"
+import { teacherApprove} from "./admin/teacherApprove"
 import { lateEnrolledStudent } from "./admin/lateEnrolledStudent"
+
 
 export const api = {
   application: {
@@ -19,6 +21,7 @@ export const api = {
     subjects,
     levels,
     classes,
+    teacherApprove
   },
 
   enrollment: {

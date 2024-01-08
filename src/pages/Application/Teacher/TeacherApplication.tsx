@@ -104,7 +104,7 @@ function TeacherApplication() {
       },
     },
   })
-  console.log(methods.formState.errors)
+
   const { trigger } = methods
   const handleNextStep = async () => {
     if (step == 0) {

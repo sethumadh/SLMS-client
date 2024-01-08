@@ -1,9 +1,5 @@
-
-
 function Teacher() {
-  return (
-    <div>Teacher</div>
-  )
+  return <div>Teacher</div>
 }
 
 export default Teacher

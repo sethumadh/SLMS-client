@@ -40,7 +40,7 @@ function NewStudentApplications() {
   })
 
   const nPages = Math.ceil(
-    (allApplicantData?.count._count?.id ?? 0) / recordsPerPage
+    (allApplicantData?.count ?? 0) / recordsPerPage
   )
 
   const handleSearch = useCallback(
